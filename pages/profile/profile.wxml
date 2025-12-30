@@ -1,0 +1,97 @@
+<!-- pages/profile/profile.wxml -->
+<view class="profile-page">
+  <!-- 用户信息 -->
+  <view class="user-info" bindtap="onUserInfoTap">
+    <view class="avatar-container">
+      <text class="avatar" wx:if="{{!userInfo.avatarUrl}}">
+        {{isLogin || isGuest ? '👤' : '🔒'}}
+      </text>
+      <image src="{{userInfo.avatarUrl}}" class="avatar-image" wx:else></image>
+    </view>
+    <view class="user-detail">
+      <text class="username">{{userInfo.nickName}}</text>
+      <view class="user-meta">
+        <text class="user-level" wx:if="{{isLogin || isGuest}}">
+          神话学者 Lv.{{userInfo.level}}
+        </text>
+        <text class="login-tip" wx:else>点击登录查看更多功能</text>
+      </view>
+      <text class="login-time" wx:if="{{loginTime}}">上次登录: {{loginTime}}</text>
+      
+      <!-- 显示手机号，使用catchtap防止事件冒泡 -->
+      <view class="phone-info" wx:if="{{userInfo.phone}}" catchtap="onPhoneTap">
+        <text class="phone-icon">📱</text>
+        <text class="phone-text">{{userInfo.phone}}</text>
+        <text class="phone-verified" wx:if="{{userInfo.phoneVerified}}">✓</text>
+      </view>
+    </view>
+    <text class="login-arrow" wx:if="{{!isLogin && !isGuest}}">›</text>
+  </view>
+
+  <!-- 学习统计 -->
+  <view class="stats-section" wx:if="{{isLogin || isGuest}}">
+    <view class="stats-item" bindtap="onCollections">
+      <text class="stats-number">{{stats.collections}}</text>
+      <text class="stats-label">收藏</text>
+    </view>
+    <view class="stats-item" bindtap="onHistory">
+      <text class="stats-number">{{stats.history}}</text>
+      <text class="stats-label">阅读</text>
+    </view>
+    <view class="stats-item" bindtap="onNotes">
+      <text class="stats-number">{{stats.notes}}</text>
+      <text class="stats-label">笔记</text>
+    </view>
+  </view>
+
+  <!-- 功能列表 -->
+  <view class="function-list" wx:if="{{isLogin || isGuest}}">
+    <view class="func-item" bindtap="onCollections">
+      <text class="func-icon">⭐</text>
+      <text class="func-name">我的收藏</text>
+      <text class="func-arrow">></text>
+    </view>
+    
+    <view class="func-item" bindtap="onHistory">
+      <text class="func-icon">📚</text>
+      <text class="func-name">浏览历史</text>
+      <text class="func-arrow">></text>
+    </view>
+    
+    <view class="func-item" bindtap="onNotes">
+      <text class="func-icon">📝</text>
+      <text class="func-name">我的笔记</text>
+      <text class="func-arrow">></text>
+    </view>
+  </view>
+
+  <!-- 设置 -->
+  <view class="settings-section">
+    <view class="section-title">设置</view>
+    <view class="setting-item" bindtap="onThemeChange">
+      <text class="setting-name">主题模式</text>
+      <switch checked="{{isDarkMode}}" bindchange="onThemeChange" color="#3cc51f"></switch>
+    </view>
+    <view class="setting-item" bindtap="onFontSize">
+      <text class="setting-name">字体大小</text>
+      <text class="setting-value">{{fontSize}}px ></text>
+    </view>
+    <view class="setting-item" bindtap="onClearCache">
+      <text class="setting-name">清除缓存</text>
+      <text class="setting-value">{{cacheSize}}MB ></text>
+    </view>
+    <view class="setting-item" bindtap="onFeedback">
+      <text class="setting-name">意见反馈</text>
+      <text class="setting-value">></text>
+    </view>
+    <view class="setting-item" bindtap="onAbout">
+      <text class="setting-name">关于我们</text>
+      <text class="setting-value">></text>
+    </view>
+  </view>
+
+  <!-- 退出按钮 -->
+  <button class="logout-btn" bindtap="onLogout" wx:if="{{isLogin || isGuest}}">
+    {{isGuest ? '退出游客模式' : '退出登录'}}
+  </button>
+</view>

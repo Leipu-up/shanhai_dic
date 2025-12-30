@@ -1,0 +1,29 @@
+<!-- pages/story/story.wxml -->
+<view class="story-page">
+  <view class="stories-list">
+    <view class="story-item" wx:for="{{stories}}" wx:key="id" bindtap="onStoryTap" data-id="{{item.id}}">
+      <view class="story-cover">{{item.icon}}</view>
+      <view class="story-info">
+        <text class="story-title">{{item.title}}</text>
+        <text class="story-desc">{{item.description}}</text>
+        <view class="story-meta">
+          <text class="meta-item">📖 {{item.chapters}}章</text>
+          <text class="meta-item">⏱️ {{item.duration}}分钟</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="timeline-section" wx:if="{{showTimeline}}">
+    <view class="section-title">神话时间线</view>
+    <view class="timeline">
+      <view class="timeline-item" wx:for="{{timeline}}" wx:key="id">
+        <view class="timeline-dot"></view>
+        <view class="timeline-content">
+          <text class="timeline-time">{{item.time}}</text>
+          <text class="timeline-event">{{item.event}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

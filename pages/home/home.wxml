@@ -1,0 +1,81 @@
+<!-- pages/home/home.wxml -->
+<view class="home-page">
+  <!-- 顶部搜索框 -->
+  <view class="search-container">
+    <view class="search-bar" bindtap="goToSearch">
+      <text class="search-icon">🔍</text>
+      <text class="search-text">搜索神话人物、地点、故事...</text>
+    </view>
+  </view>
+
+  <!-- 轮播图 -->
+  <swiper class="banner-swiper" indicator-dots autoplay interval="3000" duration="500">
+    <swiper-item wx:for="{{banners}}" wx:key="id" bindtap="goToBanner" data-id="{{item.id}}">
+      <image src="{{item.image}}" mode="aspectFill" class="banner-image"></image>
+      <view class="banner-title">{{item.title}}</view>
+    </swiper-item>
+  </swiper>
+
+  <!-- 分类入口 -->
+  <view class="category-section">
+    <view class="section-header">
+      <text class="section-title">神话分类</text>
+      <text class="section-more" bindtap="viewAllCategories">全部 ></text>
+    </view>
+    <scroll-view scroll-x class="category-scroll" enable-flex>
+      <view class="category-item" wx:for="{{categories}}" wx:key="id" bindtap="goCategory" data-id="{{item.id}}">
+        <view class="category-icon">{{item.icon}}</view>
+        <text class="category-name">{{item.name}}</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 每日推荐 -->
+  <view class="daily-section">
+    <view class="section-header">
+      <text class="section-title">每日推荐</text>
+    </view>
+    <view class="daily-card" bindtap="goToDetail" data-id="{{dailyStory.id}}">
+      <view class="daily-content">
+        <text class="daily-tag">今日推荐</text>
+        <text class="daily-title">{{dailyStory.title}}</text>
+        <text class="daily-desc">{{dailyStory.description}}</text>
+        <view class="daily-footer">
+          <text class="daily-source">{{dailyStory.source}}</text>
+          <text class="daily-date">{{dailyStory.date}}</text>
+        </view>
+      </view>
+      <image src="{{dailyStory.image}}" mode="aspectFill" class="daily-image"></image>
+    </view>
+  </view>
+
+  <!-- 热门专题 -->
+  <view class="topic-section">
+    <view class="section-header">
+      <text class="section-title">热门专题</text>
+    </view>
+    <view class="topic-grid">
+      <view class="topic-item" wx:for="{{topics}}" wx:key="id" bindtap="goTopic" data-id="{{item.id}}">
+        <view class="topic-icon-box" style="background-color: {{item.bgColor}}">
+          <text class="topic-icon">{{item.icon}}</text>
+        </view>
+        <text class="topic-name">{{item.name}}</text>
+        <text class="topic-count">{{item.count}}篇</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 最近浏览 -->
+  <view class="history-section" wx:if="{{historyList.length > 0}}">
+    <view class="section-header">
+      <text class="section-title">最近浏览</text>
+      <text class="section-more" bindtap="clearHistory">清除</text>
+    </view>
+    <scroll-view scroll-x class="history-scroll" enable-flex>
+      <view class="history-item" wx:for="{{historyList}}" wx:key="id" bindtap="goToHistory" data-id="{{item.id}}">
+        <image src="{{item.image}}" mode="aspectFill" class="history-image"></image>
+        <text class="history-name">{{item.name}}</text>
+      </view>
+    </scroll-view>
+  </view>
+</view>

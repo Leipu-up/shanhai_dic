@@ -1,0 +1,37 @@
+<!-- pages/map/map.wxml -->
+<view class="map-page">
+  <view class="map-container">
+    <!-- 地图将在这里显示 -->
+    <view class="map-placeholder">
+      <text class="map-icon">🗺️</text>
+      <text class="map-text">交互式神话地图</text>
+      <text class="map-hint">点击下方按钮开始探索</text>
+    </view>
+  </view>
+
+  <view class="map-controls">
+    <view class="filter-tags">
+      <text class="filter-tag active">全部</text>
+      <text class="filter-tag">地理</text>
+      <text class="filter-tag">神庙</text>
+      <text class="filter-tag">事件</text>
+    </view>
+
+    <view class="control-buttons">
+      <button class="control-btn" bindtap="onZoomIn">放大</button>
+      <button class="control-btn" bindtap="onZoomOut">缩小</button>
+      <button class="control-btn" bindtap="onLocate">定位</button>
+      <button class="control-btn" bindtap="onShowRoute">路线</button>
+    </view>
+  </view>
+
+  <view class="map-locations">
+    <view class="location-item" wx:for="{{locations}}" wx:key="id" bindtap="onLocationTap" data-id="{{item.id}}">
+      <view class="location-icon">{{item.icon}}</view>
+      <view class="location-info">
+        <text class="location-name">{{item.name}}</text>
+        <text class="location-desc">{{item.description}}</text>
+      </view>
+    </view>
+  </view>
+</view>

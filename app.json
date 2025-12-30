@@ -1,0 +1,55 @@
+{
+    "pages": [
+      "pages/home/home",
+      "pages/map/map",
+      "pages/detail/detail",
+      "pages/story/story",
+      "pages/login/login",
+      "pages/profile/profile"
+    ],
+    "window": {
+      "backgroundTextStyle": "light",
+      "navigationBarBackgroundColor": "#2c3e50",
+      "navigationBarTitleText": "神话百科",
+      "navigationBarTextStyle": "white"
+    },
+    "tabBar": {
+      "color": "#7A7E83",
+      "selectedColor": "#3cc51f",
+      "borderStyle": "black",
+      "backgroundColor": "#ffffff",
+      "list": [
+        {
+          "pagePath": "pages/home/home",
+          "text": "首页",
+          "iconPath": "images/home.png",
+          "selectedIconPath": "images/home-active.png"
+        },
+        {
+          "pagePath": "pages/map/map",
+          "text": "地图",
+          "iconPath": "images/map.png",
+          "selectedIconPath": "images/map-active.png"
+        },
+        {
+          "pagePath": "pages/story/story",
+          "text": "故事",
+          "iconPath": "images/story.png",
+          "selectedIconPath": "images/story-active.png"
+        },
+        {
+          "pagePath": "pages/profile/profile",
+          "text": "我的",
+          "iconPath": "images/profile.png",
+          "selectedIconPath": "images/profile-active.png"
+        }
+      ]
+    },
+    "permission": {
+      "scope.userLocation": {
+        "desc": "您的位置信息将用于地图定位"
+      }
+    },
+    "style": "v2",
+    "sitemapLocation": "sitemap.json"
+  }

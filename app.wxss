@@ -1,0 +1,27 @@
+/* 全局样式 */
+page {
+    background-color: #f5f5f5;
+    font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+  }
+  
+  /* 容器样式 */
+  .container {
+    padding: 20rpx;
+  }
+  
+  /* 按钮样式 */
+  .primary-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 50rpx;
+    font-size: 32rpx;
+  }
+  
+  /* 卡片样式 */
+  .card {
+    background: white;
+    border-radius: 16rpx;
+    box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.1);
+    margin: 20rpx;
+    padding: 30rpx;
+  }

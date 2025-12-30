@@ -1,0 +1,89 @@
+<!-- pages/login/login.wxml -->
+<view class="login-page">
+  <!-- 背景装饰 -->
+  <view class="decoration-circle circle-1"></view>
+  <view class="decoration-circle circle-2"></view>
+  
+  <!-- 登录内容 -->
+  <view class="login-container">
+    <!-- 头部 -->
+    <view class="login-header">
+      <view class="logo-container">
+        <text class="logo-icon">🐉</text>
+      </view>
+      <text class="login-title">神话百科</text>
+      <text class="login-subtitle">探索中华神话的世界</text>
+    </view>
+
+    <!-- 微信登录说明 -->
+    <view class="wechat-login-tip">
+      <text class="tip-title">微信一键登录</text>
+      <text class="tip-desc">登录后可以：</text>
+      <view class="feature-list">
+        <text class="feature-item">📖 同步收藏和历史记录</text>
+        <text class="feature-item">✏️ 创建个人笔记</text>
+        <text class="feature-item">⭐ 解锁更多功能</text>
+      </view>
+    </view>
+
+    <!-- 微信登录按钮 -->
+    <button 
+      class="wechat-login-btn"
+      bindtap="handleWechatLogin"
+      open-type="getPhoneNumber"
+      bindgetphonenumber="getPhoneNumber"
+    >
+      <text class="wechat-icon">💚</text>
+      <text class="wechat-text">微信一键登录</text>
+    </button>
+
+    <!-- 登录协议 -->
+    <view class="agreement">
+      <checkbox 
+        checked="{{agreed}}"
+        bindchange="onAgreementChange"
+        color="#07C160"
+      />
+      <text class="agreement-text">
+        登录即代表同意
+        <text class="agreement-link" bindtap="viewAgreement" data-type="user">《用户协议》</text>
+        和
+        <text class="agreement-link" bindtap="viewAgreement" data-type="privacy">《隐私政策》</text>
+      </text>
+    </view>
+
+    <!-- 游客登录 -->
+    <view class="guest-login">
+      <text class="guest-text" bindtap="guestLogin">先随便看看 ></text>
+    </view>
+
+    <!-- 登录进度 -->
+    <view class="login-progress" wx:if="{{loginStep > 0}}">
+      <view class="progress-steps">
+        <view class="step-item {{loginStep >= 1 ? 'active' : ''}}">
+          <view class="step-dot">1</view>
+          <text class="step-text">获取信息</text>
+        </view>
+        <view class="step-line"></view>
+        <view class="step-item {{loginStep >= 2 ? 'active' : ''}}">
+          <view class="step-dot">2</view>
+          <text class="step-text">获取手机号</text>
+        </view>
+        <view class="step-line"></view>
+        <view class="step-item {{loginStep >= 3 ? 'active' : ''}}">
+          <view class="step-dot">3</view>
+          <text class="step-text">完成登录</text>
+        </view>
+      </view>
+      
+      <view class="progress-text">{{progressText}}</view>
+    </view>
+  </view>
+
+  <!-- 底部装饰 -->
+  <view class="decoration-myth">
+    <text class="myth-icon">🏛️</text>
+    <text class="myth-icon">⚔️</text>
+    <text class="myth-icon">👑</text>
+  </view>
+</view>
