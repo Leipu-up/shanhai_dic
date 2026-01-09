@@ -1,0 +1,126 @@
+<view class="modal-container" wx:if="{{showModal}}">
+  <view class="modal-mask" bindtap="handleCancel"></view>
+  
+  <view class="modal-content">
+    <!-- 标题栏 -->
+    <view class="modal-header">
+      <text class="modal-title">{{isEdit ? '编辑排班' : '新增排班'}}</text>
+      <text class="close-btn" bindtap="handleCancel">×</text>
+    </view>
+    
+    <scroll-view class="modal-body" scroll-y>
+      <!-- 员工选择 -->
+      <view class="form-section">
+        <view class="section-title">选择员工</view>
+        
+        <view class="form-item">
+          <text class="form-label required">员工姓名</text>
+          <picker 
+            mode="selector" 
+            range="{{staffOptions}}"
+            range-key="name"
+            value="{{staffIndex}}"
+            bindchange="onStaffChange"
+            class="picker-input"
+          >
+            <view class="picker-text {{selectedStaff ? '' : 'placeholder'}}">
+              {{selectedStaff ? selectedStaff.name : '请选择员工'}}
+            </view>
+          </picker>
+        </view>
+      </view>
+      
+      <!-- 排班类型 -->
+      <view class="form-section">
+        <view class="section-title">排班类型</view>
+        
+        <view class="form-item">
+          <view class="schedule-type-options">
+            <view 
+              class="type-option {{scheduleType === '全天班' ? 'active' : ''}}" 
+              bindtap="setScheduleType" 
+              data-type="全天班"
+            >
+              <text class="type-icon">👩‍💼</text>
+              <text class="type-text">全天班</text>
+            </view>
+            <view 
+              class="type-option {{scheduleType === '休息' ? 'active' : ''}}" 
+              bindtap="setScheduleType" 
+              data-type="休息"
+            >
+              <text class="type-icon">🏖️</text>
+              <text class="type-text">休息</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 日历选择 -->
+      <view class="form-section">
+        <view class="section-title">
+          <text>选择日期</text>
+          <text class="selected-count" wx:if="{{selectedDates.length > 0}}">
+            已选 {{selectedDates.length}}/6 天
+          </text>
+        </view>
+        
+        <view class="calendar-container">
+          <!-- 月份导航 -->
+          <view class="calendar-header">
+            <view class="nav-btn prev" bindtap="prevMonth">‹</view>
+            <text class="current-month">{{currentYear}}年{{currentMonth + 1}}月</text>
+            <view class="nav-btn next" bindtap="nextMonth">›</view>
+          </view>
+          
+          <!-- 星期标题 -->
+          <view class="week-header">
+            <view class="week-day" wx:for="{{weekDays}}" wx:key="index">{{item}}</view>
+          </view>
+          
+          <!-- 日期网格 -->
+          <view class="date-grid">
+            <!-- 填充空白 -->
+            <view class="date-cell empty" wx:for="{{firstDayOfMonth}}" wx:key="index"></view>
+            
+            <!-- 日期 -->
+            <view 
+              class="date-cell {{getDateClass(item)}}" 
+              wx:for="{{daysInMonth}}" 
+              wx:key="index"
+              bindtap="selectDate"
+              data-date="{{item.date}}"
+            >
+              <text class="date-text">{{item.day}}</text>
+              <text class="date-status" wx:if="{{item.status}}">{{item.status}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 已选日期列表 -->
+      <view class="form-section" wx:if="{{selectedDates.length > 0}}">
+        <view class="section-title">已选日期</view>
+        
+        <view class="selected-dates">
+          <view 
+            class="selected-date-item" 
+            wx:for="{{selectedDates}}" 
+            wx:key="index"
+            bindtap="removeDate"
+            data-index="{{index}}"
+          >
+            <text class="date-text">{{item}}</text>
+            <text class="remove-btn">×</text>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+    
+    <!-- 底部按钮 -->
+    <view class="modal-footer">
+      <button class="btn-cancel" bindtap="handleCancel">取消</button>
+      <button class="btn-confirm" bindtap="handleConfirm" disabled="{{!isFormValid}}">确认保存</button>
+    </view>
+  </view>
+</view>

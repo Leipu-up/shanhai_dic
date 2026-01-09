@@ -1,0 +1,245 @@
+.my-page {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #FFF0F5 0%, #F8F8F8 100%);
+    padding-bottom: 40rpx;
+  }
+  
+  /* 用户信息头部 */
+  .user-header {
+    background: linear-gradient(135deg, #FF69B4, #FF1493);
+    padding: 60rpx 40rpx 40rpx;
+    color: white;
+    position: relative;
+    border-radius: 0 0 30rpx 30rpx;
+  }
+  
+  .user-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .avatar {
+    width: 120rpx;
+    height: 120rpx;
+    border-radius: 50%;
+    border: 4rpx solid rgba(255, 255, 255, 0.3);
+    margin-right: 30rpx;
+    background-color: white;
+  }
+  
+  .user-details {
+    flex: 1;
+  }
+  
+  .user-name {
+    display: block;
+    font-size: 40rpx;
+    font-weight: 600;
+    margin-bottom: 10rpx;
+  }
+  
+  .user-role {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 6rpx 20rpx;
+    border-radius: 20rpx;
+    font-size: 24rpx;
+    margin-right: 20rpx;
+  }
+  
+  .user-id {
+    font-size: 26rpx;
+    opacity: 0.9;
+  }
+  
+  .edit-btn {
+    position: absolute;
+    right: 40rpx;
+    top: 60rpx;
+    display: flex;
+    align-items: center;
+  }
+  
+  .edit-text {
+    font-size: 28rpx;
+    margin-right: 10rpx;
+  }
+  
+  .arrow {
+    font-size: 40rpx;
+    font-weight: 300;
+  }
+  
+  /* 个人统计 */
+  .personal-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20rpx;
+    margin: 20rpx;
+    padding: 30rpx;
+  }
+  
+  .stats-item {
+    text-align: center;
+    padding: 30rpx 20rpx;
+    background: linear-gradient(135deg, #FFF0F5, #FFFFFF);
+    border-radius: 16rpx;
+    box-shadow: 0 4rpx 12rpx rgba(255, 105, 180, 0.1);
+  }
+  
+  .stats-number {
+    display: block;
+    font-size: 36rpx;
+    font-weight: 600;
+    color: #FF1493;
+    margin-bottom: 10rpx;
+  }
+  
+  .stats-label {
+    font-size: 26rpx;
+    color: #666;
+  }
+  
+  /* 功能菜单 */
+  .menu-section {
+    margin-top: 40rpx;
+  }
+  
+  .menu-list {
+    background: #fff;
+    margin: 20rpx;
+    border-radius: 16rpx;
+    overflow: hidden;
+  }
+  
+  .menu-item {
+    display: flex;
+    align-items: center;
+    padding: 30rpx;
+    border-bottom: 1rpx solid #F0F0F0;
+    transition: background-color 0.3s;
+  }
+  
+  .menu-item:active {
+    background-color: #FFF0F5;
+  }
+  
+  .menu-item:last-child {
+    border-bottom: none;
+  }
+  
+  .menu-icon {
+    width: 60rpx;
+    height: 60rpx;
+    border-radius: 12rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36rpx;
+    margin-right: 20rpx;
+  }
+  
+  .menu-icon.schedule {
+    background: #FFF0F5;
+    color: #FF69B4;
+  }
+  
+  .menu-icon.customers {
+    background: #F0FFF0;
+    color: #32CD32;
+  }
+  
+  .menu-icon.performance {
+    background: #F0F8FF;
+    color: #1E90FF;
+  }
+  
+  .menu-icon.settings {
+    background: #F5F5F5;
+    color: #666;
+  }
+  
+  .menu-icon.help {
+    background: #FFF5EE;
+    color: #FFA500;
+  }
+  
+  .menu-icon.about {
+    background: #F0FFFF;
+    color: #20B2AA;
+  }
+  
+  .menu-text {
+    flex: 1;
+    font-size: 32rpx;
+    color: #333;
+  }
+  
+  .menu-right {
+    display: flex;
+    align-items: center;
+  }
+  
+  .menu-desc {
+    font-size: 26rpx;
+    color: #999;
+    margin-right: 20rpx;
+  }
+  
+  .badge {
+    background: #FF4444;
+    color: white;
+    font-size: 22rpx;
+    min-width: 36rpx;
+    height: 36rpx;
+    border-radius: 18rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10rpx;
+    margin-right: 20rpx;
+  }
+  
+  /* 退出登录 */
+  .logout-section {
+    padding: 60rpx 40rpx;
+  }
+  
+  .logout-btn, .login-btn {
+    width: 100%;
+    height: 90rpx;
+    border-radius: 45rpx;
+    font-size: 32rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+  }
+  
+  .logout-btn {
+    background: #FF4444;
+    color: white;
+    border: none;
+  }
+  
+  .logout-btn:active {
+    background: #CC0000;
+  }
+  
+  .login-btn {
+    background: linear-gradient(135deg, #FF69B4, #FF1493);
+    color: white;
+    border: none;
+  }
+  
+  .login-btn:active {
+    opacity: 0.9;
+  }
+  
+  /* 版本信息 */
+  .version-info {
+    text-align: center;
+    color: #999;
+    font-size: 24rpx;
+    margin-top: 20rpx;
+  }

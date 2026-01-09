@@ -1,0 +1,404 @@
+.staff-page {
+    min-height: 100vh;
+    background: #F8F8F8;
+    padding-bottom: 120rpx;
+}
+
+/* 搜索框样式 */
+.search-bar {
+    background: white;
+    padding: 20rpx 30rpx;
+    box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.search-input-container {
+    display: flex;
+    align-items: center;
+    background: #F5F5F5;
+    border-radius: 50rpx;
+    padding: 0 30rpx;
+    height: 80rpx;
+}
+
+.search-icon {
+    font-size: 32rpx;
+    color: #999;
+    margin-right: 20rpx;
+}
+
+.search-input {
+    flex: 1;
+    font-size: 28rpx;
+    color: #333;
+    height: 100%;
+}
+
+.search-clear {
+    width: 40rpx;
+    height: 40rpx;
+    border-radius: 50%;
+    background: #E0E0E0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28rpx;
+    color: #999;
+}
+
+/* 统计信息 */
+.stats-info {
+    display: flex;
+    justify-content: space-around;
+    background: white;
+    padding: 30rpx 20rpx;
+    margin: 20rpx;
+    border-radius: 16rpx;
+    box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+}
+
+.stats-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stats-number {
+    font-size: 36rpx;
+    font-weight: 600;
+    color: #FF69B4;
+    margin-bottom: 8rpx;
+}
+
+.stats-label {
+    font-size: 24rpx;
+    color: #666;
+}
+
+/* 员工网格 */
+.staff-grid {
+    padding: 20rpx;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20rpx;
+}
+
+.staff-card {
+    background: white;
+    border-radius: 16rpx;
+    padding: 25rpx;
+    box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+    border: 1rpx solid #F0F0F0;
+    transition: transform 0.3s;
+}
+
+.staff-card:active {
+    transform: scale(0.98);
+}
+
+/* 卡片头部 */
+.card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20rpx;
+}
+
+.staff-avatar {
+    width: 100rpx;
+    height: 100rpx;
+    border-radius: 50%;
+    border: 2rpx solid #FFE4F2;
+    margin-right: 20rpx;
+    flex-shrink: 0;
+}
+
+.staff-basic-info {
+    flex: 1;
+}
+
+.staff-name {
+    display: block;
+    font-size: 32rpx;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10rpx;
+}
+
+.staff-position {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10rpx;
+}
+
+.position-tag {
+    background: #FFF0F5;
+    color: #FF69B4;
+    padding: 6rpx 12rpx;
+    border-radius: 20rpx;
+    font-size: 22rpx;
+    font-weight: 500;
+}
+
+.store-tag {
+    background: #F0F8FF;
+    color: #1E90FF;
+    padding: 6rpx 12rpx;
+    border-radius: 20rpx;
+    font-size: 22rpx;
+    font-weight: 500;
+}
+
+/* 卡片信息行 */
+.card-info-row {
+    display: flex;
+    margin-bottom: 15rpx;
+}
+
+.info-item {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    margin-right: 15rpx;
+}
+
+.info-item:last-child {
+    margin-right: 0;
+}
+
+.info-icon {
+    font-size: 26rpx;
+    margin-right: 10rpx;
+    color: #666;
+}
+
+.info-text {
+    font-size: 26rpx;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 状态徽章 */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 8rpx 16rpx;
+    border-radius: 20rpx;
+    font-size: 24rpx;
+    font-weight: 500;
+}
+
+.status-badge.on-duty {
+    background: #F0FFF0;
+    color: #32CD32;
+}
+
+.status-badge.off-duty {
+    background: #F5F5F5;
+    color: #999;
+}
+
+.duration-text {
+    margin-left: 10rpx;
+    font-size: 22rpx;
+    opacity: 0.8;
+}
+
+/* 业绩部分 */
+.performance-section {
+    background: #FFF0F5;
+    border-radius: 12rpx;
+    padding: 15rpx;
+    margin: 20rpx 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.performance-label {
+    display: flex;
+    align-items: center;
+}
+
+.performance-icon {
+    font-size: 28rpx;
+    margin-right: 10rpx;
+    color: #FF69B4;
+}
+
+.performance-title {
+    font-size: 26rpx;
+    color: #666;
+}
+
+.performance-amount {
+    font-size: 28rpx;
+    font-weight: 600;
+    color: #FF69B4;
+}
+
+/* 卡片操作按钮 */
+.card-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15rpx;
+}
+
+.action-btn {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 25rpx !important;
+    border-radius: 50rpx !important;
+    font-size: 22rpx !important;
+    line-height: 50rpx !important;
+    margin: 0 !important;
+    border: none !important;
+}
+
+.action-btn.call {
+    background: #F0FFF0 !important;
+    color: #32CD32 !important;
+}
+
+.action-btn.edit {
+    background: #FFE4F2 !important;
+    color: #FF69B4 !important;
+}
+
+.action-icon {
+    font-size: 22rpx;
+    margin-right: 6rpx;
+}
+
+/* 加载更多容器 */
+.load-more-container {
+    padding: 40rpx 0;
+    text-align: center;
+}
+
+.loading-more {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-spinner {
+    width: 36rpx;
+    height: 36rpx;
+    border: 3rpx solid #FFF0F5;
+    border-top: 3rpx solid #FF69B4;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15rpx;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+    font-size: 26rpx;
+    color: #FF69B4;
+}
+
+.no-more-data {
+    padding: 25rpx 0;
+}
+
+.no-more-text {
+    font-size: 26rpx;
+    color: #999;
+}
+
+.load-more-tip {
+    padding: 25rpx 0;
+}
+
+.load-more-text {
+    font-size: 26rpx;
+    color: #999;
+}
+
+/* 空状态 */
+.empty-state {
+    text-align: center;
+    padding: 100rpx 30rpx;
+}
+
+.empty-icon {
+    font-size: 120rpx;
+    margin-bottom: 30rpx;
+    opacity: 0.3;
+}
+
+.empty-text {
+    display: block;
+    color: #999;
+    font-size: 32rpx;
+    margin-bottom: 40rpx;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #FF69B4, #FF1493) !important;
+    color: white !important;
+    border-radius: 50rpx !important;
+    padding: 20rpx 40rpx !important;
+    font-size: 28rpx !important;
+}
+
+/* 新增按钮 */
+.add-btn-container {
+    position: fixed;
+    bottom: 40rpx;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    z-index: 90;
+}
+
+.add-btn {
+    background: linear-gradient(135deg, #FF69B4, #FF1493) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 50rpx !important;
+    padding: 20rpx 40rpx !important;
+    font-size: 30rpx !important;
+    box-shadow: 0 4rpx 15rpx rgba(255, 105, 180, 0.3);
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.add-icon {
+    font-size: 36rpx;
+    margin-right: 10rpx;
+    font-weight: 300;
+}
+
+.add-text {
+    font-size: 30rpx;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .staff-grid {
+        grid-template-columns: 1fr;
+        gap: 15rpx;
+    }
+    
+    .stats-info {
+        padding: 20rpx 10rpx;
+        margin: 15rpx;
+    }
+    
+    .stats-number {
+        font-size: 32rpx;
+    }
+}

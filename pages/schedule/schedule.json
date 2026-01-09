@@ -1,0 +1,9 @@
+{
+    "usingComponents": {
+      "schedule-modal": "/pages/schedule/components/schedule-modal/schedule-modal"
+    },
+    "navigationBarTitleText": "排班管理",
+    "navigationBarBackgroundColor": "#FF69B4",
+    "navigationBarTextStyle": "white",
+    "enablePullDownRefresh": true
+  }

@@ -1,0 +1,586 @@
+.customer-page {
+    min-height: 100vh;
+    background: #F8F8F8;
+    padding-bottom: 120rpx;
+}
+
+/* ============ 紧凑型筛选栏 ============ */
+.filter-bar.compact {
+    background: white;
+    padding: 20rpx 30rpx;
+    margin: 20rpx;
+    border-radius: 16rpx;
+    box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+    border: 1rpx solid #F0F0F0;
+}
+
+.filter-row.compact {
+    display: flex;
+    align-items: center;
+    gap: 15rpx;
+    margin-bottom: 20rpx;
+}
+
+.filter-row.compact:last-child {
+    margin-bottom: 0;
+}
+
+/* 日期筛选项 */
+.filter-item.date-item {
+    flex: 1;
+}
+
+.date-picker.compact {
+    display: flex;
+    align-items: center;
+    padding: 18rpx 20rpx;
+    border-radius: 12rpx;
+    background: #FFF0F5;
+    border: 1rpx solid #FFD1E8;
+    font-size: 26rpx;
+}
+
+.date-icon {
+    font-size: 28rpx;
+    margin-right: 10rpx;
+    color: #FF69B4;
+    flex-shrink: 0;
+}
+
+.date-text {
+    flex: 1;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.date-separator.compact {
+    font-size: 24rpx;
+    color: #FF69B4;
+    font-weight: 500;
+    flex-shrink: 0;
+}
+
+/* 筛选选择器 */
+.filter-select.compact {
+    display: flex;
+    align-items: center;
+    padding: 18rpx 20rpx;
+    border-radius: 12rpx;
+    background: #F8F8F8;
+    border: 1rpx solid #E0E0E0;
+    font-size: 26rpx;
+}
+
+.filter-icon {
+    font-size: 28rpx;
+    margin-right: 10rpx;
+    flex-shrink: 0;
+}
+
+.filter-text {
+    flex: 1;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 按钮行 */
+.filter-row.compact.button-row {
+    justify-content: space-between;
+    margin-top: 10rpx;
+}
+
+/* 原样式按钮 */
+.btn-reset.original,
+.btn-search.original {
+    flex: 1;
+    border-radius: 16rpx !important;
+    font-size: 30rpx !important;
+    height: 90rpx !important;
+    border: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.3s !important;
+    margin: 0 !important;
+    padding: 0 30rpx !important;
+    white-space: nowrap;
+    min-width: 0;
+    box-sizing: border-box !important;
+}
+
+.btn-reset.original {
+    background: linear-gradient(135deg, #F5F5F5, #FFFFFF) !important;
+    color: #666 !important;
+    border: 1rpx solid #E0E0E0 !important;
+}
+
+.btn-reset.original:active {
+    transform: translateY(2rpx);
+    background: linear-gradient(135deg, #E0E0E0, #F5F5F5) !important;
+}
+
+.btn-search.original {
+    background: linear-gradient(135deg, #FF69B4, #FF1493) !important;
+    color: white !important;
+    box-shadow: 0 4rpx 15rpx rgba(255, 105, 180, 0.3) !important;
+}
+
+.btn-search.original:active {
+    transform: translateY(2rpx);
+    box-shadow: 0 2rpx 8rpx rgba(255, 105, 180, 0.3) !important;
+}
+
+.btn-icon {
+    font-size: 34rpx;
+    margin-right: 15rpx;
+    flex-shrink: 0;
+}
+
+.btn-text {
+    font-size: 30rpx;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ============ 紧凑型列表 ============ */
+.customer-list.compact {
+    padding: 0 20rpx;
+}
+
+/* 列表标题 */
+.list-header.compact {
+    margin-bottom: 20rpx;
+    padding: 15rpx;
+    background: white;
+    border-radius: 12rpx;
+    box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.list-title-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.list-title {
+    font-size: 32rpx;
+    font-weight: 600;
+    color: #333;
+    position: relative;
+    padding-left: 16rpx;
+}
+
+.list-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10rpx;
+    width: 4rpx;
+    height: 24rpx;
+    background: #FF69B4;
+    border-radius: 2rpx;
+}
+
+.list-count {
+    font-size: 24rpx;
+    color: #666;
+}
+
+/* 客户列表项 - 紧凑版 */
+.customer-item.compact {
+    background: white;
+    border-radius: 12rpx;
+    padding: 20rpx;
+    margin-bottom: 15rpx;
+    box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.06);
+    border: 1rpx solid #F0F0F0;
+}
+
+.customer-main-info {
+    display: flex;
+    flex-direction: column;
+    gap: 15rpx;
+}
+
+/* 客户基本信息 */
+.customer-basic {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.customer-name {
+    font-size: 30rpx;
+    font-weight: 600;
+    color: #333;
+}
+
+.customer-phone {
+    font-size: 26rpx;
+    color: #666;
+}
+
+/* 预约时间信息 */
+.appointment-time-info {
+    display: flex;
+    gap: 15rpx;
+}
+
+.time-item {
+    display: flex;
+    align-items: center;
+    background: #FFF0F5;
+    padding: 8rpx 12rpx;
+    border-radius: 8rpx;
+    flex: 1;
+}
+
+.time-icon {
+    font-size: 24rpx;
+    margin-right: 8rpx;
+    color: #FF69B4;
+}
+
+.time-text {
+    font-size: 24rpx;
+    color: #333;
+}
+
+/* 员工和状态信息 */
+.appointment-staff-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.staff-item {
+    display: flex;
+    align-items: center;
+}
+
+.staff-icon {
+    font-size: 24rpx;
+    margin-right: 8rpx;
+    color: #666;
+}
+
+.staff-text {
+    font-size: 24rpx;
+    color: #333;
+}
+
+/* 状态徽章 */
+.status-badge {
+    padding: 6rpx 12rpx;
+    border-radius: 16rpx;
+    font-size: 22rpx;
+    font-weight: 500;
+}
+
+.status-badge.pending {
+    background: #FFF0F5;
+    color: #FF69B4;
+}
+
+.status-badge.confirmed {
+    background: #F0FFF0;
+    color: #32CD32;
+}
+
+.status-badge.completed {
+    background: #F0F8FF;
+    color: #1E90FF;
+}
+
+.status-badge.timeout {
+    background: #FFF0F0;
+    color: #FF4444;
+}
+
+.status-badge.cancelled {
+    background: #F5F5F5;
+    color: #999;
+}
+
+/* ============ 空状态 ============ */
+.empty-state.compact {
+    text-align: center;
+    padding: 60rpx 30rpx;
+    background: white;
+    border-radius: 12rpx;
+    margin-top: 20rpx;
+}
+
+.empty-icon {
+    font-size: 80rpx;
+    margin-bottom: 20rpx;
+    opacity: 0.3;
+}
+
+.empty-text {
+    display: block;
+    color: #999;
+    font-size: 28rpx;
+    margin-bottom: 30rpx;
+}
+
+.btn-primary.compact {
+    background: linear-gradient(135deg, #FF69B4, #FF1493) !important;
+    color: white !important;
+    border-radius: 50rpx !important;
+    padding: 20rpx 40rpx !important;
+    font-size: 28rpx !important;
+}
+
+/* ============ 详情弹窗 ============ */
+.detail-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+}
+
+.modal-mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content.compact {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    border-radius: 24rpx 24rpx 0 0;
+    max-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30rpx;
+    border-bottom: 1rpx solid #F0F0F0;
+}
+
+.modal-title {
+    font-size: 32rpx;
+    font-weight: 600;
+    color: #333;
+}
+
+.close-btn {
+    font-size: 40rpx;
+    color: #999;
+    width: 50rpx;
+    height: 50rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-body {
+    flex: 1;
+    padding: 30rpx;
+}
+
+.detail-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20rpx;
+}
+
+.detail-row {
+    display: flex;
+    align-items: flex-start;
+    font-size: 28rpx;
+    line-height: 1.4;
+}
+
+.detail-label {
+    color: #666;
+    width: 140rpx;
+    flex-shrink: 0;
+}
+
+.detail-value {
+    color: #333;
+    flex: 1;
+}
+
+.detail-status {
+    display: inline-block;
+    padding: 6rpx 12rpx;
+    border-radius: 16rpx;
+    font-size: 24rpx;
+    margin-left: 10rpx;
+}
+
+.detail-status.pending {
+    background: #FFF0F5;
+    color: #FF69B4;
+}
+
+.detail-status.confirmed {
+    background: #F0FFF0;
+    color: #32CD32;
+}
+
+.detail-status.completed {
+    background: #F0F8FF;
+    color: #1E90FF;
+}
+
+.modal-footer.compact {
+    display: flex;
+    padding: 20rpx 30rpx;
+    border-top: 1rpx solid #F0F0F0;
+    gap: 15rpx;
+}
+
+.btn-edit,
+.btn-cancel,
+.btn-complete {
+    flex: 1;
+    border-radius: 12rpx !important;
+    font-size: 28rpx !important;
+    height: 80rpx !important;
+    border: none !important;
+}
+
+.btn-edit {
+    background: #FFE4F2 !important;
+    color: #FF69B4 !important;
+}
+
+.btn-cancel {
+    background: #FFF0F0 !important;
+    color: #FF4444 !important;
+}
+
+.btn-complete {
+    background: #F0FFF0 !important;
+    color: #32CD32 !important;
+}
+
+/* ============ 加载更多样式 ============ */
+.load-more-container {
+    padding: 30rpx 0;
+    text-align: center;
+}
+
+.loading-more {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-spinner {
+    width: 36rpx;
+    height: 36rpx;
+    border: 3rpx solid #FFF0F5;
+    border-top: 3rpx solid #FF69B4;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15rpx;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+    font-size: 26rpx;
+    color: #FF69B4;
+}
+
+.no-more-data {
+    padding: 25rpx 0;
+}
+
+.no-more-text {
+    font-size: 26rpx;
+    color: #999;
+}
+
+.load-more-tip {
+    padding: 25rpx 0;
+}
+
+.load-more-text {
+    font-size: 26rpx;
+    color: #999;
+}
+
+/* ============ 新增按钮 ============ */
+.add-btn-container {
+    position: fixed;
+    bottom: 40rpx;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    z-index: 90;
+}
+
+.add-btn {
+    background: linear-gradient(135deg, #FF69B4, #FF1493) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 50rpx !important;
+    padding: 20rpx 40rpx !important;
+    font-size: 30rpx !important;
+    box-shadow: 0 4rpx 15rpx rgba(255, 105, 180, 0.3);
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.add-icon {
+    font-size: 36rpx;
+    margin-right: 10rpx;
+    font-weight: 300;
+}
+
+.add-text {
+    font-size: 30rpx;
+}
+
+/* ============ 响应式调整 ============ */
+@media (max-width: 768px) {
+    .filter-row.compact {
+        flex-wrap: wrap;
+    }
+    
+    .filter-item {
+        flex: 1 0 calc(50% - 8rpx);
+    }
+    
+    .filter-item.button-item {
+        flex: 0 0 100%;
+        justify-content: center;
+        margin-top: 10rpx;
+    }
+}

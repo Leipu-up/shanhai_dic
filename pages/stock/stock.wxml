@@ -1,0 +1,87 @@
+<!-- stock.wxml -->
+<view class="container">
+  <view class="header">
+    <view class="title">库存管理</view>
+    <view class="stock-stats">
+      <text>总商品：{{totalProducts}}种</text>
+      <text class="warning">低库存：{{lowStockCount}}种</text>
+    </view>
+  </view>
+
+  <view class="filter-tabs">
+    <view 
+      class="tab-item {{currentTab === 'all' ? 'active' : ''}}" 
+      bindtap="switchTab" 
+      data-tab="all"
+    >
+      全部商品
+    </view>
+    <view 
+      class="tab-item {{currentTab === 'low' ? 'active' : ''}}" 
+      bindtap="switchTab" 
+      data-tab="low"
+    >
+      低库存
+    </view>
+    <view 
+      class="tab-item {{currentTab === 'expiring' ? 'active' : ''}}" 
+      bindtap="switchTab" 
+      data-tab="expiring"
+    >
+      临期产品
+    </view>
+  </view>
+
+  <view class="action-buttons" wx:if="{{isAdmin}}">
+    <button class="primary-btn mini" bindtap="goToAddStock">
+      ＋ 新增商品
+    </button>
+    <button class="secondary-btn mini" bindtap="showInStockDialog">
+      入库
+    </button>
+    <button class="secondary-btn mini" bindtap="showOutStockDialog">
+      出库
+    </button>
+  </view>
+
+  <view class="stock-list">
+    <block wx:for="{{filteredStock}}" wx:key="id">
+      <view class="stock-card">
+        <view class="stock-header">
+          <text class="product-name">{{item.name}}</text>
+          <view class="stock-status">
+            <text class="stock-count {{item.status}}">{{item.stock}} {{item.unit}}</text>
+            <text class="category-tag">{{item.category}}</text>
+          </view>
+        </view>
+        
+        <view class="stock-details">
+          <view class="detail-row">
+            <text class="detail-label">规格：</text>
+            <text class="detail-value">{{item.spec}}</text>
+          </view>
+          <view class="detail-row">
+            <text class="detail-label">供应商：</text>
+            <text class="detail-value">{{item.supplier}}</text>
+          </view>
+          <view class="detail-row">
+            <text class="detail-label">批号：</text>
+            <text class="detail-value">{{item.batchNumber}}</text>
+          </view>
+          <view class="detail-row" wx:if="{{item.expiryDate}}">
+            <text class="detail-label">有效期：</text>
+            <text class="detail-value {{item.isExpiring ? 'expiring' : ''}}">
+              {{item.expiryDate}}
+            </text>
+          </view>
+        </view>
+        
+        <view class="stock-actions" wx:if="{{isAdmin}}">
+          <button class="mini-btn" bindtap="inStock" data-id="{{item.id}}">入库</button>
+          <button class="mini-btn" bindtap="outStock" data-id="{{item.id}}">出库</button>
+          <button class="mini-btn delete" bindtap="deleteStock" data-id="{{item.id}}">删除</button>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>

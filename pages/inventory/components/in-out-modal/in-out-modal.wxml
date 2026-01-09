@@ -1,0 +1,140 @@
+<view class="modal-container" wx:if="{{showModal}}">
+  <view class="modal-mask" bindtap="handleCancel"></view>
+  
+  <view class="modal-content">
+    <!-- 标题栏 -->
+    <view class="modal-header">
+      <text class="modal-title">{{type === 'in' ? '商品入库' : '商品出库'}}</text>
+      <text class="close-btn" bindtap="handleCancel">×</text>
+    </view>
+    
+    <scroll-view class="modal-body" scroll-y>
+      <!-- 商品信息 -->
+      <view class="form-section">
+        <view class="section-title">商品信息</view>
+        
+        <view class="form-item">
+          <text class="form-label">商品名称</text>
+          <view class="form-value">{{inventoryName}}</view>
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">当前库存</text>
+          <view class="form-value">
+            <text class="current-quantity">{{currentQuantity}}</text>
+            <text class="current-unit">{{unit}}</text>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 操作信息 -->
+      <view class="form-section">
+        <view class="section-title">{{type === 'in' ? '入库信息' : '出库信息'}}</view>
+        
+        <view class="form-item">
+          <text class="form-label required">{{type === 'in' ? '入库数量' : '出库数量'}}</text>
+          <input 
+            class="form-input" 
+            type="number" 
+            placeholder="{{type === 'in' ? '请输入入库数量' : '请输入出库数量'}}"
+            value="{{formData.quantity}}"
+            bindinput="onInputChange"
+            data-field="quantity"
+          />
+          <text class="form-unit">{{unit}}</text>
+        </view>
+        
+        <view class="form-item" wx:if="{{type === 'out'}}">
+          <text class="form-label">出库用途</text>
+          <picker 
+            mode="selector" 
+            range="{{purposeOptions}}"
+            value="{{purposeIndex}}"
+            bindchange="onPurposeChange"
+            class="picker-input"
+          >
+            <view class="picker-text {{formData.purpose ? '' : 'placeholder'}}">
+              {{formData.purpose || '选择出库用途'}}
+            </view>
+          </picker>
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">{{type === 'in' ? '入库人' : '出库人'}}</text>
+          <input 
+            class="form-input" 
+            type="text" 
+            placeholder="{{type === 'in' ? '请输入入库人姓名' : '请输入出库人姓名'}}"
+            value="{{formData.person}}"
+            bindinput="onInputChange"
+            data-field="person"
+          />
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">{{type === 'in' ? '入库时间' : '出库时间'}}</text>
+          <picker 
+            mode="datetime" 
+            value="{{currentTime}}" 
+            bindchange="onTimeChange"
+            class="picker-input"
+          >
+            <view class="picker-text {{formData.time ? '' : 'placeholder'}}">
+              {{formData.time || '选择时间'}}
+            </view>
+          </picker>
+        </view>
+      </view>
+      
+      <!-- 备注信息 -->
+      <view class="form-section">
+        <view class="section-title">备注信息</view>
+        
+        <view class="form-item">
+          <text class="form-label">操作备注</text>
+          <textarea 
+            class="form-textarea" 
+            placeholder="请输入备注信息（最多200字）"
+            value="{{formData.notes}}"
+            bindinput="onTextareaChange"
+            data-field="notes"
+            maxlength="200"
+          />
+          <view class="textarea-counter">
+            <text>{{formData.notes ? formData.notes.length : 0}}/200</text>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 计算结果 -->
+      <view class="form-section" wx:if="{{formData.quantity && !isNaN(formData.quantity)}}">
+        <view class="section-title">计算结果</view>
+        
+        <view class="result-display">
+          <view class="result-row">
+            <text class="result-label">当前库存：</text>
+            <text class="result-value">{{currentQuantity}} {{unit}}</text>
+          </view>
+          <view class="result-row">
+            <text class="result-label">{{type === 'in' ? '➕ 入库数量：' : '➖ 出库数量：'}}</text>
+            <text class="result-value">{{formData.quantity}} {{unit}}</text>
+          </view>
+          <view class="result-row total">
+            <text class="result-label">更新后库存：</text>
+            <text class="result-value">{{calculateNewQuantity()}} {{unit}}</text>
+          </view>
+          <view class="result-warning" wx:if="{{type === 'out' && calculateNewQuantity() < 0}}">
+            <text class="warning-icon">⚠️</text>
+            <text class="warning-text">库存不足，无法出库！</text>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+    
+    <!-- 底部按钮 -->
+    <view class="modal-footer">
+      <button class="btn-cancel" bindtap="handleCancel">取消</button>
+      <button class="btn-confirm" bindtap="handleConfirm" disabled="{{!isFormValid}}">确认{{type === 'in' ? '入库' : '出库'}}</button>
+    </view>
+  </view>
+</view>

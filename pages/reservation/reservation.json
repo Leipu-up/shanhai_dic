@@ -1,0 +1,8 @@
+{
+    "usingComponents": {
+      "add-appointment-modal": "/pages/reservation/components/add-appointment-modal/add-appointment-modal"
+    },
+    "navigationBarTitleText": "预约管理",
+    "navigationBarBackgroundColor": "#FF69B4",
+    "navigationBarTextStyle": "white"
+  }

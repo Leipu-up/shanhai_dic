@@ -1,0 +1,587 @@
+/* 排班管理页面 - 优化筛选区域 */
+.schedule-page {
+    min-height: 100vh;
+    background: #F8F8F8;
+    padding-bottom: 120rpx;
+  }
+  
+  /* ============ 紧凑型筛选栏 - 三行布局 ============ */
+  .filter-bar.compact {
+    background: white;
+    padding: 20rpx 30rpx;
+    margin: 20rpx;
+    border-radius: 16rpx;
+    box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+    border: 1rpx solid #F0F0F0;
+  }
+  
+  /* 筛选行通用样式 */
+  .filter-row.compact {
+    display: flex;
+    align-items: center;
+    gap: 15rpx;
+  }
+  
+  /* 第一行：日期范围 */
+  .filter-row.compact.date-row {
+    margin-bottom: 20rpx;
+  }
+  
+  /* 日期筛选项 */
+  .filter-item.date-item {
+    flex: 1;
+  }
+  
+  .date-picker.compact {
+    display: flex;
+    align-items: center;
+    padding: 18rpx 20rpx;
+    border-radius: 12rpx;
+    background: #FFF0F5;
+    border: 1rpx solid #FFD1E8;
+    font-size: 26rpx;
+    height: 80rpx;
+    box-sizing: border-box;
+  }
+  
+  .date-icon {
+    font-size: 28rpx;
+    margin-right: 10rpx;
+    color: #FF69B4;
+    flex-shrink: 0;
+  }
+  
+  .date-text {
+    flex: 1;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+  }
+  
+  .date-separator.compact {
+    font-size: 28rpx;
+    color: #FF69B4;
+    font-weight: 500;
+    flex-shrink: 0;
+    padding: 0 10rpx;
+  }
+  
+  /* 第二行：员工和状态筛选 */
+  .filter-row.compact.select-row {
+    margin-bottom: 20rpx;
+  }
+  
+  .filter-item.staff-item,
+  .filter-item.status-item {
+    flex: 1;
+  }
+  
+  .filter-select.compact {
+    display: flex;
+    align-items: center;
+    padding: 18rpx 20rpx;
+    border-radius: 12rpx;
+    background: #F8F8F8;
+    border: 1rpx solid #E0E0E0;
+    font-size: 26rpx;
+    height: 80rpx;
+    box-sizing: border-box;
+    position: relative;
+  }
+  
+  .filter-icon {
+    font-size: 28rpx;
+    margin-right: 10rpx;
+    flex-shrink: 0;
+  }
+  
+  .filter-text {
+    flex: 1;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+  }
+  
+  .dropdown-arrow {
+    font-size: 20rpx;
+    color: #999;
+    margin-left: 10rpx;
+    flex-shrink: 0;
+  }
+  
+  /* 第三行：按钮行 */
+  .filter-row.compact.button-row {
+    justify-content: space-between;
+    margin-top: 5rpx;
+  }
+  
+  .btn-reset.original,
+  .btn-search.original {
+    flex: 1;
+    border-radius: 16rpx !important;
+    font-size: 30rpx !important;
+    height: 90rpx !important;
+    border: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.3s !important;
+    margin: 0 !important;
+    padding: 0 30rpx !important;
+    white-space: nowrap;
+    min-width: 0;
+    box-sizing: border-box !important;
+  }
+  
+  .btn-reset.original {
+    background: linear-gradient(135deg, #F5F5F5, #FFFFFF) !important;
+    color: #666 !important;
+    border: 1rpx solid #E0E0E0 !important;
+    margin-right: 15rpx;
+  }
+  
+  .btn-reset.original:active {
+    transform: translateY(2rpx);
+    background: linear-gradient(135deg, #E0E0E0, #F5F5F5) !important;
+  }
+  
+  .btn-search.original {
+    background: linear-gradient(135deg, #FF69B4, #FF1493) !important;
+    color: white !important;
+    box-shadow: 0 4rpx 15rpx rgba(255, 105, 180, 0.3) !important;
+  }
+  
+  .btn-search.original:active {
+    transform: translateY(2rpx);
+    box-shadow: 0 2rpx 8rpx rgba(255, 105, 180, 0.3) !important;
+  }
+  
+  .btn-icon {
+    font-size: 34rpx;
+    margin-right: 15rpx;
+    flex-shrink: 0;
+  }
+  
+  .btn-text {
+    font-size: 30rpx;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  /* 统计信息 */
+  .stats-info {
+    display: flex;
+    justify-content: space-around;
+    background: white;
+    padding: 25rpx 20rpx;
+    margin: 20rpx;
+    border-radius: 16rpx;
+    box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+  }
+  
+  .stats-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .stats-number {
+    font-size: 32rpx;
+    font-weight: 600;
+    color: #FF69B4;
+    margin-bottom: 8rpx;
+  }
+  
+  .stats-label {
+    font-size: 24rpx;
+    color: #666;
+  }
+  
+  /* 排班表格 */
+  .schedule-table {
+    background: white;
+    margin: 20rpx;
+    border-radius: 16rpx;
+    overflow: hidden;
+    box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+  }
+  
+  .table-header {
+    display: flex;
+    background: #FFF0F5;
+    padding: 20rpx 0;
+    border-bottom: 1rpx solid #FFE4F2;
+  }
+  
+  .header-cell {
+    flex: 1;
+    text-align: center;
+    font-size: 26rpx;
+    font-weight: 600;
+    color: #FF69B4;
+    padding: 10rpx 5rpx;
+  }
+  
+  .header-cell:first-child {
+    flex: 1.2;
+  }
+  
+  .header-cell:last-child {
+    flex: 0.8;
+  }
+  
+  .table-body {
+    max-height: 600rpx;
+    overflow-y: auto;
+  }
+  
+  .table-row {
+    display: flex;
+    align-items: center;
+    padding: 25rpx 0;
+    border-bottom: 1rpx solid #F0F0F0;
+    transition: background-color 0.3s;
+  }
+  
+  .table-row:last-child {
+    border-bottom: none;
+  }
+  
+  .table-row:active {
+    background-color: #FFF0F5;
+  }
+  
+  .table-cell {
+    flex: 1;
+    text-align: center;
+    padding: 5rpx 5rpx;
+  }
+  
+  .table-cell:first-child {
+    flex: 1.2;
+  }
+  
+  .table-cell:last-child {
+    flex: 0.8;
+  }
+  
+  /* 员工信息 */
+  .staff-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .staff-avatar {
+    width: 60rpx;
+    height: 60rpx;
+    border-radius: 50%;
+    border: 1rpx solid #FFE4F2;
+    margin-right: 15rpx;
+  }
+  
+  .staff-name {
+    font-size: 26rpx;
+    color: #333;
+  }
+  
+  /* 班次时间 */
+  .shift-time {
+    font-size: 26rpx;
+    color: #333;
+    font-weight: 500;
+  }
+  
+  /* 状态徽章 */
+  .status-badge {
+    display: inline-block;
+    padding: 8rpx 16rpx;
+    border-radius: 20rpx;
+    font-size: 24rpx;
+    font-weight: 500;
+  }
+  
+  .status-badge.on-duty {
+    background: #F0FFF0;
+    color: #32CD32;
+    border: 1rpx solid #C8F0C8;
+  }
+  
+  .status-badge.off-duty {
+    background: #F5F5F5;
+    color: #999;
+    border: 1rpx solid #E0E0E0;
+  }
+  
+  .status-badge.pending {
+    background: #FFF0F5;
+    color: #FF69B4;
+    border: 1rpx solid #FFD1E8;
+  }
+  
+  .status-badge.completed {
+    background: #E6F7FF;
+    color: #1890FF;
+    border: 1rpx solid #B3E0FF;
+  }
+  
+  /* 预约数量 */
+  .appointment-count {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .count-number {
+    font-size: 28rpx;
+    font-weight: 600;
+    color: #FF69B4;
+    margin-right: 5rpx;
+  }
+  
+  .count-label {
+    font-size: 24rpx;
+    color: #666;
+  }
+  
+  /* 排班日期 */
+  .schedule-date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .date-day {
+    font-size: 30rpx;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5rpx;
+  }
+  
+  .date-month {
+    font-size: 22rpx;
+    color: #999;
+  }
+  
+  /* 操作按钮 */
+  .actions {
+    display: flex;
+    justify-content: center;
+    gap: 10rpx;
+  }
+  
+  .action-btn {
+    width: 60rpx !important;
+    height: 60rpx !important;
+    min-width: auto !important;
+    border-radius: 50% !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    border: none !important;
+  }
+  
+  .action-btn.edit {
+    background: #FFE4F2 !important;
+    color: #FF69B4 !important;
+    border: 1rpx solid #FFD1E8 !important;
+  }
+  
+  .action-btn.delete {
+    background: #FFF0F0 !important;
+    color: #FF4444 !important;
+    border: 1rpx solid #FFCCCC !important;
+  }
+  
+  .action-icon {
+    font-size: 26rpx;
+  }
+  
+  /* 空状态 */
+  .empty-state {
+    text-align: center;
+    padding: 80rpx 30rpx;
+    background: white;
+    margin: 20rpx;
+    border-radius: 16rpx;
+    box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+  }
+  
+  .empty-icon {
+    font-size: 100rpx;
+    margin-bottom: 30rpx;
+    opacity: 0.3;
+  }
+  
+  .empty-text {
+    display: block;
+    color: #999;
+    font-size: 30rpx;
+    margin-bottom: 40rpx;
+  }
+  
+  .btn-primary {
+    background: linear-gradient(135deg, #FF69B4, #FF1493) !important;
+    color: white !important;
+    border-radius: 50rpx !important;
+    padding: 20rpx 40rpx !important;
+    font-size: 28rpx !important;
+    border: none !important;
+    box-shadow: 0 4rpx 12rpx rgba(255, 105, 180, 0.3) !important;
+  }
+  
+  /* 加载更多容器 */
+  .load-more-container {
+    padding: 40rpx 0;
+    text-align: center;
+  }
+  
+  .loading-more {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .loading-spinner {
+    width: 36rpx;
+    height: 36rpx;
+    border: 3rpx solid #FFF0F5;
+    border-top: 3rpx solid #FF69B4;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15rpx;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .loading-text {
+    font-size: 26rpx;
+    color: #FF69B4;
+  }
+  
+  .no-more-data {
+    padding: 25rpx 0;
+  }
+  
+  .no-more-text {
+    font-size: 26rpx;
+    color: #999;
+  }
+  
+  .load-more-tip {
+    padding: 25rpx 0;
+  }
+  
+  .load-more-text {
+    font-size: 26rpx;
+    color: #999;
+  }
+  
+  .load-more-text:active {
+    color: #FF69B4;
+  }
+  
+  /* 新增按钮 */
+  .add-btn-container {
+    position: fixed;
+    bottom: 40rpx;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    z-index: 90;
+  }
+  
+  .add-btn {
+    background: linear-gradient(135deg, #FF69B4, #FF1493) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 50rpx !important;
+    padding: 20rpx 40rpx !important;
+    font-size: 30rpx !important;
+    box-shadow: 0 4rpx 15rpx rgba(255, 105, 180, 0.3);
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  
+  .add-icon {
+    font-size: 36rpx;
+    margin-right: 10rpx;
+    font-weight: 300;
+  }
+  
+  .add-text {
+    font-size: 30rpx;
+  }
+  
+  /* 响应式调整 */
+  @media (max-width: 768px) {
+    .filter-bar.compact {
+      padding: 15rpx 20rpx;
+      margin: 15rpx;
+    }
+    
+    .filter-row.compact {
+      flex-direction: column;
+      gap: 15rpx;
+    }
+    
+    .filter-row.compact.date-row {
+      flex-direction: row;
+      gap: 10rpx;
+    }
+    
+    .filter-row.compact.select-row {
+      flex-direction: row;
+      gap: 10rpx;
+    }
+    
+    .filter-row.compact.button-row {
+      flex-direction: row;
+      gap: 15rpx;
+    }
+    
+    .filter-item {
+      width: 100%;
+    }
+    
+    .date-separator.compact {
+      padding: 0 5rpx;
+    }
+    
+    .schedule-table {
+      margin: 15rpx;
+      overflow-x: auto;
+    }
+    
+    .table-header,
+    .table-row {
+      min-width: 700rpx;
+    }
+    
+    .stats-info {
+      padding: 20rpx 10rpx;
+      margin: 15rpx;
+    }
+    
+    .stats-number {
+      font-size: 28rpx;
+    }
+    
+    .stats-label {
+      font-size: 22rpx;
+    }
+  }

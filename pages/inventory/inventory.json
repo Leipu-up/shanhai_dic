@@ -1,0 +1,10 @@
+{
+    "usingComponents": {
+      "add-inventory-modal": "/pages/inventory/components/add-inventory-modal/add-inventory-modal",
+      "in-out-modal": "/pages/inventory/components/in-out-modal/in-out-modal"
+    },
+    "navigationBarTitleText": "库存管理",
+    "navigationBarBackgroundColor": "#FF69B4",
+    "navigationBarTextStyle": "white",
+    "enablePullDownRefresh": true
+  }

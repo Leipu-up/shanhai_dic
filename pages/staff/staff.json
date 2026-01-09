@@ -1,0 +1,9 @@
+{
+    "usingComponents": {
+      "add-staff-modal": "/pages/staff/components/add-staff-modal/add-staff-modal"
+    },
+    "navigationBarTitleText": "员工管理",
+    "navigationBarBackgroundColor": "#FF69B4",
+    "navigationBarTextStyle": "white",
+    "enablePullDownRefresh": true
+  }

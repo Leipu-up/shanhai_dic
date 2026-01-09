@@ -1,62 +1,429 @@
-/**index.wxss**/
-page {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-.scrollarea {
-  flex: 1;
-  overflow-y: hidden;
+.page-container {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #FFFFFF 0%, #FFF0F5 100%);
+    padding-bottom: 40rpx;
 }
 
-.userinfo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: #aaa;
-  width: 80%;
+/* 导航栏样式 */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40rpx 30rpx 20rpx;
+    background: white;
+    /* 移除固定定位相关属性 */
+    /* position: sticky; */
+    /* top: 0; */
+    /* z-index: 100; */
+    /* box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05); */
+    border-bottom: 1rpx solid #F0F0F0;
+    /* 添加底部边框 */
 }
 
-.userinfo-avatar {
-  overflow: hidden;
-  width: 128rpx;
-  height: 128rpx;
-  margin: 20rpx;
-  border-radius: 50%;
+.navbar-left {
+    flex: 1;
 }
 
-.usermotto {
-  margin-top: 200px;
+.location {
+    display: flex;
+    align-items: center;
 }
 
-.avatar-wrapper {
-  padding: 0;
-  width: 56px !important;
-  border-radius: 8px;
-  margin-top: 40px;
-  margin-bottom: 40px;
+.location-icon {
+    font-size: 32rpx;
+    margin-right: 10rpx;
 }
 
-.avatar {
-  display: block;
-  width: 56px;
-  height: 56px;
+.location-text {
+    font-size: 36rpx;
+    font-weight: 600;
+    color: #333;
 }
 
-.nickname-wrapper {
-  display: flex;
-  width: 100%;
-  padding: 16px;
-  box-sizing: border-box;
-  border-top: .5px solid rgba(0, 0, 0, 0.1);
-  border-bottom: .5px solid rgba(0, 0, 0, 0.1);
-  color: black;
+.navbar-right {
+    display: flex;
+    align-items: center;
 }
 
-.nickname-label {
-  width: 105px;
+.notification-icon {
+    position: relative;
+    font-size: 40rpx;
+    margin-right: 30rpx;
+    padding: 10rpx;
 }
 
-.nickname-input {
-  flex: 1;
+.badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: #FF4444;
+    color: white;
+    font-size: 20rpx;
+    min-width: 32rpx;
+    height: 32rpx;
+    border-radius: 16rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 8rpx;
+}
+
+.user-avatar {
+    width: 80rpx;
+    height: 80rpx;
+    border-radius: 50%;
+    border: 2rpx solid #FF69B4;
+}
+
+/* 轮播图样式 */
+.swiper-container {
+    margin: 20rpx 30rpx;
+    border-radius: 20rpx;
+    overflow: hidden;
+    box-shadow: 0 4rpx 20rpx rgba(255, 105, 180, 0.15);
+}
+
+.swiper {
+    height: 300rpx;
+}
+
+.swiper-item {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40rpx;
+    position: relative;
+}
+
+.swiper-content {
+    flex: 1;
+    z-index: 2;
+}
+
+.swiper-title {
+    display: block;
+    font-size: 40rpx;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 10rpx;
+    text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.1);
+}
+
+.swiper-desc {
+    display: block;
+    font-size: 28rpx;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 30rpx;
+}
+
+.swiper-button {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 12rpx 30rpx;
+    border-radius: 50rpx;
+    font-size: 24rpx;
+    backdrop-filter: blur(10rpx);
+    border: 1rpx solid rgba(255, 255, 255, 0.3);
+}
+
+.swiper-image {
+    width: 200rpx;
+    height: 200rpx;
+    z-index: 1;
+}
+
+/* 今日预约样式调整 */
+.today-appointments {
+    margin: 30rpx 20rpx;
+}
+
+.appointment-item {
+    display: flex;
+    padding: 30rpx 0;
+    border-bottom: 1rpx solid #F0F0F0;
+    transition: background-color 0.3s;
+}
+
+.appointment-item:active {
+    background-color: #FFF0F5;
+}
+
+.appointment-left {
+    width: 140rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 30rpx;
+}
+
+.time-badge {
+    background: linear-gradient(135deg, #FF69B4, #FF1493);
+    color: white;
+    padding: 20rpx;
+    border-radius: 16rpx;
+    text-align: center;
+    min-width: 100rpx;
+}
+
+.time-hour {
+    display: block;
+    font-size: 32rpx;
+    font-weight: 600;
+    margin-bottom: 5rpx;
+}
+
+.time-period {
+    font-size: 24rpx;
+    opacity: 0.9;
+}
+
+.appointment-divider {
+    flex: 1;
+    width: 2rpx;
+    background: linear-gradient(180deg, #FF69B4, transparent);
+    margin-top: 20rpx;
+}
+
+.appointment-right {
+    flex: 1;
+}
+
+.customer-info {
+    margin-bottom: 15rpx;
+}
+
+.customer-name {
+    display: block;
+    font-size: 32rpx;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 5rpx;
+}
+
+.customer-phone {
+    font-size: 26rpx;
+    color: #666;
+}
+
+.service-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10rpx;
+}
+
+.service {
+    font-size: 28rpx;
+    color: #333;
+    flex: 1;
+}
+
+.status-badge {
+    padding: 8rpx 20rpx;
+    border-radius: 20rpx;
+    font-size: 24rpx;
+}
+
+.status-badge.pending {
+    background: #FFF0F5;
+    color: #FF69B4;
+}
+
+.status-badge.confirmed {
+    background: #F0FFF0;
+    color: #32CD32;
+}
+
+.status-badge.completed {
+    background: #F0F8FF;
+    color: #1E90FF;
+}
+
+.staff-info {
+    display: flex;
+    align-items: center;
+    font-size: 26rpx;
+    color: #999;
+}
+
+.staff-label {
+    margin-right: 10rpx;
+}
+
+.staff-name {
+    color: #666;
+}
+
+/* 统计数据样式调整 */
+.stats-grid {
+    margin: 30rpx 20rpx;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20rpx;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    padding: 30rpx;
+    background: linear-gradient(135deg, #FFE4F2, #FFFFFF);
+    border-radius: 16rpx;
+    box-shadow: 0 4rpx 12rpx rgba(255, 105, 180, 0.1);
+    transition: transform 0.3s;
+}
+
+.stat-item:active {
+    transform: scale(0.98);
+}
+
+.stat-icon {
+    font-size: 48rpx;
+    margin-right: 20rpx;
+    width: 70rpx;
+    height: 70rpx;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stat-item:nth-child(1) .stat-icon {
+    background: rgba(106, 90, 205, 0.1);
+    color: #6A5ACD;
+}
+
+.stat-item:nth-child(2) .stat-icon {
+    background: rgba(255, 165, 0, 0.1);
+    color: #FFA500;
+}
+
+.stat-item:nth-child(3) .stat-icon {
+    background: rgba(32, 178, 170, 0.1);
+    color: #20B2AA;
+}
+
+.stat-item:nth-child(4) .stat-icon {
+    background: rgba(255, 105, 180, 0.1);
+    color: #FF69B4;
+}
+
+.stat-content {
+    flex: 1;
+}
+
+.stat-number {
+    display: block;
+    font-size: 36rpx;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5rpx;
+}
+
+.stat-label {
+    font-size: 26rpx;
+    color: #666;
+}
+
+/* 快捷操作样式调整 */
+.quick-actions {
+    margin: 30rpx 20rpx;
+}
+
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30rpx;
+    margin-top: 30rpx;
+}
+
+.action-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.3s;
+}
+
+.action-item:active {
+    transform: scale(0.95);
+}
+
+.action-icon {
+    width: 100rpx;
+    height: 100rpx;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48rpx;
+    margin-bottom: 16rpx;
+    transition: all 0.3s;
+}
+
+.action-icon.customer {
+    background: linear-gradient(135deg, #6A5ACD, #9370DB);
+    color: white;
+}
+
+.action-icon.staff {
+    background: linear-gradient(135deg, #FFA500, #FFD700);
+    color: white;
+}
+
+.action-icon.inventory {
+    background: linear-gradient(135deg, #20B2AA, #48D1CC);
+    color: white;
+}
+
+.action-icon.appointment {
+    background: linear-gradient(135deg, #FF69B4, #FF1493);
+    color: white;
+}
+
+.action-icon.schedule {
+    background: linear-gradient(135deg, #32CD32, #90EE90);
+    color: white;
+}
+
+.action-icon.reports {
+    background: linear-gradient(135deg, #1E90FF, #87CEEB);
+    color: white;
+}
+
+.action-text {
+    font-size: 28rpx;
+    color: #333;
+    text-align: center;
+}
+
+/* 底部提示 */
+.bottom-tips {
+    text-align: center;
+    padding: 30rpx;
+    color: #999;
+    font-size: 24rpx;
+}
+
+.tip-text {
+    opacity: 0.8;
+}
+
+/* 空状态样式 */
+.empty-state {
+    text-align: center;
+    padding: 60rpx 0;
+}
+
+.empty-icon {
+    font-size: 80rpx;
+    margin-bottom: 20rpx;
+    opacity: 0.5;
+}
+
+.empty-text {
+    display: block;
+    color: #999;
+    font-size: 30rpx;
+    margin-bottom: 30rpx;
 }

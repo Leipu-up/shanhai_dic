@@ -1,0 +1,124 @@
+<view class="modal-container" wx:if="{{showModal}}">
+  <view class="modal-mask" bindtap="handleCancel"></view>
+  
+  <view class="modal-content">
+    <!-- 标题栏 -->
+    <view class="modal-header">
+      <text class="modal-title">新增商品</text>
+      <text class="close-btn" bindtap="handleCancel">×</text>
+    </view>
+    
+    <scroll-view class="modal-body" scroll-y>
+      <!-- 商品信息 -->
+      <view class="form-section">
+        <view class="section-title">商品信息</view>
+        
+        <view class="form-item">
+          <text class="form-label required">商品名称</text>
+          <input 
+            class="form-input" 
+            type="text" 
+            placeholder="请输入商品名称"
+            value="{{formData.name}}"
+            bindinput="onInputChange"
+            data-field="name"
+            maxlength="50"
+          />
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">商品分类</text>
+          <picker 
+            mode="selector" 
+            range="{{categoryOptions}}"
+            value="{{categoryIndex}}"
+            bindchange="onCategoryChange"
+            class="picker-input"
+          >
+            <view class="picker-text {{formData.category ? '' : 'placeholder'}}">
+              {{formData.category || '选择分类'}}
+            </view>
+          </picker>
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label required">单位</text>
+          <input 
+            class="form-input" 
+            type="text" 
+            placeholder="如：瓶、盒、支"
+            value="{{formData.unit}}"
+            bindinput="onInputChange"
+            data-field="unit"
+            maxlength="10"
+          />
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label required">所在店铺</text>
+          <picker 
+            mode="selector" 
+            range="{{storeOptions}}"
+            value="{{storeIndex}}"
+            bindchange="onStoreChange"
+            class="picker-input"
+          >
+            <view class="picker-text {{formData.storeName ? '' : 'placeholder'}}">
+              {{formData.storeName || '选择店铺'}}
+            </view>
+          </picker>
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">初始库存</text>
+          <input 
+            class="form-input" 
+            type="number" 
+            placeholder="请输入初始库存数量"
+            value="{{formData.quantity}}"
+            bindinput="onInputChange"
+            data-field="quantity"
+          />
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">库存预警</text>
+          <input 
+            class="form-input" 
+            type="number" 
+            placeholder="设置库存预警数量"
+            value="{{formData.minStock}}"
+            bindinput="onInputChange"
+            data-field="minStock"
+          />
+        </view>
+      </view>
+      
+      <!-- 备注信息 -->
+      <view class="form-section">
+        <view class="section-title">备注信息</view>
+        
+        <view class="form-item">
+          <text class="form-label">商品备注</text>
+          <textarea 
+            class="form-textarea" 
+            placeholder="请输入商品备注信息（最多200字）"
+            value="{{formData.notes}}"
+            bindinput="onTextareaChange"
+            data-field="notes"
+            maxlength="200"
+          />
+          <view class="textarea-counter">
+            <text>{{formData.notes ? formData.notes.length : 0}}/200</text>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+    
+    <!-- 底部按钮 -->
+    <view class="modal-footer">
+      <button class="btn-cancel" bindtap="handleCancel">取消</button>
+      <button class="btn-confirm" bindtap="handleConfirm" disabled="{{!isFormValid}}">确认新增</button>
+    </view>
+  </view>
+</view>

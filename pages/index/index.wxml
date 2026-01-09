@@ -1,27 +1,158 @@
-<!--index.wxml-->
-<scroll-view class="scrollarea" scroll-y type="list">
-  <view class="container">
-    <view class="userinfo">
-      <block wx:if="{{canIUseNicknameComp && !hasUserInfo}}">
-        <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-          <image class="avatar" src="{{userInfo.avatarUrl}}"></image>
-        </button>
-        <view class="nickname-wrapper">
-          <text class="nickname-label">昵称</text>
-          <input type="nickname" class="nickname-input" placeholder="请输入昵称" bind:change="onInputChange" />
+<view class="page-container">
+    <!-- 顶部导航栏 (改为普通布局) -->
+    <view class="navbar">
+        <view class="navbar-left">
+            <view class="location">
+                <text class="location-icon">💄</text>
+                <text class="location-text">句美菁英</text>
+            </view>
+            <view class="current-date">{{currentDate}}</view>
         </view>
-      </block>
-      <block wx:elif="{{!hasUserInfo}}">
-        <button wx:if="{{canIUseGetUserProfile}}" bindtap="getUserProfile"> 获取头像昵称 </button>
-        <view wx:else> 请使用2.10.4及以上版本基础库 </view>
-      </block>
-      <block wx:else>
-        <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-        <text class="userinfo-nickname">{{userInfo.nickName}}</text>
-      </block>
+        <view class="navbar-right">
+            <view class="notification-icon" bindtap="navigateToNotifications">
+                <text>张小美</text>
+            </view>
+            <image class="user-avatar" src="{{userInfo.avatar || '/images/default-avatar.png'}}"
+                bindtap="navigateToMyPage"></image>
+        </view>
     </view>
-    <view class="usermotto">
-      <text class="user-motto">{{motto}}</text>
+
+    <!-- 轮播图区域 -->
+    <view class="swiper-container">
+        <swiper class="swiper" indicator-dots="{{true}}" autoplay="{{true}}" interval="3000" duration="500">
+            <swiper-item wx:for="{{banners}}" wx:key="index">
+                <view class="swiper-item" style="background: linear-gradient(135deg, {{item.bgColor}});"
+                    bindtap="navigateToBanner" data-url="{{item.url}}">
+                    <view class="swiper-content">
+                        <text class="swiper-title">{{item.title}}</text>
+                        <text class="swiper-desc">{{item.description}}</text>
+                        <view class="swiper-button">查看详情</view>
+                    </view>
+                    <image class="swiper-image" src="{{item.image}}" mode="aspectFit"></image>
+                </view>
+            </swiper-item>
+        </swiper>
     </view>
-  </view>
-</scroll-view>
+
+    <!-- 今日预约 -->
+    <view class="today-appointments card">
+        <view class="section-header flex-between">
+            <view class="section-title">今日预约</view>
+            <view class="view-all" bindtap="viewAllAppointments">查看全部 ></view>
+        </view>
+        <view wx:if="{{todayAppointments.length > 0}}">
+            <view class="appointment-item" wx:for="{{todayAppointments}}" wx:key="index" bindtap="viewAppointmentDetail"
+                data-id="{{item.id}}">
+                <view class="appointment-left">
+                    <view class="time-badge">
+                        <text class="time-hour">{{item.timeHour}}</text>
+                        <text class="time-period">{{item.timePeriod}}</text>
+                    </view>
+                    <view class="appointment-divider" wx:if="{{!item.last}}"></view>
+                </view>
+                <view class="appointment-right">
+                    <view class="customer-info">
+                        <text class="customer-name">{{item.customerName}}</text>
+                        <text class="customer-phone">📱 {{item.customerPhone}}</text>
+                    </view>
+                    <view class="service-info">
+                        <text class="service">{{item.service}}</text>
+                        <view class="status-badge {{item.status}}">{{item.statusText}}</view>
+                    </view>
+                    <view class="staff-info" wx:if="{{item.staffName}}">
+                        <text class="staff-label">服务人员:</text>
+                        <text class="staff-name">{{item.staffName}}</text>
+                    </view>
+                </view>
+            </view>
+        </view>
+        <view wx:else class="empty-state">
+            <view class="empty-icon">📅</view>
+            <text class="empty-text">今日暂无预约</text>
+            <button class="btn-secondary" bindtap="navigateToAddAppointment">新增预约</button>
+        </view>
+    </view>
+
+    <!-- 统计数据 -->
+    <view class="stats-grid card">
+        <view class="stat-item" bindtap="navigateToTodayCustomers">
+            <view class="stat-icon">👥</view>
+            <view class="stat-content">
+                <text class="stat-number">{{stats.todayCustomers}}</text>
+                <text class="stat-label">今日客户</text>
+            </view>
+        </view>
+        <view class="stat-item" bindtap="navigateToPerformance">
+            <view class="stat-icon">💰</view>
+            <view class="stat-content">
+                <text class="stat-number">{{stats.monthlyRevenue}}</text>
+                <text class="stat-label">本月业绩(万)</text>
+            </view>
+        </view>
+        <view class="stat-item" bindtap="navigateToInventory">
+            <view class="stat-icon">⚠️</view>
+            <view class="stat-content">
+                <text class="stat-number">{{stats.inventoryAlert}}</text>
+                <text class="stat-label">库存预警</text>
+            </view>
+        </view>
+        <view class="stat-item" bindtap="navigateToAttendance">
+            <view class="stat-icon">📊</view>
+            <view class="stat-content">
+                <text class="stat-number">{{stats.attendanceRate}}%</text>
+                <text class="stat-label">出勤率</text>
+            </view>
+        </view>
+    </view>
+
+    <!-- 快捷操作 (移到底部) -->
+    <view class="quick-actions card">
+        <view class="section-title">快捷操作</view>
+        <view class="actions-grid">
+
+            <view class="action-item" bindtap="navigateToReservation">
+                <view class="action-icon appointment">
+                    <text>📞</text>
+                </view>
+                <text class="action-text">预约管理</text>
+            </view>
+            <view class="action-item" bindtap="navigateToSchedule">
+                <view class="action-icon schedule">
+                    <text>📅</text>
+                </view>
+                <text class="action-text">我的排班</text>
+            </view>
+            <view class="action-item" bindtap="navigateToInventory">
+                <view class="action-icon inventory">
+                    <text>📦</text>
+                </view>
+                <text class="action-text">库存管理</text>
+            </view>
+            <view class="action-item" bindtap="navigateToService">
+                <view class="action-icon reports">
+                    <text>🧼</text>
+                </view>
+                <text class="action-text">服务管理</text>
+            </view>
+            <view class="action-item" bindtap="navigateToCustomer">
+                <view class="action-icon customer">
+                    <text>👥</text>
+                </view>
+                <text class="action-text">客户管理</text>
+            </view>
+            <view class="action-item" bindtap="navigateToStaff">
+                <view class="action-icon staff">
+                    <text>👩‍💼</text>
+                </view>
+                <text class="action-text">员工管理</text>
+            </view>
+            
+        </view>
+    </view>
+
+    <!-- 底部提示 -->
+    <view class="bottom-tips">
+        <text class="tip-text">当前版本 v1.0.0 • 客服热线: 18915755120</text>
+    </view>
+
+</view>

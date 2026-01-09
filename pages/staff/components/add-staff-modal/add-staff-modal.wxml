@@ -1,0 +1,166 @@
+<view class="modal-container" wx:if="{{showModal}}">
+  <view class="modal-mask" bindtap="handleCancel"></view>
+  
+  <view class="modal-content">
+    <!-- 标题栏 -->
+    <view class="modal-header">
+      <text class="modal-title">{{isEdit ? '编辑员工' : '新增员工'}}</text>
+      <text class="close-btn" bindtap="handleCancel">×</text>
+    </view>
+    
+    <scroll-view class="modal-body" scroll-y>
+      <!-- 基本信息 -->
+      <view class="form-section">
+        <view class="section-title">基本信息</view>
+        
+        <view class="form-item">
+          <text class="form-label required">员工姓名</text>
+          <input 
+            class="form-input" 
+            type="text" 
+            placeholder="请输入员工姓名"
+            value="{{formData.name}}"
+            bindinput="onInputChange"
+            data-field="name"
+            maxlength="10"
+          />
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label required">工号</text>
+          <input 
+            class="form-input" 
+            type="text" 
+            placeholder="请输入员工工号"
+            value="{{formData.employeeId}}"
+            bindinput="onInputChange"
+            data-field="employeeId"
+            maxlength="20"
+          />
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label required">联系电话</text>
+          <input 
+            class="form-input" 
+            type="number" 
+            placeholder="请输入联系电话"
+            value="{{formData.phone}}"
+            bindinput="onInputChange"
+            data-field="phone"
+            maxlength="11"
+          />
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">邮箱地址</text>
+          <input 
+            class="form-input" 
+            type="text" 
+            placeholder="请输入邮箱地址"
+            value="{{formData.email}}"
+            bindinput="onInputChange"
+            data-field="email"
+          />
+        </view>
+      </view>
+      
+      <!-- 工作信息 -->
+      <view class="form-section">
+        <view class="section-title">工作信息</view>
+        
+        <view class="form-item">
+          <text class="form-label required">职位</text>
+          <picker 
+            mode="selector" 
+            range="{{positionOptions}}"
+            value="{{formData.positionIndex}}"
+            bindchange="onPositionChange"
+            class="picker-input"
+          >
+            <view class="picker-text {{formData.position ? '' : 'placeholder'}}">
+              {{formData.position || '请选择职位'}}
+            </view>
+          </picker>
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label required">所在店名</text>
+          <picker 
+            mode="selector" 
+            range="{{storeOptions}}"
+            value="{{formData.storeIndex}}"
+            bindchange="onStoreChange"
+            class="picker-input"
+          >
+            <view class="picker-text {{formData.storeName ? '' : 'placeholder'}}">
+              {{formData.storeName || '请选择店名'}}
+            </view>
+          </picker>
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label required">入职日期</text>
+          <picker 
+            mode="date" 
+            value="{{formData.joinDate}}" 
+            bindchange="onJoinDateChange"
+            class="picker-input"
+          >
+            <view class="picker-text {{formData.joinDate ? '' : 'placeholder'}}">
+              {{formData.joinDate || '请选择入职日期'}}
+            </view>
+          </picker>
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label required">在职状态</text>
+          <view class="status-options">
+            <view 
+              class="status-option {{formData.status === '在职' ? 'active' : ''}}" 
+              bindtap="setStatus" 
+              data-status="在职"
+            >
+              <text class="status-dot"></text>
+              <text class="status-text">在职</text>
+            </view>
+            <view 
+              class="status-option {{formData.status === '离职' ? 'active' : ''}}" 
+              bindtap="setStatus" 
+              data-status="离职"
+            >
+              <text class="status-dot"></text>
+              <text class="status-text">离职</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 备注信息 -->
+      <view class="form-section">
+        <view class="section-title">备注信息</view>
+        
+        <view class="form-item">
+          <text class="form-label">员工备注</text>
+          <textarea 
+            class="form-textarea" 
+            placeholder="请输入备注信息（最多200字）"
+            value="{{formData.notes}}"
+            bindinput="onTextareaChange"
+            data-field="notes"
+            maxlength="200"
+          />
+          <view class="textarea-counter">
+            <text>{{formData.notes ? formData.notes.length : 0}}/200</text>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+    
+    <!-- 底部按钮 -->
+    <view class="modal-footer">
+      <button class="btn-cancel" bindtap="handleCancel">取消</button>
+      <button class="btn-confirm" bindtap="handleConfirm" disabled="{{!isFormValid}}">确认保存</button>
+    </view>
+  </view>
+</view>

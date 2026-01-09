@@ -1,0 +1,612 @@
+.inventory-page {
+    min-height: 100vh;
+    background: #F8F8F8;
+    padding-bottom: 120rpx;
+}
+
+/* 搜索区域 */
+.search-bar {
+    background: white;
+    padding: 25rpx 30rpx;
+    box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.search-input-container {
+    display: flex;
+    align-items: center;
+    background: #F5F5F5;
+    border-radius: 50rpx;
+    padding: 0 30rpx;
+    height: 80rpx;
+    margin-bottom: 20rpx;
+}
+
+.search-icon {
+    font-size: 32rpx;
+    color: #999;
+    margin-right: 20rpx;
+}
+
+.search-input {
+    flex: 1;
+    font-size: 28rpx;
+    color: #333;
+    height: 100%;
+}
+
+.search-clear {
+    width: 40rpx;
+    height: 40rpx;
+    border-radius: 50%;
+    background: #E0E0E0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28rpx;
+    color: #999;
+}
+
+/* 筛选选项 */
+.filter-options {
+    display: flex;
+}
+
+.filter-picker {
+    flex: 1;
+}
+
+.filter-picker-box {
+    display: flex;
+    align-items: center;
+    padding: 20rpx 25rpx;
+    border-radius: 12rpx;
+    background: #F8F8F8;
+    border: 1rpx solid #E0E0E0;
+    font-size: 26rpx;
+}
+
+.filter-icon {
+    font-size: 28rpx;
+    margin-right: 12rpx;
+    color: #666;
+    flex-shrink: 0;
+}
+
+.filter-text {
+    flex: 1;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 统计信息 */
+.stats-info {
+    display: flex;
+    justify-content: space-around;
+    background: white;
+    padding: 25rpx 20rpx;
+    margin: 20rpx;
+    border-radius: 16rpx;
+    box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.stats-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stats-number {
+    font-size: 32rpx;
+    font-weight: 600;
+    color: #FF69B4;
+    margin-bottom: 8rpx;
+}
+
+.stats-label {
+    font-size: 24rpx;
+    color: #666;
+}
+
+/* 库存表格 */
+.inventory-table {
+    background: white;
+    margin: 20rpx;
+    border-radius: 16rpx;
+    overflow: hidden;
+    box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+}
+
+.table-header {
+    display: flex;
+    background: #FFF0F5;
+    padding: 20rpx 0;
+    border-bottom: 1rpx solid #FFE4F2;
+}
+
+.header-cell {
+    text-align: center;
+    font-size: 26rpx;
+    font-weight: 600;
+    color: #FF69B4;
+    padding: 10rpx 5rpx;
+}
+
+.header-cell.name {
+    flex: 2;
+    text-align: left;
+    padding-left: 30rpx;
+}
+
+.header-cell.store {
+    flex: 1.2;
+}
+
+.header-cell.quantity {
+    flex: 1;
+}
+
+.header-cell.unit {
+    flex: 0.8;
+}
+
+.header-cell.actions {
+    flex: 0.6;
+}
+
+.table-body {
+    max-height: 600rpx;
+    overflow-y: auto;
+}
+
+.table-row {
+    display: flex;
+    align-items: center;
+    padding: 25rpx 0;
+    border-bottom: 1rpx solid #F0F0F0;
+    transition: background-color 0.3s;
+}
+
+.table-row:last-child {
+    border-bottom: none;
+}
+
+.table-row:active {
+    background-color: #FFF0F5;
+}
+
+.table-row.low-stock {
+    background-color: #FFF0F0;
+}
+
+.table-row.low-stock:active {
+    background-color: #FFE4E4;
+}
+
+.table-cell {
+    text-align: center;
+    padding: 5rpx 5rpx;
+}
+
+.table-cell.name {
+    flex: 2;
+    text-align: left;
+    padding-left: 30rpx;
+}
+
+.table-cell.store {
+    flex: 1.2;
+}
+
+.table-cell.quantity {
+    flex: 1;
+}
+
+.table-cell.unit {
+    flex: 0.8;
+}
+
+.table-cell.actions {
+    flex: 0.6;
+}
+
+/* 商品信息 */
+.product-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.product-name {
+    font-size: 28rpx;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 5rpx;
+}
+
+.product-category {
+    font-size: 22rpx;
+    color: #999;
+}
+
+.store-text {
+    font-size: 26rpx;
+    color: #333;
+}
+
+/* 库存量显示 */
+.quantity-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quantity-number {
+    font-size: 28rpx;
+    font-weight: 600;
+    color: #333;
+    margin-right: 10rpx;
+}
+
+.stock-status {
+    display: flex;
+    align-items: center;
+}
+
+.warning-icon {
+    font-size: 24rpx;
+    color: #FF4444;
+}
+
+.unit-text {
+    font-size: 26rpx;
+    color: #666;
+}
+
+/* 操作按钮 */
+.action-btn {
+    width: 60rpx !important;
+    height: 60rpx !important;
+    min-width: auto !important;
+    border-radius: 50% !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    border: none !important;
+}
+
+.action-btn.delete {
+    background: #FFF0F0 !important;
+    color: #FF4444 !important;
+}
+
+.action-icon {
+    font-size: 26rpx;
+}
+
+/* 空状态 */
+.empty-state {
+    text-align: center;
+    padding: 80rpx 30rpx;
+    background: white;
+    margin: 20rpx;
+    border-radius: 16rpx;
+    box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.empty-icon {
+    font-size: 100rpx;
+    margin-bottom: 30rpx;
+    opacity: 0.3;
+}
+
+.empty-text {
+    display: block;
+    color: #999;
+    font-size: 30rpx;
+    margin-bottom: 40rpx;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #FF69B4, #FF1493) !important;
+    color: white !important;
+    border-radius: 50rpx !important;
+    padding: 20rpx 40rpx !important;
+    font-size: 28rpx !important;
+}
+
+/* 加载更多容器 */
+.load-more-container {
+    padding: 40rpx 0;
+    text-align: center;
+}
+
+.loading-more {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-spinner {
+    width: 36rpx;
+    height: 36rpx;
+    border: 3rpx solid #FFF0F5;
+    border-top: 3rpx solid #FF69B4;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15rpx;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+    font-size: 26rpx;
+    color: #FF69B4;
+}
+
+.no-more-data {
+    padding: 25rpx 0;
+}
+
+.no-more-text {
+    font-size: 26rpx;
+    color: #999;
+}
+
+.load-more-tip {
+    padding: 25rpx 0;
+}
+
+.load-more-text {
+    font-size: 26rpx;
+    color: #999;
+}
+
+/* 新增按钮 */
+.add-btn-container {
+    position: fixed;
+    bottom: 40rpx;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    z-index: 90;
+}
+
+.add-btn {
+    background: linear-gradient(135deg, #FF69B4, #FF1493) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 50rpx !important;
+    padding: 20rpx 40rpx !important;
+    font-size: 30rpx !important;
+    box-shadow: 0 4rpx 15rpx rgba(255, 105, 180, 0.3);
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.add-icon {
+    font-size: 36rpx;
+    margin-right: 10rpx;
+    font-weight: 300;
+}
+
+.add-text {
+    font-size: 30rpx;
+}
+
+/* ============ 详情弹窗样式 ============ */
+.detail-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+}
+
+.modal-mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    border-radius: 40rpx 40rpx 0 0;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40rpx 30rpx 20rpx;
+    border-bottom: 1rpx solid #F0F0F0;
+}
+
+.modal-title {
+    font-size: 36rpx;
+    font-weight: 600;
+    color: #333;
+}
+
+.close-btn {
+    font-size: 50rpx;
+    color: #999;
+    width: 60rpx;
+    height: 60rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-body {
+    flex: 1;
+    padding: 30rpx;
+    height: 400rpx;
+}
+
+.detail-section {
+    margin-bottom: 40rpx;
+}
+
+.section-title {
+    font-size: 30rpx;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20rpx;
+    padding-left: 20rpx;
+    position: relative;
+}
+
+.section-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10rpx;
+    width: 6rpx;
+    height: 24rpx;
+    background: #FF69B4;
+    border-radius: 3rpx;
+}
+
+.detail-row {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 15rpx;
+    font-size: 28rpx;
+    line-height: 1.4;
+}
+
+.detail-row.full-width {
+    flex-direction: column;
+}
+
+.detail-label {
+    color: #666;
+    width: 160rpx;
+    flex-shrink: 0;
+}
+
+.detail-value {
+    color: #333;
+    flex: 1;
+}
+
+/* 库存信息 */
+.stock-info {
+    display: flex;
+    align-items: center;
+}
+
+.stock-quantity {
+    font-size: 28rpx;
+    font-weight: 600;
+    color: #FF69B4;
+    margin-right: 10rpx;
+}
+
+.stock-unit {
+    font-size: 26rpx;
+    color: #666;
+}
+
+.stock-warning {
+    display: inline-block;
+    padding: 8rpx 16rpx;
+    border-radius: 20rpx;
+    font-size: 24rpx;
+    font-weight: 500;
+}
+
+.stock-warning.normal {
+    background: #F0FFF0;
+    color: #32CD32;
+}
+
+.stock-warning.warning {
+    background: #FFF0F0;
+    color: #FF4444;
+}
+
+/* 操作按钮 */
+.modal-footer {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20rpx 30rpx;
+    border-top: 1rpx solid #F0F0F0;
+    gap: 15rpx;
+}
+
+.modal-footer button {
+    flex: 1;
+    min-width: calc(50% - 8rpx);
+    border-radius: 12rpx !important;
+    font-size: 26rpx !important;
+    height: 70rpx !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 10rpx !important;
+}
+
+.btn-in {
+    background: #F0FFF0 !important;
+    color: #32CD32 !important;
+}
+
+.btn-out {
+    background: #FFF0F0 !important;
+    color: #FF4444 !important;
+}
+
+.btn-records {
+    background: #F0F8FF !important;
+    color: #1E90FF !important;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .stats-info {
+        padding: 20rpx 10rpx;
+        margin: 15rpx;
+    }
+    
+    .inventory-table {
+        overflow-x: auto;
+    }
+    
+    .table-header,
+    .table-row {
+        min-width: 700rpx;
+    }
+    
+    .modal-footer button {
+        min-width: calc(50% - 8rpx);
+    }
+}

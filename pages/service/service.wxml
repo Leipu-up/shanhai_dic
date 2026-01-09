@@ -1,0 +1,139 @@
+<view class="service-page">
+  <!-- 搜索和新增区域 - 始终显示版本 -->
+  <view class="search-add-bar">
+    <view class="search-box always-show">
+      <text class="search-icon">🔍</text>
+      <input 
+        class="search-input" 
+        placeholder="搜索服务名称" 
+        value="{{searchValue}}" 
+        bindinput="onSearchInput"
+        bindconfirm="onSearchConfirm"
+      />
+    </view>
+    <view class="icon-btn add-icon-btn" bindtap="showAddModal">
+      <text class="icon">➕</text>
+    </view>
+  </view>
+
+  <!-- 服务列表 -->
+  <view class="service-list">
+    <view wx:if="{{serviceList.length === 0}}" class="empty-state">
+      <text class="empty-icon">📋</text>
+      <text class="empty-text">暂无服务数据</text>
+      <text class="empty-tip">点击"+"按钮添加服务</text>
+    </view>
+
+    <block wx:for="{{serviceList}}" wx:key="id">
+      <view class="service-item card">
+        <view class="service-info">
+          <text class="service-name">{{item.name}}</text>
+          <view class="service-details">
+            <text class="service-price">¥{{item.price}}</text>
+            <text class="service-duration">{{item.duration}}分钟</text>
+            <text class="service-category">{{item.category}}</text>
+          </view>
+          <text wx:if="{{item.description}}" class="service-description">{{item.description}}</text>
+        </view>
+        <view class="service-actions">
+          <view class="action-btn edit" data-id="{{item.id}}" bindtap="editService">
+            <text class="action-icon">✏️</text>
+            <text class="action-text">编辑</text>
+          </view>
+          <view class="action-btn delete" data-id="{{item.id}}" bindtap="deleteService">
+            <text class="action-icon">🗑️</text>
+            <text class="action-text">删除</text>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <!-- 加载更多 -->
+  <view wx:if="{{hasMore}}" class="load-more" bindtap="loadMore">
+    <text>{{loading ? '加载中...' : '点击加载更多'}}</text>
+  </view>
+  <view wx:else class="no-more">
+    <text>没有更多了</text>
+  </view>
+
+  <!-- 新增/编辑服务弹窗 -->
+  <view class="modal" wx:if="{{showModal}}">
+    <view class="modal-mask" bindtap="hideModal"></view>
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">{{isEdit ? '编辑服务' : '新增服务'}}</text>
+        <text class="close-icon" bindtap="hideModal">✕</text>
+      </view>
+      
+      <view class="modal-body">
+        <view class="form-item">
+          <text class="form-label">服务名称</text>
+          <input 
+            class="form-input" 
+            placeholder="请输入服务名称" 
+            value="{{formData.name}}"
+            bindinput="onFormInput"
+            data-field="name"
+          />
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">价格(元)</text>
+          <input 
+            class="form-input" 
+            type="number" 
+            placeholder="请输入价格" 
+            value="{{formData.price}}"
+            bindinput="onFormInput"
+            data-field="price"
+          />
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">服务时长(分钟)</text>
+          <input 
+            class="form-input" 
+            type="number" 
+            placeholder="请输入服务时长" 
+            value="{{formData.duration}}"
+            bindinput="onFormInput"
+            data-field="duration"
+          />
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">服务分类</text>
+          <picker 
+            range="{{categories}}" 
+            value="{{categoryIndex}}"
+            bindchange="onCategoryChange"
+          >
+            <view class="form-input picker-input">
+              {{formData.category || '请选择服务分类'}}
+              <text class="picker-arrow">▼</text>
+            </view>
+          </picker>
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">服务描述</text>
+          <textarea 
+            class="form-textarea" 
+            placeholder="请输入服务描述" 
+            value="{{formData.description}}"
+            bindinput="onFormInput"
+            data-field="description"
+            maxlength="200"
+          />
+          <text class="form-tip">{{formData.description ? formData.description.length : 0}}/200</text>
+        </view>
+      </view>
+      
+      <view class="modal-footer">
+        <view class="modal-btn cancel" bindtap="hideModal">取消</view>
+        <view class="modal-btn confirm" bindtap="saveService">保存</view>
+      </view>
+    </view>
+  </view>
+</view>

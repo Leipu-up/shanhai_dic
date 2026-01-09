@@ -1,27 +1,73 @@
 /* 全局样式 */
 page {
-    background-color: #f5f5f5;
-    font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
-  }
-  
-  /* 容器样式 */
-  .container {
-    padding: 20rpx;
-  }
-  
-  /* 按钮样式 */
-  .primary-btn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border-radius: 50rpx;
-    font-size: 32rpx;
+    background-color: #F8F8F8;
+    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    color: #333;
   }
   
   /* 卡片样式 */
   .card {
-    background: white;
-    border-radius: 16rpx;
-    box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.1);
-    margin: 20rpx;
+    background: #fff;
+    border-radius: 12rpx;
     padding: 30rpx;
+    margin: 20rpx;
+    box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.08);
+  }
+  
+  /* 按钮样式 */
+  .btn-primary {
+    background: linear-gradient(135deg, #FF69B4, #FF1493);
+    color: white;
+    border-radius: 50rpx;
+    padding: 20rpx 40rpx;
+    text-align: center;
+    font-size: 32rpx;
+    border: none;
+  }
+  
+  .btn-secondary {
+    background: #FFE4F2;
+    color: #FF69B4;
+    border-radius: 50rpx;
+    padding: 20rpx 40rpx;
+    text-align: center;
+    font-size: 32rpx;
+    border: 1rpx solid #FF69B4;
+  }
+  
+  /* 标题样式 */
+  .section-title {
+    font-size: 36rpx;
+    font-weight: 600;
+    color: #333;
+    margin: 40rpx 0 20rpx 30rpx;
+    position: relative;
+  }
+  
+  .section-title::before {
+    content: '';
+    position: absolute;
+    left: -10rpx;
+    top: 10rpx;
+    width: 6rpx;
+    height: 30rpx;
+    background: #FF69B4;
+    border-radius: 3rpx;
+  }
+  
+  /* 弹性布局工具类 */
+  .flex {
+    display: flex;
+  }
+  
+  .flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
