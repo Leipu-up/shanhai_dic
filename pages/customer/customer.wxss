@@ -3,18 +3,18 @@
     padding: 20rpx;
     min-height: 100vh;
     background-color: #f8f8f8;
-  }
-  
-  /* 搜索和新增区域 */
-  .search-add-bar {
+}
+
+/* 搜索和新增区域 */
+.search-add-bar {
     display: flex;
     align-items: center;
     gap: 20rpx;
     margin-bottom: 30rpx;
     padding: 0 10rpx;
-  }
-  
-  .search-box.always-show {
+}
+
+.search-box.always-show {
     flex: 1;
     position: relative;
     background: white;
@@ -24,24 +24,24 @@
     align-items: center;
     padding: 0 30rpx;
     box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.08);
-  }
-  
-  .search-icon {
+}
+
+.search-icon {
     font-size: 36rpx;
     margin-right: 20rpx;
     color: #999;
-  }
-  
-  .search-input {
+}
+
+.search-input {
     flex: 1;
     height: 100%;
     font-size: 28rpx;
     color: #333;
     background: transparent;
-  }
-  
-  /* 新增图标按钮 */
-  .add-icon-btn {
+}
+
+/* 新增图标按钮 */
+.add-icon-btn {
     width: 80rpx;
     height: 80rpx;
     background: linear-gradient(135deg, #FF69B4, #FF1493);
@@ -55,108 +55,108 @@
     border: none;
     box-shadow: 0 4rpx 12rpx rgba(255, 105, 180, 0.3);
     flex-shrink: 0;
-  }
-  
-  .add-icon-btn:active {
+}
+
+.add-icon-btn:active {
     transform: scale(0.95);
     opacity: 0.9;
-  }
-  
-  .icon {
+}
+
+.icon {
     font-size: 44rpx;
-  }
-  
-  /* 客户列表 */
-  .customer-list {
+}
+
+/* 客户列表 */
+.customer-list {
     margin-bottom: 40rpx;
-  }
-  
-  .customer-item {
+}
+
+.customer-item {
     background: white;
     border-radius: 16rpx;
     padding: 30rpx;
     margin-bottom: 20rpx;
     box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.08);
-  }
-  
-  .customer-info {
+}
+
+.customer-info {
     margin-bottom: 20rpx;
-  }
-  
-  .customer-basic {
+}
+
+.customer-basic {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 15rpx;
-  }
-  
-  .customer-name {
+}
+
+.customer-name {
     font-size: 34rpx;
     font-weight: 600;
     color: #333;
     flex: 1;
     margin-right: 20rpx;
-  }
-  
-  .customer-tags {
+}
+
+.customer-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 10rpx;
-  }
-  
-  .customer-tag {
+}
+
+.customer-tag {
     font-size: 22rpx;
     padding: 6rpx 12rpx;
     border-radius: 15rpx;
     white-space: nowrap;
-  }
-  
-  .customer-tag.gender {
+}
+
+.customer-tag.gender {
     background: #E6F3FF;
     color: #1890FF;
-  }
-  
-  .customer-tag.vip {
+}
+
+.customer-tag.vip {
     background: #FFF7E6;
     color: #FA8C16;
-  }
-  
-  .customer-tag.source {
+}
+
+.customer-tag.source {
     background: #F6FFED;
     color: #52C41A;
-  }
-  
-  .customer-contact {
+}
+
+.customer-contact {
     display: flex;
     flex-wrap: wrap;
     gap: 20rpx;
     margin-bottom: 15rpx;
-  }
-  
-  .contact-item {
+}
+
+.contact-item {
     font-size: 28rpx;
     color: #666;
     display: flex;
     align-items: center;
     gap: 8rpx;
-  }
-  
-  .customer-details {
+}
+
+.customer-details {
     display: flex;
     flex-wrap: wrap;
     gap: 20rpx;
     margin-bottom: 10rpx;
-  }
-  
-  .detail-item {
+}
+
+.detail-item {
     font-size: 26rpx;
     color: #888;
     background: #f5f5f5;
     padding: 8rpx 16rpx;
     border-radius: 6rpx;
-  }
-  
-  .customer-remark {
+}
+
+.customer-remark {
     font-size: 26rpx;
     color: #999;
     line-height: 1.5;
@@ -166,17 +166,17 @@
     background: #fafafa;
     border-radius: 8rpx;
     border-left: 4rpx solid #FF69B4;
-  }
-  
-  .customer-actions {
+}
+
+.customer-actions {
     display: flex;
     justify-content: flex-end;
     gap: 20rpx;
     padding-top: 20rpx;
     border-top: 1rpx solid #eee;
-  }
-  
-  .action-btn {
+}
+
+.action-btn {
     display: flex;
     align-items: center;
     gap: 8rpx;
@@ -185,120 +185,122 @@
     font-size: 26rpx;
     min-width: 120rpx;
     justify-content: center;
-  }
-  
-  .action-btn.edit {
+}
+
+.action-btn.edit {
     background: #FFE4F2;
     color: #FF69B4;
     border: 1rpx solid #FF69B4;
-  }
-  
-  .action-btn.delete {
+}
+
+.action-btn.delete {
     background: #FFEEEE;
     color: #FF4444;
     border: 1rpx solid #FF4444;
-  }
-  
-  .action-icon {
+}
+
+.action-icon {
     font-size: 28rpx;
-  }
-  
-  /* 空状态 */
-  .empty-state {
+}
+
+/* 空状态 */
+.empty-state {
     text-align: center;
     padding: 120rpx 0;
     background: white;
     border-radius: 16rpx;
     margin: 20rpx;
-  }
-  
-  .empty-icon {
+}
+
+.empty-icon {
     font-size: 120rpx;
     display: block;
     margin-bottom: 30rpx;
     opacity: 0.5;
-  }
-  
-  .empty-text {
+}
+
+.empty-text {
     display: block;
     font-size: 32rpx;
     color: #999;
     margin-bottom: 10rpx;
-  }
-  
-  .empty-tip {
+}
+
+.empty-tip {
     font-size: 26rpx;
     color: #ccc;
-  }
-  
-  /* 加载更多 */
-  .load-more,
-  .no-more {
+}
+
+/* 加载更多 */
+.load-more,
+.no-more {
     text-align: center;
-    padding: 40rpx 0;
+    padding: 40rpx 0 120rpx 0;
+    /* 增加底部内边距为120rpx，为按钮留出空间 */
     font-size: 28rpx;
     color: #999;
-  }
-  
-  .load-more:active {
+}
+
+.load-more:active {
     opacity: 0.7;
-  }
-  
-  /* 弹窗样式 */
-  .modal {
+}
+
+/* 弹窗样式 */
+.modal {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     z-index: 1000;
-  }
-  
-  .modal-mask {
+}
+
+.modal-mask {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
-  }
-  
-  .modal-content {
+}
+
+.modal-content {
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
     background: white;
     border-radius: 40rpx 40rpx 0 0;
-    max-height: 85vh;
+    max-height: 85%;
     overflow-y: auto;
     animation: slideUp 0.3s ease;
-  }
-  
-  @keyframes slideUp {
+}
+
+@keyframes slideUp {
     from {
-      transform: translateY(100%);
+        transform: translateY(100%);
     }
+
     to {
-      transform: translateY(0);
+        transform: translateY(0);
     }
-  }
-  
-  .modal-header {
+}
+
+.modal-header {
     padding: 40rpx 40rpx 20rpx;
     border-bottom: 1rpx solid #eee;
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-  
-  .modal-title {
+}
+
+.modal-title {
     font-size: 36rpx;
     font-weight: 600;
     color: #333;
-  }
-  
-  .close-icon {
+}
+
+.close-icon {
     font-size: 40rpx;
     color: #999;
     width: 60rpx;
@@ -306,34 +308,34 @@
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  
-  .close-icon:active {
+}
+
+.close-icon:active {
     opacity: 0.7;
-  }
-  
-  .modal-body {
+}
+
+.modal-body {
     padding: 30rpx 40rpx;
-  }
-  
-  .form-item {
+}
+
+.form-item {
     margin-bottom: 30rpx;
-  }
-  
-  .form-label {
+}
+
+.form-label {
     display: block;
     font-size: 28rpx;
     color: #666;
     margin-bottom: 15rpx;
-  }
-  
-  .form-label.required::after {
+}
+
+.form-label.required::after {
     content: "*";
     color: #FF4444;
     margin-left: 4rpx;
-  }
-  
-  .form-input {
+}
+
+.form-input {
     width: 100%;
     height: 80rpx;
     background: #f8f8f8;
@@ -342,35 +344,35 @@
     font-size: 28rpx;
     color: #333;
     box-sizing: border-box;
-  }
-  
-  /* 表单行布局 */
-  .form-row {
+}
+
+/* 表单行布局 */
+.form-row {
     display: flex;
     gap: 20rpx;
     margin-bottom: 30rpx;
-  }
-  
-  .form-item-half {
+}
+
+.form-item-half {
     flex: 1;
-  }
-  
-  .form-item-half .form-input {
+}
+
+.form-item-half .form-input {
     width: 100%;
-  }
-  
-  .picker-input {
+}
+
+.picker-input {
     display: flex;
     align-items: center;
     justify-content: space-between;
-  }
-  
-  .picker-arrow {
+}
+
+.picker-arrow {
     color: #999;
     font-size: 24rpx;
-  }
-  
-  .form-textarea {
+}
+
+.form-textarea {
     width: 100%;
     height: 200rpx;
     background: #f8f8f8;
@@ -379,24 +381,24 @@
     font-size: 28rpx;
     color: #333;
     box-sizing: border-box;
-  }
-  
-  .form-tip {
+}
+
+.form-tip {
     display: block;
     text-align: right;
     font-size: 24rpx;
     color: #999;
     margin-top: 10rpx;
-  }
-  
-  .modal-footer {
+}
+
+.modal-footer {
     padding: 30rpx 40rpx;
     display: flex;
     gap: 20rpx;
     border-top: 1rpx solid #eee;
-  }
-  
-  .modal-btn {
+}
+
+.modal-btn {
     flex: 1;
     height: 90rpx;
     border-radius: 45rpx;
@@ -405,75 +407,179 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-  }
-  
-  .modal-btn.cancel {
+}
+
+.modal-btn.cancel {
     background: #f0f0f0;
     color: #666;
-  }
-  
-  .modal-btn.confirm {
+}
+
+.modal-btn.confirm {
     background: linear-gradient(135deg, #FF69B4, #FF1493);
     color: white;
-  }
-  
-  .modal-btn:active {
+}
+
+.modal-btn:active {
     opacity: 0.8;
-  }
-  
-  /* 移动端适配 */
-  @media (max-width: 768px) {
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
     .search-add-bar {
-      gap: 15rpx;
+        gap: 15rpx;
     }
-    
+
     .search-box.always-show {
-      height: 70rpx;
-      padding: 0 25rpx;
+        height: 70rpx;
+        padding: 0 25rpx;
     }
-    
+
     .add-icon-btn {
-      width: 70rpx;
-      height: 70rpx;
+        width: 70rpx;
+        height: 70rpx;
     }
-    
+
     .icon {
-      font-size: 38rpx;
+        font-size: 38rpx;
     }
-    
+
     .customer-name {
-      font-size: 32rpx;
+        font-size: 32rpx;
     }
-    
+
     .contact-item {
-      font-size: 26rpx;
+        font-size: 26rpx;
     }
-    
+
     .form-row {
-      flex-direction: column;
-      gap: 30rpx;
+        flex-direction: column;
+        gap: 30rpx;
     }
-  }
-  
-  /* 页面加载动画 */
-  @keyframes fadeIn {
+}
+
+/* 页面加载动画 */
+@keyframes fadeIn {
     from {
-      opacity: 0;
-      transform: translateY(20rpx);
+        opacity: 0;
+        transform: translateY(20rpx);
     }
+
     to {
-      opacity: 1;
-      transform: translateY(0);
+        opacity: 1;
+        transform: translateY(0);
     }
-  }
-  
-  .customer-item {
+}
+
+.customer-item {
     animation: fadeIn 0.3s ease;
     animation-fill-mode: both;
-  }
-  
-  .customer-item:nth-child(1) { animation-delay: 0.1s; }
-  .customer-item:nth-child(2) { animation-delay: 0.2s; }
-  .customer-item:nth-child(3) { animation-delay: 0.3s; }
-  .customer-item:nth-child(4) { animation-delay: 0.4s; }
-  .customer-item:nth-child(5) { animation-delay: 0.5s; }
+}
+
+.customer-item:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.customer-item:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.customer-item:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.customer-item:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+.customer-item:nth-child(5) {
+    animation-delay: 0.5s;
+}
+
+
+
+/* 新增按钮 */
+.add-btn-container {
+    position: fixed;
+    bottom: 40rpx;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    z-index: 90;
+}
+
+.add-btn {
+    background: linear-gradient(135deg, #FF69B4, #FF1493) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 50rpx !important;
+    padding: 20rpx 40rpx !important;
+    font-size: 30rpx !important;
+    box-shadow: 0 4rpx 15rpx rgba(255, 105, 180, 0.3);
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.add-icon {
+    font-size: 36rpx;
+    margin-right: 10rpx;
+    font-weight: 300;
+}
+
+.add-text {
+    font-size: 30rpx;
+}
+
+.form-label.required::after {
+    content: '*';
+    color: #FF4444;
+    margin-left: 5rpx;
+}
+
+/* 加载状态样式 */
+.loading-status {
+    text-align: center;
+    padding: 30rpx 0 140rpx 0;
+    font-size: 28rpx;
+    color: #999;
+}
+
+.loading-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-icon {
+    width: 60rpx;
+    height: 60rpx;
+    margin-bottom: 20rpx;
+}
+
+.no-more-text {
+    color: #ccc;
+}
+
+/* 空状态样式 */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 100rpx 0;
+    text-align: center;
+}
+
+.empty-image {
+    width: 200rpx;
+    height: 200rpx;
+    margin-bottom: 30rpx;
+    opacity: 0.5;
+}
+
+.empty-text {
+    font-size: 28rpx;
+    color: #999;
+}

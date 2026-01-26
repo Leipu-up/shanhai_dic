@@ -1,222 +1,170 @@
 <view class="customer-page">
-  <!-- 搜索和新增区域 -->
-  <view class="search-add-bar">
-    <view class="search-box always-show">
-      <text class="search-icon">🔍</text>
-      <input 
-        class="search-input" 
-        placeholder="搜索客户姓名" 
-        value="{{searchValue}}" 
-        bindinput="onSearchInput"
-        bindconfirm="onSearchConfirm"
-      />
-    </view>
-    <view class="icon-btn add-icon-btn" bindtap="showAddModal">
-      <text class="icon">➕</text>
-    </view>
-  </view>
-
-  <!-- 客户列表 -->
-  <view class="customer-list">
-    <view wx:if="{{customerList.length === 0}}" class="empty-state">
-      <text class="empty-icon">👤</text>
-      <text class="empty-text">暂无客户数据</text>
-      <text class="empty-tip">点击"+"按钮添加客户</text>
+    <!-- 搜索和新增区域 -->
+    <view class="search-add-bar">
+        <view class="search-box always-show">
+            <input class="search-input" placeholder="搜索客户姓名" value="{{searchValue}}" bindinput="onSearchInput"/>
+            <text class="search-icon" bindtap="onSearchConfirm" >🔍</text>
+        </view>
     </view>
 
-    <block wx:for="{{customerList}}" wx:key="id">
-      <view class="customer-item card">
-        <view class="customer-info">
-          <view class="customer-basic">
-            <text class="customer-name">{{item.name}}</text>
-            <view class="customer-tags">
-              <text wx:if="{{item.gender}}" class="customer-tag gender">{{item.gender}}</text>
-              <text wx:if="{{item.vipLevel}}" class="customer-tag vip">{{item.vipLevel}}</text>
-              <text wx:if="{{item.source}}" class="customer-tag source">{{item.source}}</text>
+    <!-- 客户列表 -->
+    <view class="customer-list">
+        <view wx:if="{{customerList.length === 0}}" class="empty-state">
+            <text class="empty-icon">👤</text>
+            <text class="empty-text">暂无客户数据</text>
+            <text class="empty-tip">点击"+"按钮添加客户</text>
+        </view>
+
+        <block wx:for="{{customerList}}" wx:key="id" >
+            <view class="customer-item card" bindtap="viewCustomer" data-id="{{item.id}}">
+                <view class="customer-info">
+                    <view class="customer-basic">
+                        <text class="customer-name">{{item.khxm}}</text>
+                        <view class="customer-tags">
+                            <text wx:if="{{item.khxb}}" class="customer-tag gender">{{item.khxb}}</text>
+                            <text wx:if="{{item.khdj}}" class="customer-tag vip">{{item.khdj}}</text>
+                            <text wx:if="{{item.khly}}" class="customer-tag source">{{item.khly}}</text>
+                        </view>
+                    </view>
+
+                    <view class="customer-contact">
+                        <text class="contact-item">📱 {{item.khsjh}}</text>
+                    </view>
+
+                    <view wx:if="{{item.ljxf}}" class="customer-details">
+                        <text class="detail-item">累计消费:  ¥{{item.ljxf}}</text>
+                    </view>
+                    <text wx:if="{{item.bz}}" class="customer-remark">{{item.bz}}</text>
+                </view>
+
+                <view class="customer-actions">
+                    <view class="action-btn edit" data-id="{{item.id}}" catchtap="editCustomer">
+                        <text class="action-icon">✏️</text>
+                        <text class="action-text">编辑</text>
+                    </view>
+                    <view class="action-btn delete" data-id="{{item.id}}" catchtap="deleteCustomer">
+                        <text class="action-icon">🗑️</text>
+                        <text class="action-text">删除</text>
+                    </view>
+                </view>
             </view>
-          </view>
-          
-          <view class="customer-contact">
-            <text class="contact-item">📱 {{item.phone}}</text>
-            <text wx:if="{{item.wechat}}" class="contact-item">💬 {{item.wechat}}</text>
-          </view>
-          
-          <view wx:if="{{item.lastVisit}}" class="customer-details">
-            <text class="detail-item">最近消费: {{item.lastVisit}}</text>
-            <text wx:if="{{item.totalConsumption}}" class="detail-item">累计消费: ¥{{item.totalConsumption}}</text>
-          </view>
-          
-          <text wx:if="{{item.remark}}" class="customer-remark">{{item.remark}}</text>
-        </view>
-        
-        <view class="customer-actions">
-          <view class="action-btn edit" data-id="{{item.id}}" bindtap="editCustomer">
-            <text class="action-icon">✏️</text>
-            <text class="action-text">编辑</text>
-          </view>
-          <view class="action-btn delete" data-id="{{item.id}}" bindtap="deleteCustomer">
-            <text class="action-icon">🗑️</text>
-            <text class="action-text">删除</text>
-          </view>
-        </view>
-      </view>
-    </block>
-  </view>
-
-  <!-- 加载更多 -->
-  <view wx:if="{{hasMore}}" class="load-more" bindtap="loadMore">
-    <text>{{loading ? '加载中...' : '点击加载更多'}}</text>
-  </view>
-  <view wx:else class="no-more">
-    <text>没有更多了</text>
-  </view>
-
-  <!-- 新增/编辑客户弹窗 -->
-  <view class="modal" wx:if="{{showModal}}">
-    <view class="modal-mask" bindtap="hideModal"></view>
-    <view class="modal-content">
-      <view class="modal-header">
-        <text class="modal-title">{{isEdit ? '编辑客户' : '新增客户'}}</text>
-        <text class="close-icon" bindtap="hideModal">✕</text>
-      </view>
-      
-      <view class="modal-body">
-        <view class="form-item">
-          <text class="form-label required">客户姓名</text>
-          <input 
-            class="form-input" 
-            placeholder="请输入客户姓名" 
-            value="{{formData.name}}"
-            bindinput="onFormInput"
-            data-field="name"
-          />
-        </view>
-        
-        <view class="form-item">
-          <text class="form-label required">手机号</text>
-          <input 
-            class="form-input" 
-            type="number" 
-            placeholder="请输入手机号" 
-            value="{{formData.phone}}"
-            bindinput="onFormInput"
-            data-field="phone"
-            maxlength="11"
-          />
-        </view>
-        
-        <view class="form-item">
-          <text class="form-label">微信号</text>
-          <input 
-            class="form-input" 
-            placeholder="请输入微信号" 
-            value="{{formData.wechat}}"
-            bindinput="onFormInput"
-            data-field="wechat"
-          />
-        </view>
-        
-        <view class="form-row">
-          <view class="form-item-half">
-            <text class="form-label">性别</text>
-            <picker 
-              range="{{genders}}" 
-              value="{{genderIndex}}"
-              bindchange="onGenderChange"
-            >
-              <view class="form-input picker-input">
-                {{formData.gender || '请选择性别'}}
-                <text class="picker-arrow">▼</text>
-              </view>
-            </picker>
-          </view>
-          
-          <view class="form-item-half">
-            <text class="form-label">生日</text>
-            <picker 
-              mode="date" 
-              value="{{formData.birthday}}"
-              bindchange="onBirthdayChange"
-            >
-              <view class="form-input picker-input">
-                {{formData.birthday || '请选择生日'}}
-                <text class="picker-arrow">▼</text>
-              </view>
-            </picker>
-          </view>
-        </view>
-        
-        <view class="form-row">
-          <view class="form-item-half">
-            <text class="form-label">客户等级</text>
-            <picker 
-              range="{{vipLevels}}" 
-              value="{{vipLevelIndex}}"
-              bindchange="onVipLevelChange"
-            >
-              <view class="form-input picker-input">
-                {{formData.vipLevel || '请选择等级'}}
-                <text class="picker-arrow">▼</text>
-              </view>
-            </picker>
-          </view>
-          
-          <view class="form-item-half">
-            <text class="form-label">客户来源</text>
-            <picker 
-              range="{{sources}}" 
-              value="{{sourceIndex}}"
-              bindchange="onSourceChange"
-            >
-              <view class="form-input picker-input">
-                {{formData.source || '请选择来源'}}
-                <text class="picker-arrow">▼</text>
-              </view>
-            </picker>
-          </view>
-        </view>
-        
-        <view class="form-item">
-          <text class="form-label">最近消费</text>
-          <input 
-            class="form-input" 
-            placeholder="请输入最近消费日期" 
-            value="{{formData.lastVisit}}"
-            bindinput="onFormInput"
-            data-field="lastVisit"
-          />
-        </view>
-        
-        <view class="form-item">
-          <text class="form-label">累计消费</text>
-          <input 
-            class="form-input" 
-            type="number" 
-            placeholder="请输入累计消费金额" 
-            value="{{formData.totalConsumption}}"
-            bindinput="onFormInput"
-            data-field="totalConsumption"
-          />
-        </view>
-        
-        <view class="form-item">
-          <text class="form-label">客户备注</text>
-          <textarea 
-            class="form-textarea" 
-            placeholder="请输入客户备注信息" 
-            value="{{formData.remark}}"
-            bindinput="onFormInput"
-            data-field="remark"
-            maxlength="200"
-          />
-          <text class="form-tip">{{formData.remark ? formData.remark.length : 0}}/200</text>
-        </view>
-      </view>
-      
-      <view class="modal-footer">
-        <view class="modal-btn cancel" bindtap="hideModal">取消</view>
-        <view class="modal-btn confirm" bindtap="saveCustomer">保存</view>
-      </view>
+        </block>
     </view>
-  </view>
+
+    <!-- 加载状态提示 -->
+    <view class="loading-status">
+        <view wx:if="{{loading && hasMore}}" class="loading-content">
+            <text>加载中...</text>
+        </view>
+        <text wx:if="{{!hasMore && customerList.length > 0 && !loading}}" class="no-more-text">没有更多了</text>
+    </view>
+
+    <!-- 空状态提示 -->
+    <view wx:if="{{customerList.length === 0 && !loading}}" class="empty-state">
+        <text class="empty-text">暂无客户数据</text>
+    </view>
+
+    <!-- 新增客户按钮 -->
+    <view class="add-btn-container">
+        <button class="add-btn" bindtap="showAddModal">
+            <text class="add-icon">+</text>
+            <text class="add-text">新增客户</text>
+        </button>
+    </view>
+
+
+    <!-- 新增/编辑客户弹窗 -->
+    <view class="modal" wx:if="{{showModal}}">
+        <view class="modal-mask" bindtap="hideModal"></view>
+        <view class="modal-content">
+            <view class="modal-header">
+                <text class="modal-title">{{isView? '查看客户': (isEdit ? '编辑客户' : '新增客户')}}</text>
+                <text class="close-icon" bindtap="hideModal">✕</text>
+            </view>
+
+            <view class="modal-body">
+                <view class="form-item">
+                    <text class="form-label required">客户姓名</text>
+                    <input class="form-input" placeholder="请输入客户姓名" value="{{formData.khxm}}" bindinput="onFormInput"
+                        data-field="khxm" disabled="{{isView}}"/>
+                </view>
+
+                <view class="form-item">
+                    <text class="form-label required">手机号</text>
+                    <input class="form-input" type="number" placeholder="请输入手机号" value="{{formData.khsjh}}"
+                        bindinput="onFormInput" data-field="khsjh" maxlength="11"  disabled="{{isView}}"/>
+                </view>
+
+                <view class="form-row">
+                    <view class="form-item-half">
+                        <text class="form-label">性别</text>
+                        <picker range="{{genders}}" value="{{khxb}}"
+                         bindchange="onGenderChange" disabled="{{isView}}">
+                            <view class="form-input picker-input">
+                                {{formData.khxb || '请选择性别'}}
+                                <text class="picker-arrow">▼</text>
+                            </view>
+                        </picker>
+                    </view>
+
+                    <view class="form-item-half">
+                        <text class="form-label">生日</text>
+                        <picker mode="date" value="{{formData.khsr}}" 
+                        bindchange="onBirthdayChange" disabled="{{isView}}">
+                            <view class="form-input picker-input">
+                                {{formData.khsr || '请选择生日'}}
+                                <text class="picker-arrow">▼</text>
+                            </view>
+                        </picker>
+                    </view>
+                </view>
+
+                <view class="form-row">
+                    <view class="form-item-half">
+                        <text class="form-label">客户等级</text>
+                        <picker range="{{vipLevels}}" value="{{formData.khdj}}"
+                         bindchange="onVipLevelChange" disabled="{{isView}}">
+                            <view class="form-input picker-input">
+                                {{formData.khdj || '请选择等级'}}
+                                <text class="picker-arrow">▼</text>
+                            </view>
+                        </picker>
+                    </view>
+
+                    <view class="form-item-half">
+                        <text class="form-label">客户来源</text>
+                        <picker range="{{sources}}" value="{{formData.khly}}"
+                         bindchange="onSourceChange" disabled="{{isView}}">
+                            <view class="form-input picker-input">
+                                {{formData.khly || '请选择来源'}}
+                                <text class="picker-arrow">▼</text>
+                            </view>
+                        </picker>
+                    </view>
+                </view>
+
+                <view class="form-item">
+                    <text class="form-label">累计消费</text>
+                    <input class="form-input" placeholder="请输入累计消费" value="{{formData.ljxf}}"
+                        bindinput="onFormInput" data-field="ljxf" disabled="{{isView}}"/>
+                </view>
+
+                <view class="form-item">
+                    <text class="form-label">客户备注</text>
+                    <textarea class="form-textarea" placeholder="请输入客户备注信息" value="{{formData.bz}}"
+                        bindinput="onFormInput" data-field="bz" maxlength="200" disabled="{{isView}}"/>
+                    <text class="form-tip">{{formData.bz ? formData.bz.length : 0}}/200</text>
+                </view>
+            </view>
+
+            <view class="modal-footer" wx:if="{{!isView}}">
+                <view class="modal-btn cancel" bindtap="hideModal">取消</view>
+                <view class="modal-btn confirm" bindtap="saveCustomer">保存</view>
+            </view>
+            <!-- 查看模式下的关闭按钮（可选） -->
+            <view class="modal-footer" wx:if="{{isView}}">
+                <button class="modal-btn cancel" bindtap="hideModal">关闭</button>
+            </view>
+        </view>
+    </view>
 </view>

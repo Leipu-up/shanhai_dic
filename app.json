@@ -8,7 +8,7 @@
     "pages/schedule/schedule",
     "pages/inventory/inventory",
     "pages/service/service",
-    "pages/stock/stock"
+    "pages/inventory/inOutRecords/inOutRecords"
   ],
   "window": {
     "navigationBarTitleText": "句美菁英",

@@ -1,424 +1,354 @@
-// customer.js
+// 引入API服务
+const {
+    api
+} = require('../../utils/app');
+
 Page({
     data: {
-      searchValue: '',
-      customerList: [],
-      pageSize: 10,
-      currentPage: 1,
-      hasMore: true,
-      loading: false,
-      
-      // 弹窗相关数据
-      showModal: false,
-      isEdit: false,
-      editingId: null,
-      formData: {
-        name: '',
-        phone: '',
-        wechat: '',
-        gender: '',
-        birthday: '',
-        vipLevel: '',
-        source: '',
-        lastVisit: '',
-        totalConsumption: '',
-        remark: ''
-      },
-      
-      // 选择器数据
-      genders: ['男', '女', '保密'],
-      genderIndex: 0,
-      
-      vipLevels: ['普通', '银卡', '金卡', '钻石', '至尊'],
-      vipLevelIndex: 0,
-      
-      sources: ['门店到访', '朋友推荐', '线上预约', '活动引流', '电话咨询', '其他'],
-      sourceIndex: 0
-    },
-  
-    onLoad: function() {
-      this.loadCustomerList();
-    },
-  
-    // 加载客户列表
-    loadCustomerList: function() {
-      const { searchValue, currentPage, pageSize } = this.data;
-      
-      this.setData({ loading: true });
-      
-      // 模拟API请求
-      setTimeout(() => {
-        const mockData = this.generateMockData(searchValue, currentPage, pageSize);
-        const newList = currentPage === 1 ? mockData : [...this.data.customerList, ...mockData];
-        const hasMore = mockData.length >= pageSize;
-        
-        this.setData({
-          customerList: newList,
-          hasMore: hasMore,
-          loading: false
-        });
-      }, 500);
-    },
-  
-    // 生成模拟数据
-    generateMockData: function(searchValue, page, pageSize) {
-      const allCustomers = [
-        { 
-          id: 1, 
-          name: '张美丽', 
-          phone: '13800138001',
-          wechat: 'zhangmeili',
-          gender: '女',
-          birthday: '1990-05-20',
-          vipLevel: '钻石',
-          source: '朋友推荐',
-          lastVisit: '2023-10-15',
-          totalConsumption: 12800,
-          remark: '注重护肤，喜欢高端产品'
-        },
-        { 
-          id: 2, 
-          name: '王先生', 
-          phone: '13900139002',
-          gender: '男',
-          vipLevel: '金卡',
-          source: '门店到访',
-          lastVisit: '2023-10-10',
-          totalConsumption: 5800,
-          remark: '主要为太太购买产品'
-        },
-        { 
-          id: 3, 
-          name: '李小姐', 
-          phone: '13600136003',
-          wechat: 'lily_lee',
-          gender: '女',
-          vipLevel: '银卡',
-          source: '线上预约',
-          lastVisit: '2023-10-08',
-          totalConsumption: 3200,
-          remark: '皮肤敏感，需要温和护理'
-        },
-        { 
-          id: 4, 
-          name: '陈太太', 
-          phone: '13500135004',
-          gender: '女',
-          birthday: '1985-08-12',
-          vipLevel: '至尊',
-          source: '活动引流',
-          lastVisit: '2023-10-05',
-          totalConsumption: 25800,
-          remark: 'VIP客户，每月固定消费'
-        },
-        { 
-          id: 5, 
-          name: '刘女士', 
-          phone: '13700137005',
-          wechat: 'liunvshi88',
-          gender: '女',
-          vipLevel: '普通',
-          source: '电话咨询',
-          lastVisit: '2023-09-28',
-          totalConsumption: 1500,
-          remark: '新客户，首次体验'
-        },
-        { 
-          id: 6, 
-          name: '赵小姐', 
-          phone: '13200132006',
-          gender: '女',
-          vipLevel: '金卡',
-          source: '朋友推荐',
-          lastVisit: '2023-09-25',
-          totalConsumption: 7600,
-          remark: '经常做美甲和睫毛'
-        },
-        { 
-          id: 7, 
-          name: '孙先生', 
-          phone: '13100131007',
-          gender: '男',
-          vipLevel: '普通',
-          source: '门店到访',
-          lastVisit: '2023-09-20',
-          totalConsumption: 2800,
-          remark: '购买男士护肤品'
-        },
-        { 
-          id: 8, 
-          name: '周小姐', 
-          phone: '13000130008',
-          wechat: 'zhouzhou',
-          gender: '女',
-          birthday: '1995-03-15',
-          vipLevel: '银卡',
-          source: '线上预约',
-          lastVisit: '2023-09-18',
-          totalConsumption: 4200,
-          remark: '学生客户，预算有限'
-        }
-      ];
-      
-      // 筛选
-      let filtered = allCustomers;
-      if (searchValue) {
-        filtered = allCustomers.filter(item => 
-          item.name.includes(searchValue) || 
-          item.phone.includes(searchValue) ||
-          (item.wechat && item.wechat.includes(searchValue))
-        );
-      }
-      
-      // 分页
-      const start = (page - 1) * pageSize;
-      const end = start + pageSize;
-      return filtered.slice(start, end);
-    },
-  
-    // 搜索输入处理
-    onSearchInput: function(e) {
-      const searchValue = e.detail.value;
-      this.setData({
-        searchValue: searchValue,
+        searchValue: '',
+        customerList: [],
+        pageSize: 10,
         currentPage: 1,
-        customerList: []
-      });
-      
-      clearTimeout(this.searchTimer);
-      this.searchTimer = setTimeout(() => {
-        this.loadCustomerList();
-      }, 500);
-    },
-  
-    // 键盘搜索确认
-    onSearchConfirm: function(e) {
-      this.setData({
-        searchValue: e.detail.value,
-        currentPage: 1,
-        customerList: []
-      });
-      this.loadCustomerList();
-    },
-  
-    // 加载更多
-    loadMore: function() {
-      if (this.data.loading || !this.data.hasMore) return;
-      
-      this.setData({
-        currentPage: this.data.currentPage + 1
-      });
-      this.loadCustomerList();
-    },
-  
-    // 显示新增弹窗
-    showAddModal: function() {
-      this.setData({
-        showModal: true,
+        hasMore: true,
+        loading: false,
+        isRefreshing: false,
+        total: 0,
+        isFirstLoad: true,
+        // 弹窗相关数据
+        showModal: false,
         isEdit: false,
-        editingId: null,
+        isView: false,
         formData: {
-          name: '',
-          phone: '',
-          wechat: '',
-          gender: '',
-          birthday: '',
-          vipLevel: '',
-          source: '',
-          lastVisit: '',
-          totalConsumption: '',
-          remark: ''
+            id: '',
+            khxm: '',
+            khsjh: '',
+            khxb: '',
+            khsr: '',
+            khdj: '',
+            khly: '',
+            lastVisit: '',
+            bz: ''
         },
-        genderIndex: 0,
-        vipLevelIndex: 0,
-        sourceIndex: 0
-      });
+        // 选择器数据
+        genders: ['男', '女'],
+        vipLevels: ['普通', '银卡', '金卡', '钻石', '至尊'],
+        sources: ['门店到访', '朋友推荐', '线上预约', '活动引流', '电话咨询', '其他'],
     },
-  
-    // 隐藏弹窗
-    hideModal: function() {
-      this.setData({
-        showModal: false
-      });
+    onLoad: function () {
+        // 只在onLoad中加载一次
+        this.refreshCustomerList();
     },
-  
-    // 表单输入处理
-    onFormInput: function(e) {
-      const field = e.currentTarget.dataset.field;
-      const value = e.detail.value;
-      
-      this.setData({
-        [`formData.${field}`]: value
-      });
-    },
-  
-    // 性别选择
-    onGenderChange: function(e) {
-      const index = e.detail.value;
-      const gender = this.data.genders[index];
-      
-      this.setData({
-        genderIndex: index,
-        [`formData.gender`]: gender
-      });
-    },
-  
-    // 生日选择
-    onBirthdayChange: function(e) {
-      const birthday = e.detail.value;
-      this.setData({
-        [`formData.birthday`]: birthday
-      });
-    },
-  
-    // VIP等级选择
-    onVipLevelChange: function(e) {
-      const index = e.detail.value;
-      const vipLevel = this.data.vipLevels[index];
-      
-      this.setData({
-        vipLevelIndex: index,
-        [`formData.vipLevel`]: vipLevel
-      });
-    },
-  
-    // 来源选择
-    onSourceChange: function(e) {
-      const index = e.detail.value;
-      const source = this.data.sources[index];
-      
-      this.setData({
-        sourceIndex: index,
-        [`formData.source`]: source
-      });
-    },
-  
-    // 保存客户
-    saveCustomer: function() {
-      const { formData, isEdit, editingId } = this.data;
-      
-      // 验证必填字段
-      if (!formData.name.trim()) {
-        wx.showToast({
-          title: '请输入客户姓名',
-          icon: 'none'
-        });
-        return;
-      }
-      
-      if (!formData.phone) {
-        wx.showToast({
-          title: '请输入手机号',
-          icon: 'none'
-        });
-        return;
-      }
-      
-      // 简单的手机号验证
-      if (formData.phone.length !== 11) {
-        wx.showToast({
-          title: '请输入11位手机号',
-          icon: 'none'
-        });
-        return;
-      }
-      
-      wx.showLoading({
-        title: '保存中...'
-      });
-      
-      // 模拟API请求
-      setTimeout(() => {
-        wx.hideLoading();
-        
-        if (isEdit) {
-          // 更新现有客户
-          const newList = this.data.customerList.map(item => 
-            item.id === editingId ? { ...formData, id: editingId } : item
-          );
-          this.setData({ customerList: newList });
-          wx.showToast({ title: '更新成功' });
-        } else {
-          // 新增客户
-          const newCustomer = {
-            ...formData,
-            id: Date.now(), // 使用时间戳作为ID
-            totalConsumption: formData.totalConsumption || 0
-          };
-          this.setData({ 
-            customerList: [newCustomer, ...this.data.customerList]
-          });
-          wx.showToast({ title: '添加成功' });
+    // 刷新客户列表
+    refreshCustomerList: function () {
+        // 如果是首次加载，设置标记
+        if (this.data.isFirstLoad) {
+            this.setData({
+                isFirstLoad: false
+            });
         }
-        
-        this.hideModal();
-      }, 800);
-    },
-  
-    // 编辑客户
-    editCustomer: function(e) {
-      const id = e.currentTarget.dataset.id;
-      const customer = this.data.customerList.find(item => item.id === parseInt(id));
-      
-      if (customer) {
-        const genderIndex = this.data.genders.indexOf(customer.gender);
-        const vipLevelIndex = this.data.vipLevels.indexOf(customer.vipLevel);
-        const sourceIndex = this.data.sources.indexOf(customer.source);
-        
         this.setData({
-          showModal: true,
-          isEdit: true,
-          editingId: id,
-          formData: { ...customer },
-          genderIndex: genderIndex !== -1 ? genderIndex : 0,
-          vipLevelIndex: vipLevelIndex !== -1 ? vipLevelIndex : 0,
-          sourceIndex: sourceIndex !== -1 ? sourceIndex : 0
+            currentPage: 1,
+            hasMore: true,
+            loading: true,
+            isRefreshing: true
+        }, () => {
+            this.loadCustomerList();
         });
-      }
     },
-  
-    // 删除客户
-    deleteCustomer: function(e) {
-      const id = e.currentTarget.dataset.id;
-      const customerName = this.data.customerList.find(item => item.id === parseInt(id))?.name || '';
+    // 加载客户列表
+    loadCustomerList: function () {
       
-      wx.showModal({
-        title: '确认删除',
-        content: `确定要删除客户"${customerName}"吗？此操作不可恢复。`,
-        success: (res) => {
-          if (res.confirm) {
-            wx.showLoading({ title: '删除中...' });
-            
-            setTimeout(() => {
-              const newList = this.data.customerList.filter(item => item.id !== parseInt(id));
-              this.setData({ customerList: newList });
-              wx.hideLoading();
-              wx.showToast({ title: '删除成功' });
-            }, 600);
-          }
+        const {
+            searchValue,
+            currentPage,
+            pageSize
+        } = this.data;
+        // 构建参数
+        const params = {
+            "filter": {
+                "khxm": searchValue, // 修改为按客户姓名搜索
+            },
+            "page": {
+                "pageNum": currentPage,
+                "pageSize": pageSize
+            }
+        };
+        console.log('加载客户列表，页码:', currentPage);
+        // 只在第一次加载时显示loading
+        if (this.data.currentPage === 1 && this.data.isRefreshing) {
+            wx.showLoading({
+                title: '加载中...'
+            });
         }
-      });
+        api.getCustomerList(params).then(responseData => {
+            wx.hideLoading();
+            const mockData = responseData.data;
+            const newList = mockData.list || [];
+            const total = mockData.total || 0;
+            const pageCount = mockData.pageCount || 0;
+            console.log('第', currentPage, '页数据加载完成，共', newList.length, '条');
+            console.log('总页数:', pageCount, '当前页:', currentPage);
+            // 判断是否还有更多数据
+            const hasMore = currentPage < pageCount && newList.length > 0;
+            console.log('是否有更多数据:', hasMore);
+            // 如果是第一页，替换数据；否则追加数据
+            const customerList = currentPage === 1 ? newList : [...this.data.customerList, ...newList];
+            this.setData({
+                customerList: customerList,
+                hasMore: hasMore,
+                loading: false,
+                isRefreshing: false,
+                total: total
+            }, () => {
+                console.log('数据更新完成，当前总数:', customerList.length, '，是否还有更多:', hasMore);
+            });
+        }).catch(error => {
+            wx.hideLoading();
+            console.error('加载客户列表失败:', error);
+            this.setData({
+                loading: false,
+                isRefreshing: false
+            });
+            if (error.type === 'empty') {
+                // 如果是第一页且无数据，清空列表
+                if (this.data.currentPage === 1) {
+                    this.setData({
+                        customerList: [],
+                        hasMore: false
+                    });
+                }
+                wx.showToast({
+                    title: '暂无数据',
+                    icon: 'none',
+                    duration: 2000
+                });
+            } else {
+                api.handleApiError(error);
+            }
+        });
     },
-  
+    // 滑动到底部自动加载
+    onReachBottom: function () {
+        console.log('滑动到底部，触发加载更多');
+        console.log('当前状态 - loading:', this.data.loading, 'hasMore:', this.data.hasMore);
+        // 如果正在加载或没有更多数据，则不执行
+        if (this.data.loading) {
+            console.log('正在加载中，跳过');
+            return;
+        }
+        if (!this.data.hasMore) {
+            console.log('没有更多数据了，不加载');
+            return;
+        }
+        // 增加页码并加载数据
+        this.setData({
+            currentPage: this.data.currentPage + 1,
+            loading: true
+        }, () => {
+            console.log('开始加载第', this.data.currentPage, '页');
+            this.loadCustomerList();
+        });
+    },
+    // 搜索相关方法
+    onSearchInput: function (e) {
+        this.setData({
+            searchValue: e.detail.value
+        });
+    },
+    onSearch: function () {
+        this.refreshCustomerList();
+    },
+    onSearchConfirm: function () {
+        this.onSearch();
+    },
+    // 弹窗相关方法
+    showAddModal: function () {
+        this.setData({
+            showModal: true,
+            isEdit: false,
+            isView: false,
+            formData: {
+                id: '',
+                khxm: '',
+                khsjh: '',
+                khxb: '',
+                khsr: '',
+                khdj: '',
+                khly: '',
+                ljxf: '',
+                bz: ''
+            },
+        });
+    },
+    showEditModal: function (id, isView) {
+        const customer = this.data.customerList.find(item => item.id === id);
+        if (customer) {
+            this.setData({
+                showModal: true,
+                isEdit: true,
+                isView: isView || false,
+                formData: {
+                    ...customer
+                },
+            });
+        }
+    },
+    hideModal: function () {
+        this.setData({
+            showModal: false
+        });
+    },
+    // 表单输入处理
+    onFormInput: function (e) {
+        const field = e.currentTarget.dataset.field;
+        const value = e.detail.value;
+        this.setData({
+            [`formData.${field}`]: value
+        });
+    },
+    // 性别选择
+    onGenderChange: function (e) {
+        const index = e.detail.value;
+        const gender = this.data.genders[index];
+        this.setData({
+            'formData.khxb': gender
+        });
+    },
+    // 生日选择
+    onBirthdayChange: function (e) {
+        const birthday = e.detail.value;
+        this.setData({
+            'formData.khsr': birthday
+        });
+    },
+    // VIP等级选择
+    onVipLevelChange: function (e) {
+        const index = e.detail.value;
+        const vipLevel = this.data.vipLevels[index];
+        this.setData({
+            vipLevelIndex: index,
+            'formData.khdj': vipLevel
+        });
+    },
+    // 来源选择
+    onSourceChange: function (e) {
+        const index = e.detail.value;
+        const source = this.data.sources[index];
+        this.setData({
+            'formData.khly': source
+        });
+    },
+    // 保存客户
+    saveCustomer: function () {
+        const {
+            formData,
+            isEdit
+        } = this.data;
+        console.log('保存客户数据:', formData);
+        // 验证必填字段
+        if (!formData.khxm || !formData.khxm.trim()) {
+            wx.showToast({
+                title: '请输入客户姓名',
+                icon: 'none'
+            });
+            return;
+        }
+        if (!formData.khsjh || !formData.khsjh.trim()) {
+            wx.showToast({
+                title: '请输入手机号',
+                icon: 'none'
+            });
+            return;
+        }
+        // 简单的手机号验证
+        if (formData.khsjh.length !== 11 || !/^1[3-9]\d{9}$/.test(formData.khsjh)) {
+            wx.showToast({
+                title: '请输入正确的手机号',
+                icon: 'none'
+            });
+            return;
+        }
+        wx.showLoading({
+            title: '保存中...'
+        });
+        if (isEdit) {
+            api.updateCustomer(formData).then(responseData => {
+                wx.hideLoading();
+                wx.showToast({
+                    title: '编辑成功',
+                    icon: 'success'
+                });
+                this.refreshCustomerList();
+                this.hideModal();
+            }).catch(error => {
+                wx.hideLoading();
+                api.handleApiError(error);
+            });
+        } else {
+            console.log(formData);
+            api.addCustomer(formData).then(responseData => {
+                wx.hideLoading();
+                wx.showToast({
+                    title: '新增成功',
+                    icon: 'success'
+                });
+                this.refreshCustomerList();
+                this.hideModal();
+            }).catch(error => {
+                wx.hideLoading();
+                api.handleApiError(error);
+            });
+        }
+    },
+    // 查看客户
+    viewCustomer: function (e) {
+        const id = e.currentTarget.dataset.id;
+        this.showEditModal(parseInt(id), true);
+    },
+    // 编辑客户
+    editCustomer: function (e) {
+        const id = e.currentTarget.dataset.id;
+        this.showEditModal(parseInt(id), false);
+    },
+    // 删除客户
+    deleteCustomer: function (e) {
+        const id = e.currentTarget.dataset.id;
+        const customerName = this.data.customerList.find(item => item.id === parseInt(id))?.khxm || '';
+        wx.showModal({
+            title: '确认删除',
+            content: `确定要删除客户"${customerName}"吗？`,
+            success: (res) => {
+                if (res.confirm) {
+                    wx.showLoading({
+                        title: '删除中...'
+                    });
+                    api.deleteCustomer({
+                        id: id
+                    }).then(responseData => {
+                        wx.hideLoading();
+                        wx.showToast({
+                            title: '删除成功',
+                            icon: 'success'
+                        });
+                        this.refreshCustomerList();
+                    }).catch(error => {
+                        wx.hideLoading();
+                        api.handleApiError(error);
+                    });
+                }
+            }
+        });
+    },
+    // 停止事件冒泡
+    stopPropagation: function (e) {
+        // 阻止事件冒泡
+    },
     // 下拉刷新
-    onPullDownRefresh: function() {
-      this.setData({
-        currentPage: 1,
-        customerList: []
-      });
-      this.loadCustomerList();
-      setTimeout(() => {
-        wx.stopPullDownRefresh();
-      }, 1000);
-    },
-  
-    // 页面显示时刷新数据
-    onShow: function() {
-      // 可以在这里刷新数据，确保数据最新
-      this.setData({
-        currentPage: 1,
-        customerList: []
-      });
-      this.loadCustomerList();
+    onPullDownRefresh: function () {
+        console.log('下拉刷新');
+        this.refreshCustomerList();
+        setTimeout(() => {
+            wx.stopPullDownRefresh();
+        }, 1000);
     }
-  });
+});

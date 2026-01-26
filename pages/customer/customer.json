@@ -2,5 +2,6 @@
     "navigationBarTitleText": "客户管理",
     "navigationBarBackgroundColor": "#FF69B4",
     "navigationBarTextStyle": "white",
+    "onReachBottomDistance": 50,
     "enablePullDownRefresh": true
   }

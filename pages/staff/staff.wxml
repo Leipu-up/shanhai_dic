@@ -1,142 +1,126 @@
 <view class="staff-page">
-  <!-- 搜索框 -->
-  <view class="search-bar">
-    <view class="search-input-container">
-      <text class="search-icon">🔍</text>
-      <input 
-        class="search-input" 
-        placeholder="输入员工姓名搜索" 
-        placeholder-style="color: #999;"
-        value="{{searchKeyword}}"
-        bindinput="onSearchInput"
-        bindconfirm="onSearchConfirm"
-      />
-      <view class="search-clear" wx:if="{{searchKeyword}}" bindtap="clearSearch">
-        <text>×</text>
-      </view>
-    </view>
-  </view>
-
-  <!-- 员工列表 -->
-  <view class="staff-list">
-    <view wx:if="{{staffList.length > 0}}">
-      <!-- 统计信息 -->
-      <view class="stats-info">
-        <view class="stats-item">
-          <text class="stats-number">{{totalCount}}</text>
-          <text class="stats-label">员工总数</text>
+    <!-- 搜索框 -->
+    <view class="search-bar">
+        <view class="search-input-container">
+            <input class="search-input" placeholder="输入员工姓名搜索" placeholder-style="color: #999;"
+                value="{{searchKeyword}}" bindinput="onSearchInput"  />
+            <text class="search-icon" bindtap="onSearchConfirm">🔍</text>
         </view>
-        <view class="stats-item">
-          <text class="stats-number">{{onDutyCount}}</text>
-          <text class="stats-label">在职员工</text>
-        </view>
-        <view class="stats-item">
-          <text class="stats-number">{{totalPages}}</text>
-          <text class="stats-label">总页数</text>
-        </view>
-      </view>
-
-      <!-- 员工卡片列表 -->
-      <view class="staff-grid">
-        <view class="staff-card" 
-              wx:for="{{staffList}}" 
-              wx:key="id" 
-              bindtap="viewStaffDetail"
-              data-id="{{item.id}}">
-          
-          <!-- 员工头像和基本信息 -->
-          <view class="card-header">
-            <image class="staff-avatar" src="{{item.avatar || '/images/default-avatar.png'}}"></image>
-            <view class="staff-basic-info">
-              <text class="staff-name">{{item.name}}</text>
-              <view class="staff-position">
-                <text class="position-tag">{{item.position}}</text>
-                <text class="store-tag">{{item.storeName}}</text>
-              </view>
-            </view>
-          </view>
-
-          <!-- 工号和电话 -->
-          <view class="card-info-row">
-            <view class="info-item">
-              <text class="info-icon">🆔</text>
-              <text class="info-text">{{item.employeeId}}</text>
-            </view>
-            <view class="info-item">
-              <text class="info-icon">📱</text>
-              <text class="info-text">{{item.phone}}</text>
-            </view>
-          </view>
-
-          <!-- 在职状态和时长 -->
-          <view class="card-info-row">
-            <view class="status-badge {{item.status === '在职' ? 'on-duty' : 'off-duty'}}">
-              <text>{{item.status}}</text>
-              <text class="duration-text" wx:if="{{item.workDuration}}">{{item.workDuration}}</text>
-            </view>
-          </view>
-
-          <!-- 本月业绩 -->
-          <view class="performance-section">
-            <view class="performance-label">
-              <text class="performance-icon">💰</text>
-              <text class="performance-title">本月业绩</text>
-            </view>
-            <text class="performance-amount">{{item.monthlyPerformance}}</text>
-          </view>
-
-          <!-- 操作按钮 -->
-          <view class="card-actions">
-            <button class="action-btn call" size="mini" bindtap="callStaff" data-phone="{{item.phone}}" catchtap="stopPropagation">
-              <text class="action-icon">📞</text>
-              联系
-            </button>
-            <button class="action-btn edit" size="mini" bindtap="editStaff" data-id="{{item.id}}" catchtap="stopPropagation">
-              <text class="action-icon">✏️</text>
-              编辑
-            </button>
-          </view>
-        </view>
-      </view>
-
-      <!-- 分页加载提示 -->
-      <view class="load-more-container">
-        <view wx:if="{{isLoading}}" class="loading-more">
-          <view class="loading-spinner"></view>
-          <text class="loading-text">正在加载更多...</text>
-        </view>
-        
-        <view wx:if="{{!hasMore && totalCount > 0}}" class="no-more-data">
-          <text class="no-more-text">已加载全部员工</text>
-        </view>
-        
-        <view wx:if="{{hasMore && !isLoading}}" class="load-more-tip">
-          <text class="load-more-text">上拉加载更多</text>
-        </view>
-      </view>
     </view>
 
-    <!-- 空状态 -->
-    <view wx:else class="empty-state">
-      <view class="empty-icon">👩‍💼</view>
-      <text class="empty-text" wx:if="{{searchKeyword}}">未找到匹配的员工</text>
-      <text class="empty-text" wx:else>暂无员工信息</text>
-      <button class="btn-primary" bindtap="showAddModal">新增员工</button>
+    <!-- 员工列表 -->
+    <view class="staff-list">
+        <view wx:if="{{staffList.length > 0}}">
+            <!-- 统计信息 -->
+            <view class="stats-info">
+                <view class="stats-item">
+                    <text class="stats-number">{{totalCount}}</text>
+                    <text class="stats-label">员工总数</text>
+                </view>
+                <view class="stats-item">
+                    <text class="stats-number">{{onDutyCount}}</text>
+                    <text class="stats-label">在职员工</text>
+                </view>
+                <view class="stats-item">
+                    <text class="stats-number">{{totalPages}}</text>
+                    <text class="stats-label">总页数</text>
+                </view>
+            </view>
+
+            <!-- 员工卡片列表 -->
+            <view class="staff-grid">
+                <view class="staff-card" wx:for="{{staffList}}" wx:key="id" bindtap="viewStaffDetail"
+                    data-id="{{item.id}}">
+
+                    <!-- 员工头像和基本信息 -->
+                    <view class="card-header">
+                        <image class="staff-avatar" src="{{item.avatar || '/images/default-avatar.png'}}"></image>
+                        <view class="staff-basic-info">
+                            <text class="staff-name">{{item.nameView}}</text>
+                            <view class="staff-position">
+                                <text class="position-tag">{{item.position}}</text>
+                                <text class="store-tag">{{item.storeName}}</text>
+                            </view>
+                        </view>
+                    </view>
+
+                    <!-- 工号和电话 -->
+                    <view class="card-info-row">
+                        <view class="info-item">
+                            <text class="info-icon">🆔</text>
+                            <text class="info-text">{{item.employeeId}}</text>
+                        </view>
+                        <view class="info-item">
+                            <text class="info-icon">📱</text>
+                            <text class="info-text">{{item.phone}}</text>
+                        </view>
+                    </view>
+
+                    <!-- 在职状态和时长 -->
+                    <view class="card-info-row">
+                        <view class="status-badge {{item.status === '在职' ? 'on-duty' : 'off-duty'}}">
+                            <text>{{item.status}}</text>
+                            <text class="duration-text" wx:if="{{item.workDuration}}">{{item.workDuration}}</text>
+                        </view>
+                    </view>
+
+                    <!-- 本月业绩 -->
+                    <view class="performance-section">
+                        <view class="performance-label">
+                            <text class="performance-icon">💰</text>
+                            <text class="performance-title">本月业绩</text>
+                        </view>
+                        <text class="performance-amount">{{item.monthlyPerformance}}</text>
+                    </view>
+
+                    <!-- 操作按钮 -->
+                    <view class="card-actions">
+                        <button class="action-btn call" size="mini" catchtap="callStaff" data-phone="{{item.phone}}">
+                            <text class="action-icon">📞</text>
+                            联系
+                        </button>
+                        <button class="action-btn edit" size="mini" catchtap="editStaff" data-id="{{item.id}}">
+                            <text class="action-icon">✏️</text>
+                            编辑
+                        </button>
+                    </view>
+                </view>
+            </view>
+
+            <!-- 分页加载提示 -->
+            <view class="load-more-container">
+                <view wx:if="{{isLoading}}" class="loading-more">
+                    <view class="loading-spinner"></view>
+                    <text class="loading-text">正在加载更多...</text>
+                </view>
+
+                <view wx:if="{{!hasMore && totalCount > 0}}" class="no-more-data">
+                    <text class="no-more-text">已加载全部员工</text>
+                </view>
+
+                <view wx:if="{{hasMore && !isLoading}}" class="load-more-tip">
+                    <text class="load-more-text">上拉加载更多</text>
+                </view>
+            </view>
+        </view>
+
+        <!-- 空状态 -->
+        <view wx:else class="empty-state">
+            <view class="empty-icon">👩‍💼</view>
+            <text class="empty-text" wx:if="{{searchKeyword}}">未找到匹配的员工</text>
+            <text class="empty-text" wx:else>暂无员工信息</text>
+            <button class="btn-primary" bindtap="showAddModal">新增员工</button>
+        </view>
     </view>
-  </view>
 
-  <!-- 新增员工按钮 -->
-  <view class="add-btn-container" wx:if="{{staffList.length > 0}}">
-    <button class="add-btn" bindtap="showAddModal">
-      <text class="add-icon">+</text>
-      <text class="add-text">新增员工</text>
-    </button>
-  </view>
+    <!-- 新增员工按钮 -->
+    <view class="add-btn-container" wx:if="{{staffList.length > 0}}">
+        <button class="add-btn" bindtap="showAddModal">
+            <text class="add-icon">+</text>
+            <text class="add-text">新增员工</text>
+        </button>
+    </view>
 
-  <!-- 新增员工弹窗组件 -->
-  <add-staff-modal 
-    id="addStaffModal"
-    bind:confirm="handleAddStaff"
-    bind:cancel="hideAddModal"
-  />
+    <!-- 新增员工弹窗组件 -->
+    <add-staff-modal id="addStaffModal" bind:confirm="handleAddStaff" bind:cancel="hideAddModal" />
 </view>

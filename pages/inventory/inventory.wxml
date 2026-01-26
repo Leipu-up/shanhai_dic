@@ -1,253 +1,250 @@
 <view class="inventory-page">
-  <!-- 搜索区域 -->
-  <view class="search-bar">
-    <view class="search-input-container">
-      <text class="search-icon">🔍</text>
-      <input 
-        class="search-input" 
-        placeholder="输入商品名称搜索" 
-        placeholder-style="color: #999;"
-        value="{{searchKeyword}}"
-        bindinput="onSearchInput"
-        bindconfirm="onSearchConfirm"
-      />
-      <view class="search-clear" wx:if="{{searchKeyword}}" bindtap="clearSearch">
-        <text>×</text>
-      </view>
-    </view>
-    
-    <view class="filter-options">
-      <picker 
-        mode="selector" 
-        range="{{storeOptions}}"
-        value="{{selectedStoreIndex}}"
-        bindchange="onStoreChange"
-        class="filter-picker"
-      >
-        <view class="filter-picker-box">
-          <text class="filter-icon">🏪</text>
-          <text class="filter-text">{{selectedStoreName || '全部店名'}}</text>
-        </view>
-      </picker>
-    </view>
-  </view>
-
-  <!-- 库存列表 -->
-  <view class="inventory-list">
-    <view wx:if="{{inventoryList.length > 0}}">
-      <!-- 统计信息 -->
-      <view class="stats-info">
-        <view class="stats-item">
-          <text class="stats-number">{{totalCount}}</text>
-          <text class="stats-label">商品种类</text>
-        </view>
-        <view class="stats-item">
-          <text class="stats-number">{{lowStockCount}}</text>
-          <text class="stats-label">库存预警</text>
-        </view>
-        <view class="stats-item">
-          <text class="stats-number">{{totalPages}}</text>
-          <text class="stats-label">总页数</text>
-        </view>
-      </view>
-
-      <!-- 库存表格 -->
-      <view class="inventory-table">
-        <view class="table-header">
-          <view class="header-cell name">商品名称</view>
-          <view class="header-cell store">店名</view>
-          <view class="header-cell quantity">库存量</view>
-          <view class="header-cell unit">单位</view>
-          <view class="header-cell actions">操作</view>
-        </view>
-
-        <view class="table-body">
-          <view 
-            class="table-row {{item.isLowStock ? 'low-stock' : ''}}" 
-            wx:for="{{inventoryList}}" 
-            wx:key="id"
-            bindtap="showDetailModal"
-            data-id="{{item.id}}"
-          >
-            <view class="table-cell name">
-              <view class="product-info">
-                <text class="product-name">{{item.name}}</text>
-                <text class="product-category">{{item.category}}</text>
-              </view>
-            </view>
-            
-            <view class="table-cell store">
-              <text class="store-text">{{item.storeName}}</text>
-            </view>
-            
-            <view class="table-cell quantity">
-              <view class="quantity-display">
-                <text class="quantity-number">{{item.quantity}}</text>
-                <view class="stock-status" wx:if="{{item.isLowStock}}">
-                  <text class="warning-icon">⚠️</text>
+    <!-- 搜索区域 -->
+    <view class="search-bar">
+        <!-- 左侧：门店选择器 -->
+        <view class="store-picker-container">
+            <picker mode="selector" range="{{storeOptions}}" value="{{selectedStoreName}}" bindchange="onStoreChange"
+                class="store-picker">
+                <view class="store-picker-box">
+                    <text class="store-icon">🏪</text>
+                    <text class="store-text">{{selectedStoreName || '全部门店'}}</text>
+                    <text class="dropdown-icon">▼</text>
                 </view>
-              </view>
-            </view>
-            
-            <view class="table-cell unit">
-              <text class="unit-text">{{item.unit}}</text>
-            </view>
-            
-            <view class="table-cell actions">
-              <button class="action-btn delete" size="mini" bindtap="deleteInventory" data-id="{{item.id}}" catchtap="stopPropagation">
-                <text class="action-icon">🗑️</text>
-              </button>
-            </view>
-          </view>
+            </picker>
         </view>
-      </view>
 
-      <!-- 分页加载提示 -->
-      <view class="load-more-container">
-        <view wx:if="{{isLoading}}" class="loading-more">
-          <view class="loading-spinner"></view>
-          <text class="loading-text">正在加载更多...</text>
+        <!-- 右侧：搜索框 -->
+        <view class="search-input-container">
+            <input class="search-input" placeholder="输入商品名称搜索" placeholder-style="color: #999;"
+                value="{{searchKeyword}}" bindinput="onSearchInput" bindconfirm="onSearchConfirm" />
+            <text class="search-icon" bindtap="onSearchConfirm">🔍</text>
         </view>
-        
-        <view wx:if="{{!hasMore && totalCount > 0}}" class="no-more-data">
-          <text class="no-more-text">已加载全部商品</text>
-        </view>
-        
-        <view wx:if="{{hasMore && !isLoading}}" class="load-more-tip">
-          <text class="load-more-text">上拉加载更多</text>
-        </view>
-      </view>
     </view>
 
-    <!-- 空状态 -->
-    <view wx:else class="empty-state">
-      <view class="empty-icon">📦</view>
-      <text class="empty-text" wx:if="{{searchKeyword}}">未找到匹配的商品</text>
-      <text class="empty-text" wx:else>暂无库存信息</text>
-      <button class="btn-primary" bindtap="showAddModal">新增商品</button>
-    </view>
-  </view>
-
-  <!-- 新增商品按钮 -->
-  <view class="add-btn-container" wx:if="{{inventoryList.length > 0}}">
-    <button class="add-btn" bindtap="showAddModal">
-      <text class="add-icon">+</text>
-      <text class="add-text">新增商品</text>
-    </button>
-  </view>
-
-  <!-- 详情弹窗 -->
-  <view class="detail-modal" wx:if="{{showDetailModal}}">
-    <view class="modal-mask" bindtap="hideDetailModal"></view>
-    <view class="modal-content">
-      <view class="modal-header">
-        <text class="modal-title">库存详情</text>
-        <text class="close-btn" bindtap="hideDetailModal">×</text>
-      </view>
-      
-      <scroll-view class="modal-body" scroll-y>
-        <!-- 基本信息 -->
-        <view class="detail-section">
-          <view class="section-title">基本信息</view>
-          <view class="detail-row">
-            <text class="detail-label">商品名称：</text>
-            <text class="detail-value">{{currentDetail.name}}</text>
-          </view>
-          <view class="detail-row">
-            <text class="detail-label">商品分类：</text>
-            <text class="detail-value">{{currentDetail.category}}</text>
-          </view>
-          <view class="detail-row">
-            <text class="detail-label">所在店铺：</text>
-            <text class="detail-value">{{currentDetail.storeName}}</text>
-          </view>
-          <view class="detail-row">
-            <text class="detail-label">当前库存：</text>
-            <view class="stock-info">
-              <text class="stock-quantity">{{currentDetail.quantity}}</text>
-              <text class="stock-unit">{{currentDetail.unit}}</text>
+    <!-- 库存列表 -->
+    <view class="inventory-list">
+        <view wx:if="{{inventoryList.length > 0}}">
+            <!-- 统计信息 -->
+            <view class="stats-info">
+                <view class="stats-item">
+                    <text class="stats-number">{{totalCount}}</text>
+                    <text class="stats-label">商品种类</text>
+                </view>
+                <view class="stats-item">
+                    <text class="stats-number">{{lowStockCount}}</text>
+                    <text class="stats-label">库存预警</text>
+                </view>
+                <view class="stats-item">
+                    <text class="stats-number">{{totalPages}}</text>
+                    <text class="stats-label">总页数</text>
+                </view>
             </view>
-          </view>
-          <view class="detail-row">
-            <text class="detail-label">库存预警：</text>
-            <view class="stock-warning {{currentDetail.isLowStock ? 'warning' : 'normal'}}">
-              <text>{{currentDetail.isLowStock ? '低于预警线' : '正常'}}</text>
+
+            <!-- 库存表格 -->
+            <view class="inventory-table">
+                <view class="table-header">
+                    <view class="header-cell name">商品名称</view>
+                    <view class="header-cell store">店名</view>
+                    <view class="header-cell quantity">库存量</view>
+                    <view class="header-cell unit">单位</view>
+                    <view class="header-cell actions">操作</view>
+                </view>
+
+                <view class="table-body">
+                    <view class="table-row {{item.isLowStock ? 'low-stock' : ''}}" wx:for="{{inventoryList}}"
+                        wx:key="id" bindtap="showDetailModal" data-id="{{item.id}}">
+                        <view class="table-cell name">
+                            <view class="product-info">
+                                <text class="product-name">{{item.name}}</text>
+                                <text class="product-category">{{item.category}}</text>
+                            </view>
+                        </view>
+
+                        <view class="table-cell store">
+                            <text class="store-text">{{item.store}}</text>
+                        </view>
+
+                        <view class="table-cell quantity">
+                            <view class="quantity-display">
+                                <text class="quantity-number">{{item.quantity}}</text>
+                                <view class="stock-status" wx:if="{{item.isLowStock>=item.quantity}}">
+                                    <text class="warning-icon">⚠️</text>
+                                </view>
+                            </view>
+                        </view>
+
+                        <view class="table-cell unit">
+                            <text class="unit-text">{{item.unit}}</text>
+                        </view>
+
+                        <view class="table-cell actions">
+                            <button class="action-btn edit" size="mini" data-id="{{item.id}}" catchtap="editInventory">
+                                <text class="action-icon">✏️</text>
+                            </button>
+                            <button class="action-btn delete" size="mini" data-id="{{item.id}}"
+                                catchtap="deleteInventory">
+                                <text class="action-icon">🗑️</text>
+                            </button>
+                        </view>
+                    </view>
+                </view>
             </view>
-          </view>
+
+            <!-- 分页加载提示 -->
+            <view class="load-more-container">
+                <view wx:if="{{isLoading}}" class="loading-more">
+                    <view class="loading-spinner"></view>
+                    <text class="loading-text">正在加载更多...</text>
+                </view>
+
+                <view wx:if="{{!hasMore && totalCount > 0}}" class="no-more-data">
+                    <text class="no-more-text">已加载全部商品</text>
+                </view>
+
+                <view wx:if="{{hasMore && !isLoading}}" class="load-more-tip">
+                    <text class="load-more-text">上拉加载更多</text>
+                </view>
+            </view>
         </view>
 
-        <!-- 入库信息 -->
-        <view class="detail-section" wx:if="{{currentDetail.lastInTime}}">
-          <view class="section-title">最后入库</view>
-          <view class="detail-row">
-            <text class="detail-label">入库时间：</text>
-            <text class="detail-value">{{currentDetail.lastInTime}}</text>
-          </view>
-          <view class="detail-row">
-            <text class="detail-label">入库人：</text>
-            <text class="detail-value">{{currentDetail.lastInPerson}}</text>
-          </view>
-          <view class="detail-row">
-            <text class="detail-label">入库数量：</text>
-            <text class="detail-value">{{currentDetail.lastInQuantity}} {{currentDetail.unit}}</text>
-          </view>
+        <!-- 空状态 -->
+        <view wx:else class="empty-state">
+            <view class="empty-icon">📦</view>
+            <text class="empty-text" wx:if="{{searchKeyword}}">未找到匹配的商品</text>
+            <text class="empty-text" wx:else>暂无库存信息</text>
+            <button class="btn-primary" bindtap="showAddModal">新增商品</button>
         </view>
-
-        <!-- 出库信息 -->
-        <view class="detail-section" wx:if="{{currentDetail.lastOutTime}}">
-          <view class="section-title">最后出库</view>
-          <view class="detail-row">
-            <text class="detail-label">出库时间：</text>
-            <text class="detail-value">{{currentDetail.lastOutTime}}</text>
-          </view>
-          <view class="detail-row">
-            <text class="detail-label">出库人：</text>
-            <text class="detail-value">{{currentDetail.lastOutPerson}}</text>
-          </view>
-          <view class="detail-row">
-            <text class="detail-label">出库数量：</text>
-            <text class="detail-value">{{currentDetail.lastOutQuantity}} {{currentDetail.unit}}</text>
-          </view>
-          <view class="detail-row">
-            <text class="detail-label">出库用途：</text>
-            <text class="detail-value">{{currentDetail.lastOutPurpose}}</text>
-          </view>
-        </view>
-
-        <!-- 备注信息 -->
-        <view class="detail-section" wx:if="{{currentDetail.notes}}">
-          <view class="section-title">备注信息</view>
-          <view class="detail-row full-width">
-            <text class="detail-value">{{currentDetail.notes}}</text>
-          </view>
-        </view>
-      </scroll-view>
-      
-      <!-- 操作按钮 -->
-      <view class="modal-footer">
-        <button class="btn-in" bindtap="showInModal">入库</button>
-        <button class="btn-out" bindtap="showOutModal">出库</button>
-        <button class="btn-records" bindtap="gotoInRecords">入库记录</button>
-        <button class="btn-records" bindtap="gotoOutRecords">出库记录</button>
-      </view>
     </view>
-  </view>
 
-  <!-- 新增商品弹窗组件 -->
-  <add-inventory-modal 
-    id="addInventoryModal"
-    bind:confirm="handleAddInventory"
-    bind:cancel="hideAddModal"
-  />
+    <!-- 新增商品按钮 -->
+    <view class="add-btn-container" wx:if="{{inventoryList.length > 0}}">
+        <button class="add-btn" bindtap="showAddModal">
+            <text class="add-icon">+</text>
+            <text class="add-text">新增库存</text>
+        </button>
+    </view>
 
-  <!-- 入库/出库弹窗组件 -->
-  <in-out-modal 
-    id="inOutModal"
-    type="{{inOutType}}"
-    inventory-name="{{currentDetail.name}}"
-    current-quantity="{{currentDetail.quantity}}"
-    unit="{{currentDetail.unit}}"
-    bind:confirm="handleInOutConfirm"
-    bind:cancel="hideInOutModal"
-  />
+    <!-- 详情弹窗 -->
+    <view class="detail-modal" wx:if="{{showDetailModal}}">
+        <view class="modal-mask" bindtap="hideDetailModal"></view>
+        <view class="modal-content">
+            <view class="modal-header">
+                <text class="modal-title">库存详情</text>
+                <text class="close-btn" bindtap="hideDetailModal">×</text>
+            </view>
+
+            <scroll-view class="modal-body" scroll-y>
+                <!-- 基本信息 -->
+                <view class="detail-section">
+                    <view class="section-title">基本信息</view>
+                    <view class="detail-row">
+                        <text class="detail-label">商品名称：</text>
+                        <text class="detail-value">{{currentDetail.name}}</text>
+                    </view>
+                    <view class="detail-row">
+                        <text class="detail-label">商品分类：</text>
+                        <text class="detail-value">{{currentDetail.category}}</text>
+                    </view>
+                    <view class="detail-row">
+                        <text class="detail-label">所在店铺：</text>
+                        <text class="detail-value">{{currentDetail.store}}</text>
+                    </view>
+                    <view class="detail-row">
+                        <text class="detail-label">当前库存：</text>
+                        <view class="stock-info">
+                            <text class="stock-quantity">{{currentDetail.quantity}}</text>
+                            <text class="stock-unit">{{currentDetail.unit}}</text>
+                        </view>
+                    </view>
+                    <view class="detail-row">
+                        <text class="detail-label">库存预警：</text>
+                        <view class="stock-warning 
+                        {{currentDetail.isLowStock>=currentDetail.quantity ? 'warning' : 'normal'}}">
+                            <text>{{currentDetail.isLowStock>=currentDetail.quantity ? '低于预警线' : '正常'}}</text>
+                        </view>
+                    </view>
+                </view>
+
+                <!-- 备注信息 -->
+                <view class="detail-section" wx:if="{{currentDetail.notes}}">
+                    <view class="section-title">备注信息</view>
+                    <view class="detail-row full-width">
+                        <text class="detail-value">{{currentDetail.notes}}</text>
+                    </view>
+                </view>
+                <!-- 入库信息 -->
+                <view class="detail-section" wx:if="{{currentDetail.lastIn}}">
+                    <view class="section-header">
+                        <text class="section-title">最后入库</text>
+                        <button class="btn-record all-in" bindtap="gotoInRecords">全部入库</button>
+                    </view>
+                    <view class="detail-row">
+                        <text class="detail-label">入库时间：</text>
+                        <text class="detail-value">{{currentDetail.lastIn.rksj || '无记录'}}</text>
+                    </view>
+                    <view class="detail-row">
+                        <text class="detail-label">入库人：</text>
+                        <text class="detail-value">{{currentDetail.lastIn.jjygb.nickname || '未知'}}</text>
+                    </view>
+                    <view class="detail-row">
+                        <text class="detail-label">入库数量：</text>
+                        <text class="detail-value">{{currentDetail.lastIn.rksl || 0}} {{currentDetail.unit}}</text>
+                    </view>
+                </view>
+
+
+                <!-- 出库信息 -->
+                <view class="detail-section" wx:if="{{currentDetail.lastOut}}">
+                    <view class="section-header">
+                        <text class="section-title">最后出库</text>
+                        <button class="btn-record all-out" bindtap="gotoOutRecords">全部出库</button>
+                    </view>
+                    <view class="detail-row">
+                        <text class="detail-label">出库时间：</text>
+                        <text class="detail-value">{{currentDetail.lastOut.cksj || '无记录'}}</text>
+                    </view>
+                    <view class="detail-row">
+                        <text class="detail-label">出库人：</text>
+                        <text class="detail-value">{{currentDetail.lastOut.jjygb.nickname || '未知'}}</text>
+                    </view>
+                    <view class="detail-row">
+                        <text class="detail-label">出库数量：</text>
+                        <text class="detail-value">{{currentDetail.lastOut.cksl || 0}} {{currentDetail.unit}}</text>
+                    </view>
+                    <view class="detail-row">
+                        <text class="detail-label">出库用途：</text>
+                        <text class="detail-value">{{currentDetail.lastOut.ckyt || '未指定'}}</text>
+                    </view>
+                </view>
+                <!-- 如果都没有记录，显示提示 -->
+                <view class="detail-section"
+                    wx:if="{{!currentDetail.lastIn && !currentDetail.lastOut && currentDetail.lastIn !== null}}">
+                    <view class="section-title">出入库记录</view>
+                    <view class="empty-record">
+                        <text class="empty-record-text">暂无出入库记录</text>
+                    </view>
+                </view>
+
+
+            </scroll-view>
+
+            <!-- 操作按钮 -->
+            <view class="modal-footer">
+                <button class="btn-in" bindtap="showInModal">入库</button>
+                <button class="btn-out" bindtap="showOutModal">出库</button>
+            </view>
+        </view>
+    </view>
+
+    <!-- 新增商品弹窗组件 -->
+    <add-inventory-modal id="addInventoryModal" bind:confirm="handleAddInventory" bind:cancel="hideAddModal" />
+
+    <!-- 入库/出库弹窗组件 -->
+    <in-out-modal id="inOutModal" 
+        type="{{inOutType}}" 
+        inventory-id="{{currentDetail.id}}"
+        inventory-name="{{currentDetail.name}}"
+        current-quantity="{{currentDetail.quantity}}" 
+        unit="{{currentDetail.unit}}" bind:confirm="handleInOutConfirm"
+        bind:cancel="hideInOutModal" />
 </view>

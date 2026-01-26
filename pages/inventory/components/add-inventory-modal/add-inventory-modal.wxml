@@ -4,7 +4,7 @@
   <view class="modal-content">
     <!-- 标题栏 -->
     <view class="modal-header">
-      <text class="modal-title">新增商品</text>
+      <text class="modal-title">{{formData.id ? '编辑库存' : '新增库存'}}</text>
       <text class="close-btn" bindtap="handleCancel">×</text>
     </view>
     
@@ -31,7 +31,7 @@
           <picker 
             mode="selector" 
             range="{{categoryOptions}}"
-            value="{{categoryIndex}}"
+            value="{{category}}"
             bindchange="onCategoryChange"
             class="picker-input"
           >
@@ -59,12 +59,12 @@
           <picker 
             mode="selector" 
             range="{{storeOptions}}"
-            value="{{storeIndex}}"
+            value="{{store}}"
             bindchange="onStoreChange"
             class="picker-input"
           >
-            <view class="picker-text {{formData.storeName ? '' : 'placeholder'}}">
-              {{formData.storeName || '选择店铺'}}
+            <view class="picker-text {{formData.store ? '' : 'placeholder'}}">
+              {{formData.store || '选择店铺'}}
             </view>
           </picker>
         </view>
@@ -118,7 +118,7 @@
     <!-- 底部按钮 -->
     <view class="modal-footer">
       <button class="btn-cancel" bindtap="handleCancel">取消</button>
-      <button class="btn-confirm" bindtap="handleConfirm" disabled="{{!isFormValid}}">确认新增</button>
+      <button class="btn-confirm" bindtap="handleConfirm" disabled="{{!isFormValid}}">保存</button>
     </view>
   </view>
 </view>

@@ -74,7 +74,7 @@
         <view class="form-item">
           <text class="form-label">{{type === 'in' ? '入库时间' : '出库时间'}}</text>
           <picker 
-            mode="datetime" 
+            mode="date" 
             value="{{currentTime}}" 
             bindchange="onTimeChange"
             class="picker-input"
@@ -121,7 +121,7 @@
           </view>
           <view class="result-row total">
             <text class="result-label">更新后库存：</text>
-            <text class="result-value">{{calculateNewQuantity()}} {{unit}}</text>
+            <text class="result-value">{{newQuantity}} {{unit}}</text>
           </view>
           <view class="result-warning" wx:if="{{type === 'out' && calculateNewQuantity() < 0}}">
             <text class="warning-icon">⚠️</text>

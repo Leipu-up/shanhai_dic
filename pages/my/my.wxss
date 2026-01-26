@@ -2,133 +2,133 @@
     min-height: 100vh;
     background: linear-gradient(180deg, #FFF0F5 0%, #F8F8F8 100%);
     padding-bottom: 40rpx;
-  }
-  
-  /* 用户信息头部 */
-  .user-header {
+}
+
+/* 用户信息头部 */
+.user-header {
     background: linear-gradient(135deg, #FF69B4, #FF1493);
     padding: 60rpx 40rpx 40rpx;
     color: white;
     position: relative;
     border-radius: 0 0 30rpx 30rpx;
-  }
-  
-  .user-info {
+}
+
+.user-info {
     display: flex;
     align-items: center;
-  }
-  
-  .avatar {
+}
+
+.avatar {
     width: 120rpx;
     height: 120rpx;
     border-radius: 50%;
     border: 4rpx solid rgba(255, 255, 255, 0.3);
     margin-right: 30rpx;
     background-color: white;
-  }
-  
-  .user-details {
+}
+
+.user-details {
     flex: 1;
-  }
-  
-  .user-name {
+}
+
+.user-name {
     display: block;
     font-size: 40rpx;
     font-weight: 600;
     margin-bottom: 10rpx;
-  }
-  
-  .user-role {
+}
+
+.user-role {
     display: inline-block;
     background: rgba(255, 255, 255, 0.2);
     padding: 6rpx 20rpx;
     border-radius: 20rpx;
     font-size: 24rpx;
     margin-right: 20rpx;
-  }
-  
-  .user-id {
+}
+
+.user-id {
     font-size: 26rpx;
     opacity: 0.9;
-  }
-  
-  .edit-btn {
+}
+
+.edit-btn {
     position: absolute;
     right: 40rpx;
     top: 60rpx;
     display: flex;
     align-items: center;
-  }
-  
-  .edit-text {
+}
+
+.edit-text {
     font-size: 28rpx;
     margin-right: 10rpx;
-  }
-  
-  .arrow {
+}
+
+.arrow {
     font-size: 40rpx;
     font-weight: 300;
-  }
-  
-  /* 个人统计 */
-  .personal-stats {
+}
+
+/* 个人统计 */
+.personal-stats {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 20rpx;
     margin: 20rpx;
     padding: 30rpx;
-  }
-  
-  .stats-item {
+}
+
+.stats-item {
     text-align: center;
     padding: 30rpx 20rpx;
     background: linear-gradient(135deg, #FFF0F5, #FFFFFF);
     border-radius: 16rpx;
     box-shadow: 0 4rpx 12rpx rgba(255, 105, 180, 0.1);
-  }
-  
-  .stats-number {
+}
+
+.stats-number {
     display: block;
     font-size: 36rpx;
     font-weight: 600;
     color: #FF1493;
     margin-bottom: 10rpx;
-  }
-  
-  .stats-label {
+}
+
+.stats-label {
     font-size: 26rpx;
     color: #666;
-  }
-  
-  /* 功能菜单 */
-  .menu-section {
+}
+
+/* 功能菜单 */
+.menu-section {
     margin-top: 40rpx;
-  }
-  
-  .menu-list {
+}
+
+.menu-list {
     background: #fff;
     margin: 20rpx;
     border-radius: 16rpx;
     overflow: hidden;
-  }
-  
-  .menu-item {
+}
+
+.menu-item {
     display: flex;
     align-items: center;
     padding: 30rpx;
     border-bottom: 1rpx solid #F0F0F0;
     transition: background-color 0.3s;
-  }
-  
-  .menu-item:active {
+}
+
+.menu-item:active {
     background-color: #FFF0F5;
-  }
-  
-  .menu-item:last-child {
+}
+
+.menu-item:last-child {
     border-bottom: none;
-  }
-  
-  .menu-icon {
+}
+
+.menu-icon {
     width: 60rpx;
     height: 60rpx;
     border-radius: 12rpx;
@@ -137,56 +137,56 @@
     justify-content: center;
     font-size: 36rpx;
     margin-right: 20rpx;
-  }
-  
-  .menu-icon.schedule {
+}
+
+.menu-icon.schedule {
     background: #FFF0F5;
     color: #FF69B4;
-  }
-  
-  .menu-icon.customers {
+}
+
+.menu-icon.customers {
     background: #F0FFF0;
     color: #32CD32;
-  }
-  
-  .menu-icon.performance {
+}
+
+.menu-icon.performance {
     background: #F0F8FF;
     color: #1E90FF;
-  }
-  
-  .menu-icon.settings {
+}
+
+.menu-icon.settings {
     background: #F5F5F5;
     color: #666;
-  }
-  
-  .menu-icon.help {
+}
+
+.menu-icon.help {
     background: #FFF5EE;
     color: #FFA500;
-  }
-  
-  .menu-icon.about {
+}
+
+.menu-icon.about {
     background: #F0FFFF;
     color: #20B2AA;
-  }
-  
-  .menu-text {
+}
+
+.menu-text {
     flex: 1;
     font-size: 32rpx;
     color: #333;
-  }
-  
-  .menu-right {
+}
+
+.menu-right {
     display: flex;
     align-items: center;
-  }
-  
-  .menu-desc {
+}
+
+.menu-desc {
     font-size: 26rpx;
     color: #999;
     margin-right: 20rpx;
-  }
-  
-  .badge {
+}
+
+.badge {
     background: #FF4444;
     color: white;
     font-size: 22rpx;
@@ -198,14 +198,15 @@
     justify-content: center;
     padding: 0 10rpx;
     margin-right: 20rpx;
-  }
-  
-  /* 退出登录 */
-  .logout-section {
+}
+
+/* 退出登录 */
+.logout-section {
     padding: 60rpx 40rpx;
-  }
-  
-  .logout-btn, .login-btn {
+}
+
+.logout-btn,
+.login-btn {
     width: 100%;
     height: 90rpx;
     border-radius: 45rpx;
@@ -214,32 +215,124 @@
     align-items: center;
     justify-content: center;
     transition: all 0.3s;
-  }
-  
-  .logout-btn {
+}
+
+.logout-btn {
     background: #FF4444;
     color: white;
     border: none;
-  }
-  
-  .logout-btn:active {
+}
+
+.logout-btn:active {
     background: #CC0000;
-  }
-  
-  .login-btn {
+}
+
+.login-btn {
     background: linear-gradient(135deg, #FF69B4, #FF1493);
     color: white;
     border: none;
-  }
-  
-  .login-btn:active {
+}
+
+.login-btn:active {
     opacity: 0.9;
-  }
-  
-  /* 版本信息 */
-  .version-info {
+}
+
+/* 版本信息 */
+.version-info {
     text-align: center;
     color: #999;
     font-size: 24rpx;
     margin-top: 20rpx;
-  }
+}
+
+
+/* 弹窗遮罩层 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+}
+
+/* 添加记录弹窗 */
+.add-modal {
+    width: 650rpx;
+    background: #fff;
+    border-radius: 20rpx;
+    overflow: hidden;
+    animation: slideUp 0.3s ease;
+}
+
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30rpx;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.modal-title {
+    font-size: 32rpx;
+    font-weight: 600;
+    color: #fff;
+}
+
+.close-btn {
+    font-size: 40rpx;
+    color: #fff;
+    cursor: pointer;
+    padding: 0 10rpx;
+}
+
+.modal-content {
+    padding: 30rpx;
+    max-height: 500rpx;
+    overflow-y: auto;
+}
+
+
+/* 弹窗操作按钮 */
+.modal-actions {
+    display: flex;
+    padding: 20rpx 30rpx;
+    border-top: 1rpx solid #f0f0f0;
+}
+
+.action-btn {
+    flex: 1;
+    height: 80rpx;
+    line-height: 80rpx;
+    font-size: 28rpx;
+    border-radius: 10rpx;
+    margin: 0;
+    padding: 0;
+    transition: all 0.2s;
+}
+
+
+/* 添加弹窗操作按钮 */
+.action-btn.cancel-btn {
+    background: #f8f9fa;
+    color: #666;
+    border: 1rpx solid #dee2e6;
+    margin-right: 15rpx;
+}
+
+.action-btn.save-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+}
+
+.photo {
+    height: 250rpx;
+    width: 250rpx;
+    border-radius: 50%;
+}

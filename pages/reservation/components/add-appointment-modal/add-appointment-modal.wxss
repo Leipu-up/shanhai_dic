@@ -23,7 +23,7 @@
     width: 100%;
     background: white;
     border-radius: 40rpx 40rpx 0 0;
-    max-height: 85vh;
+    max-height: 85%;
     /* 最大高度为屏幕的85% */
     display: flex;
     flex-direction: column;

@@ -1,108 +1,173 @@
 <view class="my-page">
-  <!-- 用户信息头部 -->
-  <view class="user-header">
-    <view class="user-info">
-      <image class="avatar" src="{{userInfo.avatar || '/images/default-avatar.png'}}"></image>
-      <view class="user-details">
-        <text class="user-name">{{userInfo.nickName || '请登录'}}</text>
-        <text class="user-role">{{roleText}}</text>
-        <text class="user-id">工号: {{userInfo.employeeId || ''}}</text>
-      </view>
-    </view>
-    <view class="edit-btn" bindtap="editProfile" wx:if="{{userInfo.nickName}}">
-      <text class="edit-text">编辑资料</text>
-      <text class="arrow">›</text>
-    </view>
-    <view class="edit-btn" bindtap="editProfile" wx:if="{{!userInfo.nickName}}">
-      <text class="edit-text">登录</text>
-      <text class="arrow">›</text>
-    </view>
-  </view>
-
-  <!-- 个人统计 -->
-  <view class="personal-stats card">
-    <view class="stats-item">
-      <text class="stats-number">{{personalStats.monthlyPerformance}}</text>
-      <text class="stats-label">本月业绩(元)</text>
-    </view>
-    <view class="stats-item">
-      <text class="stats-number">{{personalStats.customerCount}}</text>
-      <text class="stats-label">服务客户</text>
-    </view>
-    <view class="stats-item">
-      <text class="stats-number">{{personalStats.attendanceDays}}/31</text>
-      <text class="stats-label">本月出勤(天)</text>
-    </view>
-    <view class="stats-item">
-      <text class="stats-number">{{personalStats.satisfaction}}%</text>
-      <text class="stats-label">满意度</text>
-    </view>
-  </view>
-
-  <!-- 功能菜单 -->
-  <view class="menu-section">
-    <view class="section-title">我的功能</view>
-    <view class="menu-list">
-      <view class="menu-item" bindtap="navigateToMySchedule">
-        <view class="menu-icon schedule">📅</view>
-        <text class="menu-text">我的排班</text>
-        <view class="menu-right">
-          <text class="menu-desc">{{nextSchedule}}</text>
-          <text class="arrow">›</text>
+    <!-- 用户信息头部 -->
+    <view class="user-header">
+        <view class="user-info">
+            <image class="avatar" src="{{userInfo.avatar || '/images/default-avatar.png'}}"></image>
+            <view class="user-details">
+                <text class="user-name">{{userInfo.nickName || '请登录'}}</text>
+                <text class="user-role">{{userInfo.roleText||'游客'}}</text>
+                <text class="user-id">工号: {{userInfo.employeeNo || ''}}</text>
+            </view>
         </view>
-      </view>
-
-      <view class="menu-item" bindtap="navigateToMyCustomers">
-        <view class="menu-icon customers">👥</view>
-        <text class="menu-text">我的客户</text>
-        <view class="menu-right">
-          <text class="badge" wx:if="{{unreadMessages > 0}}">{{unreadMessages}}</text>
-          <text class="arrow">›</text>
+        <view class="edit-btn" bindtap="toEdit" wx:if="{{userInfo.userId}}">
+            <text class="edit-text">编辑</text>
+            <text class="arrow">›</text>
         </view>
-      </view>
-
-      <view class="menu-item" bindtap="navigateToPerformance">
-        <view class="menu-icon performance">📊</view>
-        <text class="menu-text">业绩统计</text>
-        <view class="menu-right">
-          <text class="arrow">›</text>
+        <view class="edit-btn" bindtap="toLogin" wx:if="{{!userInfo.userId}}">
+            <text class="edit-text">登录</text>
+            <text class="arrow">›</text>
         </view>
-      </view>
     </view>
-  </view>
 
-  <!-- 系统设置 -->
-  <view class="menu-section">
-    <view class="section-title">系统设置</view>
-    <view class="menu-list">
-      <view class="menu-item" bindtap="navigateToSettings">
-        <view class="menu-icon settings">⚙️</view>
-        <text class="menu-text">系统设置</text>
-        <text class="arrow">›</text>
-      </view>
-
-      <view class="menu-item" bindtap="navigateToHelp">
-        <view class="menu-icon help">❓</view>
-        <text class="menu-text">帮助中心</text>
-        <text class="arrow">›</text>
-      </view>
-
-      <view class="menu-item" bindtap="showAbout">
-        <view class="menu-icon about">ℹ️</view>
-        <text class="menu-text">关于我们</text>
-        <text class="arrow">›</text>
-      </view>
+    <!-- 个人统计 -->
+    <view class="personal-stats card">
+        <view class="stats-item">
+            <text class="stats-number">{{personalStats.monthlyPerformance}}</text>
+            <text class="stats-label">本月目标(元)</text>
+        </view>
+        <view class="stats-item">
+            <text class="stats-number">{{personalStats.monthlyPerformance}}</text>
+            <text class="stats-label">本月业绩(元)</text>
+        </view>
+        <view class="stats-item">
+            <text class="stats-number">{{personalStats.customerCount}}</text>
+            <text class="stats-label">服务客户</text>
+        </view>
+        <view class="stats-item">
+            <text class="stats-number">{{personalStats.attendanceDays}}/31</text>
+            <text class="stats-label">本月出勤(天)</text>
+        </view>
     </view>
-  </view>
 
-  <!-- 退出登录 -->
-  <view class="logout-section">
-    <button class="logout-btn" bindtap="logout" wx:if="{{isLoggedIn}}">退出登录</button>
-    <button class="login-btn" bindtap="login" wx:else>立即登录</button>
-  </view>
+    <!-- 功能菜单 -->
+    <view class="menu-section">
+        <view class="section-title">我的功能</view>
+        <view class="menu-list">
+            <view class="menu-item" bindtap="navigateToMySchedule">
+                <view class="menu-icon schedule">📅</view>
+                <text class="menu-text">我的排班</text>
+                <view class="menu-right">
+                    <text class="menu-desc">{{nextSchedule}}</text>
+                    <text class="arrow">›</text>
+                </view>
+            </view>
 
-  <!-- 版本信息 -->
-  <view class="version-info">
-    <text>v1.0.0</text>
-  </view>
+            <view class="menu-item" bindtap="navigateToMyCustomers">
+                <view class="menu-icon customers">👥</view>
+                <text class="menu-text">今日客户</text>
+                <view class="menu-right">
+                    <text class="badge" wx:if="{{unreadMessages > 0}}">{{unreadMessages}}</text>
+                    <text class="arrow">›</text>
+                </view>
+            </view>
+
+        </view>
+    </view>
+
+    <!-- 系统设置 -->
+    <view class="menu-section">
+        <view class="section-title">系统设置</view>
+        <view class="menu-list">
+            <view class="menu-item">
+                <view class="menu-icon about">⏰</view>
+                <text class="menu-text">最后登录</text>
+                <view class="menu-right">
+                    <text class="menu-desc">{{lastLoginTime}}</text>
+                    <text class="arrow">›</text>
+                </view>
+            </view>
+
+            <view class="menu-item" bindtap="contactCustomerService">
+                <view class="menu-icon help">📞</view>
+                <text class="menu-text">联系客服</text>
+                <view class="menu-right">
+                    <text class="menu-desc">189157555120</text>
+                    <text class="arrow">›</text>
+                </view>
+            </view>
+
+            <view class="menu-item" bindtap="showAbout">
+                <view class="menu-icon about">ℹ️</view>
+                <text class="menu-text">关于我们</text>
+                <text class="arrow">›</text>
+            </view>
+
+        </view>
+    </view>
+
+    <!-- 退出登录 -->
+    <view class="logout-section">
+        <button class="logout-btn" bindtap="logout" wx:if="{{userInfo.userId}}">退出登录</button>
+        <button class="login-btn" bindtap="toLogin" wx:else>立即登录</button>
+    </view>
+
+    <!-- 版本信息 -->
+    <view class="version-info">
+        <text>v1.0.0</text>
+    </view>
+</view>
+
+<!-- 登录弹窗 -->
+<view class="modal-overlay" wx:if="{{showLoginModal}}" bindtap="">
+    <view class="add-modal" catchtap="">
+        <view class="modal-header">
+            <text class="modal-title">登录</text>
+            <text class="close-btn" bindtap="closeLoginModal">×</text>
+        </view>
+
+        <view class="modal-content">
+            <view class="form-item">
+                <text class="form-label">手机号：</text>
+                <input class="form-input" placeholder="请输入手机号" value="{{phone}}" data-field="phone"
+                    bindinput="onFormInput" />
+            </view>
+        </view>
+        <view class="modal-content">
+            <view class="form-item">
+                <text class="form-label">登录密码(6位)：</text>
+                <input class="form-input" placeholder="请输入登录密码" value="{{password}}" data-field="password"
+                    bindinput="onFormInput" />
+            </view>
+        </view>
+        <view class="modal-actions">
+            <button class="action-btn cancel-btn" bindtap="closeLoginModal">取消</button>
+            <button class="action-btn save-btn" bindtap="checkUser">登录</button>
+        </view>
+    </view>
+</view>
+
+<!-- 编辑弹窗 -->
+<view class="modal-overlay" wx:if="{{showEditModal}}" bindtap="">
+    <view class="add-modal" catchtap="">
+        <view class="modal-header">
+            <text class="modal-title">编辑</text>
+            <text class="close-btn" bindtap="closeEditModal">×</text>
+        </view>
+        <view class="modal-content">
+            <view class="form-item">
+                <button class="btn" open-type="chooseAvatar" bindchooseavatar="choosePhoto">
+                    <image src="{{editAvatarUrl}}" class="photo" />
+                </button>
+            </view>
+            <view class="form-item">
+                <text class="form-label">昵称：</text>
+                <input class="input" type="nickname" placeholder="输入或获取昵称" model:value="{{userInfo.nickName}}" 
+                bindinput="onFormInput" data-field="editName"/>
+            </view>
+            <view class="form-item">
+                <text class="form-label">手机号：</text>
+                <input class="form-input" placeholder="请输入手机号" value="{{userInfo.phoneNumber}}" data-field="editPhone"
+                    bindinput="onFormInput" />
+            </view>
+            <view class="form-item">
+                <text class="form-label">登录密码：</text>
+                <input class="form-input" placeholder="请输入登录密码：" value="{{userInfo.password}}" data-field="editPassword"
+                    bindinput="onFormInput" />
+            </view>
+        </view>
+        <view class="modal-actions">
+            <button class="action-btn cancel-btn" bindtap="closeEditModal">取消</button>
+            <button class="action-btn save-btn" bindtap="updateUser">保存</button>
+        </view>
+    </view>
 </view>

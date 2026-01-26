@@ -5,54 +5,55 @@
     width: 100%;
     height: 100%;
     z-index: 1000;
-  }
-  
-  .modal-mask {
+}
+
+.modal-mask {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
-  }
-  
-  .modal-content {
+}
+
+.modal-content {
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
     background: white;
     border-radius: 40rpx 40rpx 0 0;
-    max-height: 85vh;
+    max-height: 80%;
     display: flex;
     flex-direction: column;
     animation: slideUp 0.3s ease;
-  }
-  
-  @keyframes slideUp {
+}
+
+@keyframes slideUp {
     from {
-      transform: translateY(100%);
+        transform: translateY(100%);
     }
+
     to {
-      transform: translateY(0);
+        transform: translateY(0);
     }
-  }
-  
-  .modal-header {
+}
+
+.modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 40rpx 30rpx 20rpx;
     border-bottom: 1rpx solid #F0F0F0;
-  }
-  
-  .modal-title {
+}
+
+.modal-title {
     font-size: 36rpx;
     font-weight: 600;
     color: #333;
-  }
-  
-  .close-btn {
+}
+
+.close-btn {
     font-size: 50rpx;
     color: #999;
     width: 60rpx;
@@ -60,28 +61,28 @@
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  
-  .modal-body {
+}
+
+.modal-body {
     flex: 1;
     padding: 20rpx 30rpx;
     height: 400rpx;
-  }
-  
-  .form-section {
+}
+
+.form-section {
     margin-bottom: 40rpx;
-  }
-  
-  .section-title {
+}
+
+.section-title {
     font-size: 32rpx;
     font-weight: 500;
     color: #333;
     margin-bottom: 30rpx;
     padding-left: 20rpx;
     position: relative;
-  }
-  
-  .section-title::before {
+}
+
+.section-title::before {
     content: '';
     position: absolute;
     left: 0;
@@ -90,71 +91,80 @@
     height: 30rpx;
     background: #FF69B4;
     border-radius: 3rpx;
-  }
-  
-  .form-item {
+}
+
+.form-item {
     margin-bottom: 30rpx;
     position: relative;
-  }
-  
-  .form-label {
+}
+
+.form-label {
     display: block;
     font-size: 28rpx;
     color: #666;
     margin-bottom: 15rpx;
-  }
-  
-  .form-label.required::after {
+}
+
+.form-label.required::after {
     content: '*';
     color: #FF4444;
     margin-left: 5rpx;
-  }
-  
-  .form-value {
+}
+
+.form-value {
     background: #F8F8F8;
     border-radius: 12rpx;
     padding: 25rpx 30rpx;
     font-size: 28rpx;
     color: #333;
     border: 1rpx solid #E0E0E0;
-  }
-  
-  .current-quantity {
+}
+
+.current-quantity {
     font-size: 28rpx;
     font-weight: 600;
     color: #FF69B4;
     margin-right: 10rpx;
-  }
-  
-  .current-unit {
+}
+
+.current-unit {
     font-size: 26rpx;
     color: #666;
-  }
-  
-  .form-input {
+}
+
+.form-input {
     background: #F8F8F8;
     border-radius: 12rpx;
-    padding: 25rpx 30rpx;
+    padding: 0 30rpx;
+    /* 上下padding设为0 */
     font-size: 28rpx;
     color: #333;
     border: 1rpx solid #E0E0E0;
     width: 100%;
     box-sizing: border-box;
-  }
-  
-  .form-input:focus {
+    /* 关键设置 */
+    height: 80rpx;
+    /* 明确高度 */
+    line-height: 80rpx;
+    /* 行高等于高度 */
+    /* 确保垂直居中 */
+    display: flex;
+    align-items: center;
+}
+
+.form-input:focus {
     border-color: #FF69B4;
-  }
-  
-  .form-unit {
+}
+
+.form-unit {
     position: absolute;
     right: 30rpx;
     top: 65rpx;
     font-size: 26rpx;
     color: #666;
-  }
-  
-  .picker-input {
+}
+
+.picker-input {
     background: #F8F8F8;
     border-radius: 12rpx;
     padding: 25rpx 30rpx;
@@ -163,18 +173,18 @@
     border: 1rpx solid #E0E0E0;
     display: flex;
     align-items: center;
-  }
-  
-  .picker-text {
+}
+
+.picker-text {
     flex: 1;
-  }
-  
-  .picker-text.placeholder {
+}
+
+.picker-text.placeholder {
     color: #999;
-  }
-  
-  /* 文本域 */
-  .form-textarea {
+}
+
+/* 文本域 */
+.form-textarea {
     background: #F8F8F8;
     border-radius: 12rpx;
     padding: 25rpx 30rpx;
@@ -184,81 +194,81 @@
     height: 200rpx;
     width: 100%;
     box-sizing: border-box;
-  }
-  
-  .textarea-counter {
+}
+
+.textarea-counter {
     text-align: right;
     font-size: 24rpx;
     color: #999;
     margin-top: 10rpx;
-  }
-  
-  /* 计算结果 */
-  .result-display {
+}
+
+/* 计算结果 */
+.result-display {
     background: #F8F8F8;
     border-radius: 12rpx;
     padding: 25rpx 30rpx;
     border: 1rpx solid #E0E0E0;
-  }
-  
-  .result-row {
+}
+
+.result-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 15rpx;
     font-size: 28rpx;
-  }
-  
-  .result-row:last-child {
+}
+
+.result-row:last-child {
     margin-bottom: 0;
-  }
-  
-  .result-row.total {
+}
+
+.result-row.total {
     border-top: 1rpx solid #E0E0E0;
     padding-top: 15rpx;
     margin-top: 15rpx;
     font-weight: 600;
     color: #333;
-  }
-  
-  .result-label {
+}
+
+.result-label {
     color: #666;
-  }
-  
-  .result-value {
+}
+
+.result-value {
     color: #333;
     font-weight: 500;
-  }
-  
-  .result-warning {
+}
+
+.result-warning {
     display: flex;
     align-items: center;
     background: #FFF0F0;
     border-radius: 8rpx;
     padding: 15rpx 20rpx;
     margin-top: 20rpx;
-  }
-  
-  .warning-icon {
+}
+
+.warning-icon {
     font-size: 28rpx;
     color: #FF4444;
     margin-right: 10rpx;
-  }
-  
-  .warning-text {
+}
+
+.warning-text {
     font-size: 26rpx;
     color: #FF4444;
     flex: 1;
-  }
-  
-  .modal-footer {
+}
+
+.modal-footer {
     display: flex;
     padding: 30rpx;
     border-top: 1rpx solid #F0F0F0;
     gap: 20rpx;
-  }
-  
-  .btn-cancel {
+}
+
+.btn-cancel {
     flex: 1;
     background: #F5F5F5 !important;
     color: #666 !important;
@@ -266,9 +276,9 @@
     font-size: 32rpx !important;
     height: 80rpx !important;
     border: none !important;
-  }
-  
-  .btn-confirm {
+}
+
+.btn-confirm {
     flex: 1;
     background: linear-gradient(135deg, #FF69B4, #FF1493) !important;
     color: white !important;
@@ -276,8 +286,8 @@
     font-size: 32rpx !important;
     height: 80rpx !important;
     border: none !important;
-  }
-  
-  .btn-confirm[disabled] {
+}
+
+.btn-confirm[disabled] {
     opacity: 0.5 !important;
-  }
+}
