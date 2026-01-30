@@ -11,9 +11,6 @@
                     </view>
                 </picker>
             </view>
-
-            <!-- <view class="date-separator compact">至</view> -->
-
             <view class="filter-item date-item">
                 <picker mode="date" value="{{endDate}}" bindchange="onEndDateChange">
                     <view class="date-picker compact">
@@ -23,7 +20,6 @@
                 </picker>
             </view>
         </view>
-
         <!-- 第二行：员工和状态筛选 -->
         <view class="filter-row compact">
             <view class="filter-item">
@@ -35,7 +31,6 @@
                     </view>
                 </picker>
             </view>
-
             <view class="filter-item">
                 <picker mode="selector" range="{{statusOptions}}" range-key="name" value="{{selectedStatusIndex}}"
                     bindchange="onStatusChange">
@@ -45,20 +40,17 @@
                     </view>
                 </picker>
             </view>
-
             <!-- 第三行：查询和重置按钮（还原为原先样式） -->
             <view class="filter-row compact button-row">
                 <button class="btn-reset original" bindtap="resetFilters">
                     <text class="btn-icon">🔄</text>
                     <text class="btn-text">重置</text>
                 </button>
-                <button class="btn-search original" bindtap="searchAppointments">
+                <button class="btn-search original" bindtap="onSearchConfirm">
                     <text class="btn-icon">🔍</text>
                     <text class="btn-text">查询</text>
                 </button>
             </view>
-
-
         </view>
     </view>
 
@@ -68,7 +60,7 @@
         <view class="list-header compact">
             <view class="list-title-section">
                 <text class="list-title">预约列表</text>
-                <text class="list-count" wx:if="{{totalCount > 0}}">{{currentPage}}/{{totalPages}} 页，共 {{totalCount}}
+                <text class="list-count" wx:if="{{total > 0}}">{{currentPage}}/{{pageCount}} 页，共 {{total}}
                     条</text>
                 <text class="list-count" wx:else>暂无数据</text>
             </view>
@@ -78,31 +70,31 @@
             <!-- 客户列表项 - 简化版本 -->
             <view class="customer-item compact" wx:for="{{customerList}}" wx:key="id" bindtap="showDetailModal"
                 data-index="{{index}}">
-
                 <view class="customer-main-info">
                     <view class="customer-basic">
-                        <text class="customer-name">{{item.name}}</text>
-                        <text class="customer-phone">{{item.phone}}</text>
+                        <text class="customer-name">{{item.jmkhb.khxm}}</text>
+                        <text class="customer-phone">{{item.jmkhb.khsjh}}</text>
                     </view>
-
                     <view class="appointment-time-info">
                         <view class="time-item">
                             <text class="time-icon">📅</text>
-                            <text class="time-text">{{item.appointmentDate}}</text>
+                            <text class="time-text">{{item.yyrq}}</text>
                         </view>
                         <view class="time-item">
                             <text class="time-icon">⏰</text>
-                            <text class="time-text">{{item.appointmentTime}}</text>
+                            <text class="time-text">{{item.yysj}}</text>
                         </view>
                     </view>
-
                     <view class="appointment-staff-info">
                         <view class="staff-item">
                             <text class="staff-icon">👩‍💼</text>
-                            <text class="staff-text">{{item.staffName}}</text>
+                            <text class="staff-text">{{item.jmygb.nickname}}</text>
                         </view>
-                        <view class="status-badge {{item.status}}">
-                            {{item.statusText}}
+                        <view class="status-badge {{item.zt=='待服务'?'pending':
+                        (item.zt=='服务中'?'confirmed':
+                        (item.zt=='已服务'?'completed':
+                        (item.zt=='已超时'?'timeout':'cancelled')))}}">
+                            {{item.zt}}
                         </view>
                     </view>
                 </view>
@@ -114,11 +106,9 @@
                     <view class="loading-spinner"></view>
                     <text class="loading-text">正在加载...</text>
                 </view>
-
                 <view wx:if="{{!hasMore && totalCount > 0}}" class="no-more-data">
                     <text class="no-more-text">已加载全部数据</text>
                 </view>
-
                 <view wx:if="{{hasMore && !isLoading}}" class="load-more-tip">
                     <text class="load-more-text">上拉加载更多</text>
                 </view>
@@ -148,62 +138,68 @@
                 <text class="modal-title">预约详情</text>
                 <text class="close-btn" bindtap="hideDetailModal">×</text>
             </view>
-
             <scroll-view class="modal-body" scroll-y>
                 <view class="detail-section">
                     <view class="detail-row">
                         <text class="detail-label">客户姓名：</text>
-                        <text class="detail-value">{{currentDetail.name}}</text>
+                        <text class="detail-value">{{currentDetail.jmkhb.khxm}}</text>
                     </view>
                     <view class="detail-row">
                         <text class="detail-label">手机号：</text>
-                        <text class="detail-value">{{currentDetail.phone}}</text>
+                        <text class="detail-value">{{currentDetail.jmkhb.khsjh}}</text>
                     </view>
                     <view class="detail-row">
                         <text class="detail-label">预约日期：</text>
-                        <text class="detail-value">{{currentDetail.appointmentDate}}</text>
+                        <text class="detail-value">{{currentDetail.yyrq}}</text>
                     </view>
                     <view class="detail-row">
                         <text class="detail-label">预约时间：</text>
-                        <text class="detail-value">{{currentDetail.appointmentTime}}</text>
+                        <text class="detail-value">{{currentDetail.yysj}}</text>
                     </view>
                     <view class="detail-row">
                         <text class="detail-label">服务项目：</text>
-                        <text class="detail-value">{{currentDetail.service}}</text>
+                        <text class="detail-value">{{currentDetail.jmfwb.fwmc}}</text>
                     </view>
                     <view class="detail-row">
                         <text class="detail-label">服务时长：</text>
-                        <text class="detail-value">{{currentDetail.duration}}分钟</text>
+                        <text class="detail-value">{{currentDetail.jmfwb.fwsc}}分钟</text>
                     </view>
                     <view class="detail-row">
                         <text class="detail-label">服务人员：</text>
-                        <text class="detail-value">{{currentDetail.staffName}}</text>
+                        <text class="detail-value">{{currentDetail.jmygb.nickname}}</text>
                     </view>
                     <view class="detail-row">
                         <text class="detail-label">预约状态：</text>
-                        <view class="detail-status {{currentDetail.status}}">
-                            {{currentDetail.statusText}}
+                        <view class="detail-status  {{item.zt=='待服务'?'pending':
+                        (item.zt=='服务中'?'confirmed':
+                        (item.zt=='已服务'?'completed':
+                        (item.zt=='已超时'?'timeout':'cancelled')))}}">
+                            {{currentDetail.zt}}
                         </view>
                     </view>
-                    <view class="detail-row" wx:if="{{currentDetail.notes}}">
+                    <view class="detail-row" wx:if="{{currentDetail.bz}}">
                         <text class="detail-label">备注：</text>
-                        <text class="detail-value">{{currentDetail.notes}}</text>
+                        <text class="detail-value">{{currentDetail.bz}}</text>
                     </view>
                 </view>
             </scroll-view>
-
             <view class="modal-footer compact">
-                <button class="btn-edit" bindtap="editCurrentAppointment">编辑</button>
-                <button class="btn-cancel"
-                    wx:if="{{currentDetail.status === 'pending' || currentDetail.status === 'confirmed'}}"
+                <button class="btn-gb" wx:if="{{currentDetail.zt === '已取消' || currentDetail.zt === '已超时'
+                    || currentDetail.zt === '已服务' || currentDetail.zt === '服务中'}}"
+                    bindtap="hideDetailModal">关闭</button>
+                <button class="btn-edit" wx:if="{{currentDetail.zt === '待服务'}}"
+                    bindtap="editCurrentAppointment">编辑</button>
+                <button class="btn-cancel" wx:if="{{currentDetail.zt === '待服务'||currentDetail.zt === '服务中'}}"
                     bindtap="cancelCurrentAppointment">取消预约</button>
-                <button class="btn-complete" wx:if="{{currentDetail.status === 'pending'}}"
-                    bindtap="completeCurrentAppointment">标记完成</button>
+                <button class="btn-complete" wx:if="{{currentDetail.zt === '待服务'}}"
+                    bindtap="completeCurrentAppointment">已到店</button>
+                <button class="btn-complete" wx:if="{{currentDetail.zt === '服务中'}}"
+                    bindtap="completeAppointment">服务完成</button>
             </view>
         </view>
     </view>
 
     <!-- 新增预约弹窗组件 -->
-    <add-appointment-modal id="addAppointmentModal" user-role="{{userRole}}" staff-list="{{staffList}}"
+    <add-appointment-modal id="addAppointmentModal" staff-list="{{staffList}}" service-options="{{serviceOptions}}"
         bind:confirm="handleAddAppointment" bind:cancel="hideAddModal" />
 </view>

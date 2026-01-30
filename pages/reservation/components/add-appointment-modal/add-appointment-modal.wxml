@@ -9,21 +9,64 @@
         </view>
 
         <scroll-view class="modal-body" scroll-y style="max-height: {{scrollViewHeight}}px">
-            <!-- 客户信息 -->
-            <view class="form-section">
-                <view class="section-title">客户信息</view>
 
-                <view class="form-item">
-                    <text class="form-label required">客户姓名</text>
-                    <input class="form-input" type="text" placeholder="请输入客户姓名" value="{{formData.name}}"
-                        bindinput="onInputChange" data-field="name" maxlength="20" />
+            <!-- 客户搜索框 -->
+            <view class="customer-search-box">
+                <view class="search-input-container">
+                    <input class="search-input" placeholder="输入客户姓名或手机号搜索" placeholder-style="color: #999;"
+                        value="{{searchCustomerKeyword}}" bindinput="onCustomerSearchInput"
+                        bindconfirm="onCustomerSearchConfirm" />
+                    <text class="search-icon" bindtap="onCustomerSearch">🔍</text>
                 </view>
 
-                <view class="form-item">
-                    <text class="form-label required">手机号</text>
-                    <input class="form-input" type="number" placeholder="请输入手机号" value="{{formData.phone}}"
-                        bindinput="onInputChange" data-field="phone" maxlength="11" />
+                <!-- 搜索结果列表 -->
+                <view class="search-results" wx:if="{{showCustomerResults && searchCustomerResults.length > 0}}">
+                    <view class="result-item" wx:for="{{searchCustomerResults}}" wx:key="id" bindtap="selectCustomer"
+                        data-index="{{index}}" data-id="{{item.id}}">
+                        <view class="customer-info">
+                            <text class="customer-name">{{item.khxm}}</text>
+                            <text class="customer-phone">{{item.khsjh}}</text>
+                        </view>
+                        <text class="select-hint">选择</text>
+                    </view>
                 </view>
+
+                <!-- 搜索结果为空提示 -->
+                <view class="no-results"
+                    wx:if="{{showCustomerResults && searchCustomerResults.length === 0 && searchCustomerKeyword}}">
+                    <text class="no-results-text">未找到匹配的客户</text>
+                </view>
+                <!-- 已选择的客户信息 -->
+                <view class="selected-customer" wx:if="{{formData.name || formData.phone}}">
+                    <view class="selected-customer-row">
+                        <view class="selected-customer-info">
+                            <text class="info-label">客户姓名：</text>
+                            <text class="info-value">{{formData.name}}</text>
+                        </view>
+                        <view class="selected-customer-info">
+                            <text class="info-label">手机号：</text>
+                            <text class="info-value">{{formData.phone}}</text>
+                        </view>
+                    </view>
+                    <button class="btn-change-customer" bindtap="clearSelectedCustomer">重新选择</button>
+                </view>
+
+                <!-- 手动输入客户信息（当没有选择客户时显示） -->
+                <view wx:if="{{!formData.name && !formData.phone}}">
+                    <view class="form-item">
+                        <text class="form-label required">客户姓名</text>
+                        <input class="form-input" type="text" placeholder="请输入客户姓名" value="{{formData.name}}"
+                            bindinput="onInputChange" data-field="name" maxlength="20" />
+                    </view>
+
+                    <view class="form-item">
+                        <text class="form-label required">手机号</text>
+                        <input class="form-input" type="number" placeholder="请输入手机号" value="{{formData.phone}}"
+                            bindinput="onInputChange" data-field="phone" maxlength="11" />
+                    </view>
+                </view>
+
+
             </view>
 
             <!-- 预约信息 -->
@@ -78,12 +121,12 @@
                 <view class="form-item">
                     <text class="form-label required">服务人员</text>
                     <picker mode="selector" range="{{staffOptions}}" range-key="name" value="{{staffIndex}}"
-                        bindchange="onStaffChange" class="picker-input" disabled="{{userRole !== 'admin'}}">
+                        bindchange="onStaffChange" class="picker-input" disabled="{{currentUser.level < 3}}">
                         <view class="picker-text {{formData.staffName ? '' : 'placeholder'}}">
-                            {{formData.staffName || (userRole === 'admin' ? '请选择服务人员' : currentUser.nickName)}}
+                            {{formData.staffName || (currentUser.level >=3 ? '请选择服务人员' : currentUser.nickname)}}
                         </view>
                     </picker>
-                    <text class="help-text" wx:if="{{userRole !== 'admin'}}">您只能为自己预约</text>
+                    <text class="help-text" wx:if="{{currentUser.level <3 }}">您只能为自己预约</text>
                 </view>
             </view>
 

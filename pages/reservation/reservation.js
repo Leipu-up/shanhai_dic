@@ -1,37 +1,37 @@
+// 引入API服务
+const {
+    api
+} = require('../../utils/app');
+
 Page({
     data: {
-        userRole: 'staff',
         // 筛选条件
         startDate: '',
         endDate: '',
         selectedStaffId: '',
         selectedStaffName: '',
-        selectedStaffIndex: -1,
         selectedStatus: '',
         selectedStatusName: '',
-        selectedStatusIndex: -1,
-
+        // 列表数据
+        customerList: [],
         // 分页数据
-        pageSize: 10, // 每页显示条数
-        currentPage: 1, // 当前页码
-        totalCount: 0, // 总记录数
-        totalPages: 0, // 总页数
-        isLoading: false, // 是否正在加载
-        hasMore: true, // 是否有更多数据
+        pageSize: 10,
+        currentPage: 1,
+        hasMore: true,
+        loading: false,
+        isRefreshing: false,
+        total: 0,
+        pageCount: 0,
+        isFirstLoad: true,
+        isLoadingData: false, // 新增：防止重复请求标记
         // 详情弹窗相关
         showDetailModal: false,
         currentDetail: {},
-        currentDetailIndex: -1,
-        // 原始数据
-        allCustomers: [], // 所有客户数据
-        customerList: [], // 当前页显示的数据
-
         // 员工选项
         staffOptions: [{
             id: '',
             name: '全部员工'
         }],
-
         // 状态选项
         statusOptions: [{
                 id: '',
@@ -42,16 +42,12 @@ Page({
                 name: '待服务'
             },
             {
-                id: 'confirmed',
-                name: '已确认'
-            },
-            {
                 id: 'in_progress',
                 name: '服务中'
             },
             {
                 id: 'completed',
-                name: '已完成'
+                name: '已服务'
             },
             {
                 id: 'cancelled',
@@ -62,172 +58,48 @@ Page({
                 name: '已超时'
             }
         ],
-
         staffList: [],
-        serviceOptions: [{
-                id: 1,
-                name: '水氧焕肤',
-                duration: 60
-            },
-            {
-                id: 2,
-                name: '深层清洁',
-                duration: 90
-            },
-            {
-                id: 3,
-                name: '大白肌护理',
-                duration: 120
-            },
-            {
-                id: 4,
-                name: '眼部护理',
-                duration: 60
-            },
-            {
-                id: 5,
-                name: '颈部护理',
-                duration: 60
-            },
-            {
-                id: 6,
-                name: '全身SPA',
-                duration: 120
-            },
-            {
-                id: 7,
-                name: '美甲服务',
-                duration: 90
-            },
-            {
-                id: 8,
-                name: '美睫服务',
-                duration: 120
-            }
-        ]
+        serviceOptions: []
     },
 
-    onLoad(options) {
+    onLoad: function (options) {
+        console.log('页面onLoad开始');
         this.loadUserInfo();
         this.initDefaultDates();
-        this.loadStaffList();
-        this.loadAllCustomers(); // 改为加载所有数据
+        this.initSelectList();
+        // 不在这里直接加载数据，等待异步操作完成
     },
 
-    onShow() {
-        // 刷新数据
-        this.setData({
-            currentPage: 1,
-            hasMore: true
-        });
-        this.loadAllCustomers();
+    onReady: function () {
+        console.log('页面onReady');
+        // 确保所有异步初始化完成后再加载数据
+        setTimeout(() => {
+            this.refreshCustomerList();
+        }, 100);
     },
 
-    // 监听页面滚动到底部
-    onReachBottom() {
-        this.loadMore();
+    onShow: function () {
+        // 如果是从其他页面返回，可以刷新数据
+        // 这里保持为空，避免重复请求
     },
 
-    loadUserInfo() {
-        const userInfo = wx.getStorageSync('userInfo') || {};
-        this.setData({
-            userRole: userInfo.role || 'staff',
-            currentUser: userInfo
-        });
-    },
-    // 显示详情弹窗
-    showDetailModal(e) {
-        const index = e.currentTarget.dataset.index;
-        const detail = this.data.customerList[index];
-
-        this.setData({
-            showDetailModal: true,
-            currentDetail: detail,
-            currentDetailIndex: index
-        });
-    },
-
-    // 隐藏详情弹窗
-    hideDetailModal() {
-        this.setData({
-            showDetailModal: false
-        });
-    },
-
-    // 编辑当前预约
-    editCurrentAppointment() {
-        this.hideDetailModal();
-
-        const modal = this.selectComponent('#addAppointmentModal');
-        if (modal && this.data.currentDetail) {
-            modal.showModal(this.data.currentDetail);
+    // 加载用户信息
+    loadUserInfo: function () {
+        try {
+            const userInfo = wx.getStorageSync('userInfo') || {};
+            this.setData({
+                userLevel: userInfo.level || 0,
+                currentUser: userInfo
+            });
+        } catch (error) {
+            console.error('加载用户信息失败:', error);
         }
     },
 
-    // 取消当前预约
-    cancelCurrentAppointment() {
-        wx.showModal({
-            title: '确认取消',
-            content: `确定要取消 ${this.data.currentDetail.name} 的预约吗？`,
-            success: (res) => {
-                if (res.confirm) {
-                    // 模拟API调用
-                    wx.showLoading({
-                        title: '处理中...'
-                    });
-
-                    setTimeout(() => {
-                        wx.hideLoading();
-                        wx.showToast({
-                            title: '已取消',
-                            icon: 'success'
-                        });
-
-                        // 关闭弹窗
-                        this.hideDetailModal();
-
-                        // 重新加载数据
-                        this.loadAllCustomers();
-                    }, 1000);
-                }
-            }
-        });
-    },
-
-    // 完成当前预约
-    completeCurrentAppointment() {
-        wx.showModal({
-            title: '确认完成',
-            content: `确定要标记 ${this.data.currentDetail.name} 的预约为已完成吗？`,
-            success: (res) => {
-                if (res.confirm) {
-                    // 模拟API调用
-                    wx.showLoading({
-                        title: '处理中...'
-                    });
-
-                    setTimeout(() => {
-                        wx.hideLoading();
-                        wx.showToast({
-                            title: '已完成',
-                            icon: 'success'
-                        });
-
-                        // 关闭弹窗
-                        this.hideDetailModal();
-
-                        // 重新加载数据
-                        this.loadAllCustomers();
-                    }, 1000);
-                }
-            }
-        });
-    },
     // 初始化默认日期（今天）
-    initDefaultDates() {
+    initDefaultDates: function () {
         const today = new Date();
         const formattedDate = this.formatDate(today);
-
         this.setData({
             startDate: formattedDate,
             endDate: formattedDate
@@ -235,236 +107,234 @@ Page({
     },
 
     // 格式化日期为 YYYY-MM-DD
-    formatDate(date) {
+    formatDate: function (date) {
         const year = date.getFullYear();
         const month = (date.getMonth() + 1).toString().padStart(2, '0');
         const day = date.getDate().toString().padStart(2, '0');
         return `${year}-${month}-${day}`;
     },
 
-    loadStaffList() {
-        // 模拟员工数据
-        const staffList = [{
-                id: 1,
-                name: '李美容师',
-                phone: '13800138001'
+    // 加载员工,服务下拉列表
+    initSelectList: function () {
+        const params = {
+            "filter": {
+                "status": "在职"
             },
-            {
-                id: 2,
-                name: '王美甲师',
-                phone: '13800138002'
-            },
-            {
-                id: 3,
-                name: '张按摩师',
-                phone: '13800138003'
-            },
-            {
-                id: 4,
-                name: '赵护理师',
-                phone: '13800138004'
-            },
-            {
-                id: 5,
-                name: '陈顾问',
-                phone: '13800138005'
-            }
-        ];
-
-        // 如果是普通员工，只能看到自己
-        let staffOptions = [{
-            id: '',
-            name: '全部员工'
-        }];
-
-        if (this.data.userRole === 'admin') {
-            // 管理员可以看到所有员工
-            staffOptions = staffOptions.concat(staffList);
-        } else {
-            // 普通员工只能看到自己
-            const currentUser = this.data.currentUser;
-            if (currentUser && currentUser.id) {
-                staffOptions = [{
-                    id: '',
-                    name: '全部员工'
-                }, currentUser];
-            }
-        }
-
-        this.setData({
-            staffList,
-            staffOptions
-        });
-    },
-
-    // 加载所有客户数据（模拟）
-    loadAllCustomers() {
-        // 模拟更多的客户数据
-        const allCustomers = this.generateMockCustomers(35); // 生成35条模拟数据
-
-        // 初始加载第一页
-        const filteredCustomers = this.filterCustomers(allCustomers);
-        const paginatedData = this.paginateData(filteredCustomers, 1);
-
-        this.setData({
-            allCustomers,
-            customerList: paginatedData.data,
-            totalCount: filteredCustomers.length,
-            totalPages: paginatedData.totalPages,
-            currentPage: 1,
-            hasMore: paginatedData.hasMore
-        });
-    },
-
-    // 生成模拟数据
-    generateMockCustomers(count) {
-        const customers = [];
-        const staffs = ['李美容师', '王美甲师', '张按摩师', '赵护理师', '陈顾问'];
-        const services = ['水氧焕肤', '深层清洁', '大白肌护理', '眼部护理', '颈部护理', '全身SPA', '美甲服务', '美睫服务'];
-        const statuses = ['pending', 'confirmed', 'in_progress', 'completed', 'cancelled', 'timeout'];
-        const statusTexts = ['待服务', '已确认', '服务中', '已完成', '已取消', '已超时'];
-        const phones = ['138', '139', '136', '137', '135', '186', '188', '189'];
-
-        // 生成过去15天到未来15天的日期
-        const today = new Date();
-        const startDate = new Date();
-        startDate.setDate(today.getDate() - 15);
-
-        for (let i = 1; i <= count; i++) {
-            const randomDays = Math.floor(Math.random() * 31) - 15; // -15 到 15
-            const appointmentDate = new Date(startDate);
-            appointmentDate.setDate(startDate.getDate() + randomDays);
-            const formattedDate = this.formatDate(appointmentDate);
-
-            // 生成随机时间
-            const hour = Math.floor(Math.random() * 8) + 9; // 9-17点
-            const minute = Math.random() > 0.5 ? '00' : '30';
-            const duration = [60, 90, 120][Math.floor(Math.random() * 3)];
-            const endHour = hour + Math.floor(duration / 60);
-            const appointmentTime = `${hour.toString().padStart(2, '0')}:${minute}-${endHour.toString().padStart(2, '0')}:${minute}`;
-
-            const statusIndex = Math.floor(Math.random() * statuses.length);
-
-            customers.push({
-                id: i,
-                name: `客户${String(i).padStart(3, '0')}`,
-                phone: `${phones[Math.floor(Math.random() * phones.length)]}****${String(Math.floor(Math.random() * 9000) + 1000)}`,
-                appointmentDate: formattedDate,
-                appointmentTime: appointmentTime,
-                service: services[Math.floor(Math.random() * services.length)],
-                duration: duration,
-                staffId: Math.floor(Math.random() * 5) + 1,
-                staffName: staffs[Math.floor(Math.random() * staffs.length)],
-                status: statuses[statusIndex],
-                statusText: statusTexts[statusIndex],
-                notes: i % 3 === 0 ? '有特殊要求，请注意' : (i % 5 === 0 ? 'VIP客户，优先安排' : '')
-            });
-        }
-
-        // 按日期排序
-        customers.sort((a, b) => new Date(a.appointmentDate) - new Date(b.appointmentDate));
-
-        return customers;
-    },
-
-    // 根据筛选条件过滤客户
-    filterCustomers(allCustomers) {
-        let filtered = [...allCustomers];
-
-        // 日期范围筛选
-        const {
-            startDate,
-            endDate
-        } = this.data;
-        if (startDate && endDate) {
-            filtered = filtered.filter(item => {
-                const appointmentDate = item.appointmentDate;
-                return appointmentDate >= startDate && appointmentDate <= endDate;
-            });
-        }
-
-        // 员工筛选
-        const {
-            selectedStaffId
-        } = this.data;
-        if (selectedStaffId) {
-            filtered = filtered.filter(item => item.staffId === selectedStaffId);
-        }
-
-        // 状态筛选
-        const {
-            selectedStatus
-        } = this.data;
-        if (selectedStatus) {
-            filtered = filtered.filter(item => item.status === selectedStatus);
-        }
-
-        return filtered;
-    },
-
-    // 分页处理
-    paginateData(data, page) {
-        const {
-            pageSize
-        } = this.data;
-        const totalCount = data.length;
-        const totalPages = Math.ceil(totalCount / pageSize);
-
-        // 计算起始索引
-        const startIndex = (page - 1) * pageSize;
-        const endIndex = Math.min(startIndex + pageSize, totalCount);
-
-        // 获取当前页数据
-        const pageData = data.slice(startIndex, endIndex);
-
-        return {
-            data: pageData,
-            totalCount,
-            totalPages,
-            currentPage: page,
-            hasMore: page < totalPages
         };
+        api.getStaffList(params).then(responseData => {
+            const staffList = responseData.data || [];
+            let staffOptions = [{
+                id: '',
+                name: '全部员工'
+            }];
+            if (this.data.userLevel >= 3) {
+                // 店长以上可以看到所有员工
+                staffOptions = staffOptions.concat(staffList.map(staff => ({
+                    id: staff.id,
+                    name: staff.nickname
+                })));
+            } else {
+                // 普通员工只能看到自己
+                const currentUser = this.data.currentUser;
+                if (currentUser && currentUser.id) {
+                    staffOptions.push({
+                        id: currentUser.id,
+                        name: currentUser.nickname
+                    });
+                }
+            }
+            this.setData({
+                staffList,
+                staffOptions
+            });
+            console.log(staffList);
+            console.log(staffOptions);
+        }).catch(error => {
+            console.error('加载员工列表失败:', error);
+            api.handleApiError(error);
+        });
+        api.getServiceListAll(params).then(responseData => {
+            const serviceList = responseData.data || [];
+            let serviceOptions = [];
+            serviceOptions = serviceOptions.concat(serviceList.map(service => ({
+                id: service.id,
+                name: service.fwmc
+            })));
+            this.setData({
+                serviceOptions
+            });
+        }).catch(error => {
+            console.error('加载员工列表失败:', error);
+            api.handleApiError(error);
+        });
     },
 
-    // 加载更多数据
-    loadMore() {
-        if (this.data.isLoading || !this.data.hasMore) {
+    // 刷新客户列表
+    refreshCustomerList: function () {
+        // 如果已经在加载中，则跳过
+        if (this.data.isLoadingData) {
+            console.log('数据正在加载中，跳过刷新');
             return;
         }
-
-        this.setData({
-            isLoading: true
-        });
-
-        // 模拟网络延迟
-        setTimeout(() => {
-            const filteredCustomers = this.filterCustomers(this.data.allCustomers);
-            const nextPage = this.data.currentPage + 1;
-            const paginatedData = this.paginateData(filteredCustomers, nextPage);
-
-            // 合并数据
-            const mergedData = [...this.data.customerList, ...paginatedData.data];
-
+        if (this.data.isFirstLoad) {
             this.setData({
-                customerList: mergedData,
-                totalCount: paginatedData.totalCount,
-                totalPages: paginatedData.totalPages,
-                currentPage: nextPage,
-                hasMore: paginatedData.hasMore,
-                isLoading: false
+                isFirstLoad: false
             });
-        }, 500);
+        }
+        console.log('开始刷新客户列表');
+        this.setData({
+            currentPage: 1,
+            hasMore: true,
+            loading: true,
+            isRefreshing: true,
+            isLoadingData: true
+        }, () => {
+            this.loadCustomerList();
+        });
+    },
+    // 加载客户列表
+    loadCustomerList: function () {
+        // 如果已经在加载中，则直接返回
+        if (this.data.isLoadingData && this.data.currentPage !== 1) {
+            console.log('已经在加载中，跳过重复请求');
+            return;
+        }
+        const {
+            startDate,
+            endDate,
+            selectedStaffId,
+            selectedStatusName,
+            currentPage,
+            pageSize
+        } = this.data;
+        // 构建分页参数
+        const params = {
+            "filter": {
+                startDate: startDate,
+                endDate: endDate,
+                zt: selectedStatusName,
+                jmygb: {
+                    id: selectedStaffId
+                }
+            },
+            "page": {
+                "pageNum": currentPage,
+                "pageSize": pageSize
+            }
+        };
+        console.log('加载预约列表，页码:', currentPage, '参数:', params);
+        // 只在第一次加载或下拉刷新时显示loading
+        if (this.data.currentPage === 1 && this.data.isRefreshing) {
+            wx.showLoading({
+                title: '加载中...'
+            });
+        }
+        api.getReservationList(params).then(responseData => {
+            wx.hideLoading();
+            const mockData = responseData.data;
+            const newList = mockData.list || [];
+            const total = mockData.total || 0;
+            const pageCount = mockData.pageCount || 0;
+            console.log('第', currentPage, '页数据加载完成，共', newList.length, '条');
+            console.log('总页数:', pageCount, '当前页:', currentPage);
+            // 判断是否还有更多数据
+            const hasMore = currentPage < pageCount && newList.length > 0;
+            // 如果是第一页，替换数据；否则追加数据
+            const customerList = currentPage === 1 ? newList : [...this.data.customerList, ...newList];
+            this.setData({
+                customerList: customerList,
+                hasMore: hasMore,
+                loading: false,
+                isRefreshing: false,
+                total: total,
+                pageCount: pageCount,
+                isLoadingData: false
+            }, () => {
+                console.log('数据更新完成，当前总数:', customerList.length, '，是否还有更多:', hasMore);
+            });
+        }).catch(error => {
+            wx.hideLoading();
+            console.error('加载预约列表失败:', error);
+            this.setData({
+                loading: false,
+                isRefreshing: false,
+                isLoadingData: false
+            });
+            if (error.type === 'empty') {
+                // 如果是第一页且无数据，清空列表
+                if (this.data.currentPage === 1) {
+                    this.setData({
+                        customerList: [],
+                        hasMore: false
+                    });
+                }
+                wx.showToast({
+                    title: '暂无数据',
+                    icon: 'none',
+                    duration: 2000
+                });
+            } else {
+                api.handleApiError(error);
+            }
+        });
+    },
+
+    // 滑动到底部自动加载
+    onReachBottom: function () {
+        console.log('滑动到底部，触发加载更多');
+        console.log('当前状态 - loading:', this.data.loading, 'hasMore:', this.data.hasMore, 'isLoadingData:', this.data.isLoadingData);
+        if (this.data.loading || this.data.isLoadingData) {
+            console.log('正在加载中，跳过');
+            return;
+        }
+        if (!this.data.hasMore) {
+            console.log('没有更多数据了，不加载');
+            return;
+        }
+        this.setData({
+            currentPage: this.data.currentPage + 1,
+            loading: true,
+            isLoadingData: true
+        }, () => {
+            console.log('开始加载第', this.data.currentPage, '页');
+            this.loadCustomerList();
+        });
+    },
+
+    // 下拉刷新
+    onPullDownRefresh: function () {
+        console.log('下拉刷新');
+        // 如果正在加载中，则停止刷新
+        if (this.data.isLoadingData) {
+            wx.stopPullDownRefresh();
+            return;
+        }
+        this.refreshCustomerList();
+        // 设置一个超时停止下拉刷新
+        setTimeout(() => {
+            if (this.data.isRefreshing) {
+                wx.stopPullDownRefresh();
+            }
+        }, 2000);
+    },
+
+    onSearch: function () {
+        this.refreshCustomerList();
+    },
+
+    onSearchConfirm: function () {
+        this.onSearch();
     },
 
     // 日期变化事件
-    onStartDateChange(e) {
+    onStartDateChange: function (e) {
         const value = e.detail.value;
         this.setData({
             startDate: value
         });
     },
 
-    onEndDateChange(e) {
+    onEndDateChange: function (e) {
         const value = e.detail.value;
         this.setData({
             endDate: value
@@ -472,176 +342,274 @@ Page({
     },
 
     // 员工选择变化
-    onStaffChange(e) {
+    onStaffChange: function (e) {
         const index = e.detail.value;
         const selectedStaff = this.data.staffOptions[index];
-
         this.setData({
-            selectedStaffIndex: index,
             selectedStaffId: selectedStaff.id,
             selectedStaffName: selectedStaff.name
         });
     },
 
     // 状态选择变化
-    onStatusChange(e) {
+    onStatusChange: function (e) {
         const index = e.detail.value;
         const selectedStatus = this.data.statusOptions[index];
-
         this.setData({
-            selectedStatusIndex: index,
             selectedStatus: selectedStatus.id,
             selectedStatusName: selectedStatus.name
         });
     },
 
-    // 查询按钮点击事件
-    searchAppointments() {
-        this.setData({
-            currentPage: 1,
-            hasMore: true
-        });
-        this.loadCustomerListByFilter();
-    },
-
-    // 根据筛选条件加载客户列表
-    loadCustomerListByFilter() {
-        const filteredCustomers = this.filterCustomers(this.data.allCustomers);
-        const paginatedData = this.paginateData(filteredCustomers, 1);
-
-        this.setData({
-            customerList: paginatedData.data,
-            totalCount: filteredCustomers.length,
-            totalPages: paginatedData.totalPages,
-            currentPage: 1,
-            hasMore: paginatedData.hasMore
-        });
-    },
-
     // 重置筛选条件
-    resetFilters() {
+    resetFilters: function () {
         const today = new Date();
         const formattedDate = this.formatDate(today);
-
         this.setData({
             startDate: formattedDate,
             endDate: formattedDate,
-            selectedStaffIndex: 0,
             selectedStaffId: '',
             selectedStaffName: '',
-            selectedStatusIndex: 0,
             selectedStatus: '',
-            selectedStatusName: '',
-            currentPage: 1,
-            hasMore: true
-        }, () => {
-            this.loadCustomerListByFilter();
+            selectedStatusName: ''
+        });
+    },
+
+    // 显示详情弹窗
+    showDetailModal: function (e) {
+        const index = e.currentTarget.dataset.index;
+        const detail = this.data.customerList[index];
+        this.setData({
+            showDetailModal: true,
+            currentDetail: detail,
+        });
+    },
+
+    // 隐藏详情弹窗
+    hideDetailModal: function () {
+        this.setData({
+            showDetailModal: false
+        });
+    },
+
+    // 编辑当前预约
+    editCurrentAppointment: function () {
+        this.hideDetailModal();
+        const modal = this.selectComponent('#addAppointmentModal');
+        if (modal && this.data.currentDetail) {
+            modal.showModal(this.data.currentDetail);
+        }
+    },
+
+    // 取消当前预约
+    cancelCurrentAppointment: function () {
+        const that = this;
+        wx.showModal({
+            title: '确认取消',
+            content: `确定要取消 ${this.data.currentDetail.jmfwb.fwmc} 的预约吗？`,
+            success: (res) => {
+                if (res.confirm) {
+                    wx.showLoading({
+                        title: '处理中...'
+                    });
+                    const params = {
+                        id: that.data.currentDetail.id,
+                        zt: '已取消'
+                    };
+                    api.updateReservation(params).then(() => {
+                        wx.hideLoading();
+                        wx.showToast({
+                            title: '已取消',
+                            icon: 'success'
+                        });
+                        // 关闭弹窗并刷新数据
+                        that.hideDetailModal();
+                        that.refreshCustomerList();
+                    }).catch(error => {
+                        wx.hideLoading();
+                        api.handleApiError(error);
+                    });
+                }
+            }
+        });
+    },
+
+    // 完成当前预约
+    completeCurrentAppointment: function () {
+        const that = this;
+        wx.showModal({
+            title: '确认完成',
+            content: `确定要标记 ${this.data.currentDetail.jmfwb.fwmc} 的预约为服务中吗？`,
+            success: (res) => {
+                if (res.confirm) {
+                    wx.showLoading({
+                        title: '处理中...'
+                    });
+                    const params = {
+                        id: that.data.currentDetail.id,
+                        zt: '服务中'
+                    };
+                    api.updateReservation(params).then(() => {
+                        wx.hideLoading();
+                        wx.showToast({
+                            title: '已完成',
+                            icon: 'success'
+                        });
+                        // 关闭弹窗并刷新数据
+                        that.hideDetailModal();
+                        that.refreshCustomerList();
+                    }).catch(error => {
+                        wx.hideLoading();
+                        api.handleApiError(error);
+                    });
+                }
+            }
         });
     },
 
     // 查看客户详情
-    viewCustomerDetail(e) {
+    viewCustomerDetail: function (e) {
         const id = e.currentTarget.dataset.id;
         wx.navigateTo({
             url: `/pages/customer/detail?id=${id}`
         });
     },
 
-    // 停止事件冒泡
-    stopPropagation(e) {
-        // 阻止事件冒泡
-    },
-
     // 编辑预约
-    editAppointment(e) {
+    editAppointment: function (e) {
         const id = e.currentTarget.dataset.id;
         const modal = this.selectComponent('#addAppointmentModal');
-
         // 查找要编辑的预约
         const appointment = this.data.customerList.find(item => item.id === parseInt(id));
         if (appointment) {
             modal.showModal(appointment);
+        } else {
+            wx.showToast({
+                title: '未找到预约信息',
+                icon: 'none'
+            });
         }
     },
 
     // 取消预约
-    cancelAppointment(e) {
+    cancelAppointment: function (e) {
         const id = e.currentTarget.dataset.id;
-
+        const that = this;
         wx.showModal({
             title: '确认取消',
             content: '确定要取消这个预约吗？',
             success: (res) => {
                 if (res.confirm) {
-                    // 这里应该调用API取消预约
-                    wx.showToast({
-                        title: '已取消',
-                        icon: 'success'
+                    wx.showLoading({
+                        title: '处理中...'
                     });
-
-                    // 重新加载列表
-                    setTimeout(() => {
-                        this.loadAllCustomers();
-                    }, 1000);
+                    const params = {
+                        id: id,
+                        zt: '已取消'
+                    };
+                    api.updateReservation(params).then(() => {
+                        wx.hideLoading();
+                        wx.showToast({
+                            title: '已取消',
+                            icon: 'success'
+                        });
+                        // 关闭弹窗并刷新数据
+                        that.hideDetailModal();
+                        that.refreshCustomerList();
+                    }).catch(error => {
+                        wx.hideLoading();
+                        api.handleApiError(error);
+                    });
                 }
             }
         });
     },
 
     // 完成预约
-    completeAppointment(e) {
-        const id = e.currentTarget.dataset.id;
-
+    completeAppointment: function (e) {
+        const that = this;
         wx.showModal({
             title: '确认完成',
-            content: '确定要标记这个预约为已完成吗？',
+            content: '确定要标记这个预约为已服务吗？',
             success: (res) => {
                 if (res.confirm) {
-                    // 这里应该调用API完成预约
-                    wx.showToast({
-                        title: '已完成',
-                        icon: 'success'
+                    wx.showLoading({
+                        title: '处理中...'
                     });
-
-                    // 重新加载列表
-                    setTimeout(() => {
-                        this.loadAllCustomers();
-                    }, 1000);
+                    const params = {
+                        id: that.data.currentDetail.id,
+                        zt: '已服务'
+                    };
+                    api.updateReservation(params).then(() => {
+                        wx.hideLoading();
+                        wx.showToast({
+                            title: '已完成',
+                            icon: 'success'
+                        });
+                        // 关闭弹窗并刷新数据
+                        that.hideDetailModal();
+                        that.refreshCustomerList();
+                    }).catch(error => {
+                        wx.hideLoading();
+                        api.handleApiError(error);
+                    });
                 }
             }
         });
     },
 
     // 显示新增预约弹窗
-    showAddModal() {
+    showAddModal: function () {
         const modal = this.selectComponent('#addAppointmentModal');
-        modal.showModal();
-    },
-
-    // 隐藏新增预约弹窗
-    hideAddModal() {
-        const modal = this.selectComponent('#addAppointmentModal');
-        modal.hideModal();
+        if (modal) {
+            modal.showModal();
+        } else {
+            wx.showToast({
+                title: '弹窗组件加载失败',
+                icon: 'none'
+            });
+        }
     },
 
     // 处理新增预约
-    handleAddAppointment(e) {
+    handleAddAppointment: function (e) {
         const appointmentData = e.detail;
-
         wx.showLoading({
             title: '保存中...',
         });
-
-        // 模拟API调用
-        setTimeout(() => {
-            wx.hideLoading();
-            wx.showToast({
-                title: '预约成功',
-                icon: 'success'
+        if (appointmentData.id) {
+            // 调用API保存预约
+            api.updateReservation(appointmentData).then(() => {
+                wx.hideLoading();
+                wx.showToast({
+                    title: '编辑成功',
+                    icon: 'success'
+                });
+                // 重新加载列表
+                this.refreshCustomerList();
+            }).catch(error => {
+                wx.hideLoading();
+                api.handleApiError(error);
             });
+        } else {
+            // 调用API保存预约
+            api.addReservation(appointmentData).then(() => {
+                wx.hideLoading();
+                wx.showToast({
+                    title: '预约成功',
+                    icon: 'success'
+                });
+                // 重新加载列表
+                this.refreshCustomerList();
+            }).catch(error => {
+                wx.hideLoading();
+                api.handleApiError(error);
+            });
+        }
+    },
 
-            // 重新加载列表
-            this.loadAllCustomers();
-        }, 1500);
-    }
+    // 停止事件冒泡
+    stopPropagation: function (e) {
+        // 阻止事件冒泡
+    },
 });

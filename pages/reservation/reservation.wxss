@@ -458,6 +458,7 @@
     gap: 15rpx;
 }
 
+.btn-gb,
 .btn-edit,
 .btn-cancel,
 .btn-complete {
@@ -466,6 +467,11 @@
     font-size: 28rpx !important;
     height: 80rpx !important;
     border: none !important;
+}
+
+.btn-gb {
+    background: #F5F5F5 !important;
+    color: #666 !important;
 }
 
 .btn-edit {

@@ -57,7 +57,6 @@ Page({
     },
     // 加载客户列表
     loadCustomerList: function () {
-      
         const {
             searchValue,
             currentPage,

@@ -52,7 +52,7 @@
                 <text class="btn-icon">🔄</text>
                 <text class="btn-text">重置</text>
             </button>
-            <button class="btn-search original" bindtap="searchAppointments">
+            <button class="btn-search original" bindtap="refreshScheduleList">
                 <text class="btn-icon">🔍</text>
                 <text class="btn-text">查询</text>
             </button>

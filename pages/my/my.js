@@ -11,6 +11,7 @@ Page({
             nickName: '', // 微信昵称
             phone: '', // 手机号
             userId: '', // 用户ID
+            level: 0, //权限等级
             roleText: '', // 角色
             employeeNo: '', // 工号
         },
@@ -88,6 +89,7 @@ Page({
                 avatarUrl: '/images/touxiang.png',
                 nickName: '未登录',
                 phone: '',
+                level: 0,
                 userId: '',
                 roleText: '游客',
                 employeeNo: ''
@@ -160,6 +162,7 @@ Page({
                 'userInfo': {
                     avatarUrl: responseData.avatar,
                     nickName: responseData.nickname,
+                    level: responseData.level,
                     sjh: responseData.sjh,
                     userId: responseData.id,
                     roleText: responseData.rolename,
@@ -272,6 +275,7 @@ Page({
                         'userInfo': {
                             avatarUrl: responseData.avatar,
                             nickName: responseData.nickname,
+                            level: responseData.level,
                             phone: responseData.phone,
                             userId: responseData.id,
                             roleText: responseData.rolename,

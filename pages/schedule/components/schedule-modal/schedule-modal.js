@@ -1,3 +1,8 @@
+// 引入API服务
+const {
+    api
+} = require('../../../../utils/app.js');
+
 Component({
     properties: {
       // 父组件传递的属性
