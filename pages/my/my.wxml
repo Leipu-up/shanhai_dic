@@ -2,7 +2,7 @@
     <!-- 用户信息头部 -->
     <view class="user-header">
         <view class="user-info">
-            <image class="avatar" src="{{userInfo.avatar || '/images/default-avatar.png'}}"></image>
+            <image class="avatar" src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}"></image>
             <view class="user-details">
                 <text class="user-name">{{userInfo.nickName || '请登录'}}</text>
                 <text class="user-role">{{userInfo.roleText||'游客'}}</text>
@@ -21,20 +21,20 @@
 
     <!-- 个人统计 -->
     <view class="personal-stats card">
-        <view class="stats-item">
-            <text class="stats-number">{{personalStats.monthlyPerformance}}</text>
-            <text class="stats-label">本月目标(元)</text>
+        <!-- <view class="stats-item">
+            <text class="stats-number">30000</text>
+            <text class="stats-label">本月目标额(元)</text>
         </view>
         <view class="stats-item">
-            <text class="stats-number">{{personalStats.monthlyPerformance}}</text>
+            <text class="stats-number">{{monthlyPerformance}}</text>
             <text class="stats-label">本月业绩(元)</text>
+        </view> -->
+        <view class="stats-item">
+            <text class="stats-number">{{customerCount}}</text>
+            <text class="stats-label">本月客户数(人)</text>
         </view>
         <view class="stats-item">
-            <text class="stats-number">{{personalStats.customerCount}}</text>
-            <text class="stats-label">服务客户</text>
-        </view>
-        <view class="stats-item">
-            <text class="stats-number">{{personalStats.attendanceDays}}/31</text>
+            <text class="stats-number">{{attendanceDays}}/31</text>
             <text class="stats-label">本月出勤(天)</text>
         </view>
     </view>
@@ -45,9 +45,9 @@
         <view class="menu-list">
             <view class="menu-item" bindtap="navigateToMySchedule">
                 <view class="menu-icon schedule">📅</view>
-                <text class="menu-text">我的排班</text>
+                <text class="menu-text">下次排班</text>
                 <view class="menu-right">
-                    <text class="menu-desc">{{nextSchedule}}</text>
+                    <text class="menu-desc">{{nextSchedule}} 9:00-18:30</text>
                     <text class="arrow">›</text>
                 </view>
             </view>

@@ -5,5 +5,5 @@
     "navigationBarTitleText": "排班管理",
     "navigationBarBackgroundColor": "#FF69B4",
     "navigationBarTextStyle": "white",
-    "enablePullDownRefresh": true
+    "enablePullDownRefresh": false
   }

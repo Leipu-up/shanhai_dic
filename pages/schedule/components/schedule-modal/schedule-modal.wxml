@@ -12,19 +12,18 @@
       <!-- 员工选择 -->
       <view class="form-section">
         <view class="section-title">选择员工</view>
-        
         <view class="form-item">
           <text class="form-label required">员工姓名</text>
           <picker 
             mode="selector" 
             range="{{staffOptions}}"
             range-key="name"
-            value="{{staffIndex}}"
+            value="{{selectedStaffName}}"
             bindchange="onStaffChange"
             class="picker-input"
           >
-            <view class="picker-text {{selectedStaff ? '' : 'placeholder'}}">
-              {{selectedStaff ? selectedStaff.name : '请选择员工'}}
+            <view class="picker-text {{selectedStaffName ? '' : 'placeholder'}}">
+              {{selectedStaffName ? selectedStaffName : '请选择员工'}}
             </view>
           </picker>
         </view>

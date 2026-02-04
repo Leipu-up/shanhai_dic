@@ -10,9 +10,9 @@
         </view>
         <view class="navbar-right">
             <view class="notification-icon" bindtap="navigateToNotifications">
-                <text>张小美</text>
+                <text>你好,{{userInfo.nickName}}</text>
             </view>
-            <image class="user-avatar" src="{{userInfo.avatar || '/images/default-avatar.png'}}"
+            <image class="user-avatar" src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}"
                 bindtap="navigateToMyPage"></image>
         </view>
     </view>
@@ -41,27 +41,31 @@
             <view class="view-all" bindtap="viewAllAppointments">查看全部 ></view>
         </view>
         <view wx:if="{{todayAppointments.length > 0}}">
-            <view class="appointment-item" wx:for="{{todayAppointments}}" wx:key="index" bindtap="viewAppointmentDetail"
-                data-id="{{item.id}}">
+            <view class="appointment-item" wx:for="{{todayAppointments}}" wx:key="index">
                 <view class="appointment-left">
                     <view class="time-badge">
-                        <text class="time-hour">{{item.timeHour}}</text>
-                        <text class="time-period">{{item.timePeriod}}</text>
+                        <text class="time-hour">{{item.yysj}}</text>
+                        <!-- <text class="time-period">{{item.yysj}}</text> -->
                     </view>
                     <view class="appointment-divider" wx:if="{{!item.last}}"></view>
                 </view>
                 <view class="appointment-right">
                     <view class="customer-info">
-                        <text class="customer-name">{{item.customerName}}</text>
-                        <text class="customer-phone">📱 {{item.customerPhone}}</text>
+                        <text class="customer-name">{{item.jmkhb.khxm}}</text>
+                        <text class="customer-phone">📱 {{item.jmkhb.khsjh}}</text>
                     </view>
                     <view class="service-info">
-                        <text class="service">{{item.service}}</text>
-                        <view class="status-badge {{item.status}}">{{item.statusText}}</view>
+                        <text class="service">{{item.jmfwb.fwmc}}</text>
+                        <view class="status-badge {{item.zt=='待服务'?'pending':
+                        (item.zt=='服务中'?'confirmed':
+                        (item.zt=='已服务'?'completed':
+                        (item.zt=='已超时'?'timeout':'cancelled')))}}">
+                            {{item.zt}}
+                        </view>
                     </view>
-                    <view class="staff-info" wx:if="{{item.staffName}}">
+                    <view class="staff-info" wx:if="{{item.jmygb}}">
                         <text class="staff-label">服务人员:</text>
-                        <text class="staff-name">{{item.staffName}}</text>
+                        <text class="staff-name">{{item.jmygb.nickname}}</text>
                     </view>
                 </view>
             </view>
@@ -69,7 +73,6 @@
         <view wx:else class="empty-state">
             <view class="empty-icon">📅</view>
             <text class="empty-text">今日暂无预约</text>
-            <button class="btn-secondary" bindtap="navigateToAddAppointment">新增预约</button>
         </view>
     </view>
 
@@ -78,28 +81,28 @@
         <view class="stat-item" bindtap="navigateToTodayCustomers">
             <view class="stat-icon">👥</view>
             <view class="stat-content">
-                <text class="stat-number">{{stats.todayCustomers}}</text>
+                <text class="stat-number">{{todayCustomers}}</text>
                 <text class="stat-label">今日客户</text>
             </view>
         </view>
         <view class="stat-item" bindtap="navigateToPerformance">
             <view class="stat-icon">💰</view>
             <view class="stat-content">
-                <text class="stat-number">{{stats.monthlyRevenue}}</text>
+                <text class="stat-number">{{monthlyRevenue}}</text>
                 <text class="stat-label">本月业绩(万)</text>
             </view>
         </view>
         <view class="stat-item" bindtap="navigateToInventory">
             <view class="stat-icon">⚠️</view>
             <view class="stat-content">
-                <text class="stat-number">{{stats.inventoryAlert}}</text>
+                <text class="stat-number">{{inventoryAlert}}</text>
                 <text class="stat-label">库存预警</text>
             </view>
         </view>
         <view class="stat-item" bindtap="navigateToAttendance">
             <view class="stat-icon">📊</view>
             <view class="stat-content">
-                <text class="stat-number">{{stats.attendanceRate}}%</text>
+                <text class="stat-number">{{attendanceRate}}%</text>
                 <text class="stat-label">出勤率</text>
             </view>
         </view>

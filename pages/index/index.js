@@ -1,9 +1,18 @@
+// 引入API服务
+const {
+    api
+} = require('../../utils/app');
+
 Page({
     data: {
         userInfo: {
-            nickName: '',
-            avatar: '',
-            role: 'staff'
+            avatarUrl: '', // 微信头像URL
+            nickName: '', // 微信昵称
+            phone: '', // 手机号
+            userId: '', // 用户ID
+            level: 0, //权限等级
+            roleText: '', // 角色
+            employeeNo: '', // 工号
         },
         banners: [{
                 id: 1,
@@ -31,13 +40,11 @@ Page({
             }
         ],
         todayAppointments: [],
-        stats: {
-            todayCustomers: 8,
-            monthlyRevenue: 15.6,
-            inventoryAlert: 3,
-            attendanceRate: 95
-        },
-        unreadNotifications: 2,
+        todayCustomers: 0,
+        monthlyRevenue: 0,
+        inventoryAlert: 0,
+        attendanceRate: 0,
+        unreadNotifications: 0,
         currentDate: '',
     },
 
@@ -48,8 +55,7 @@ Page({
     },
 
     onShow() {
-        this.loadTodayAppointments();
-        this.loadNotifications();
+
     },
     // 新增：设置当前日期
     setCurrentDate() {
@@ -64,62 +70,48 @@ Page({
     },
 
     loadUserInfo() {
-        const userInfo = wx.getStorageSync('userInfo') || {
-            nickName: '美容师',
-            avatar: '',
-            role: 'staff'
-        };
-
-        this.setData({
-            userInfo
-        });
+        const userInfo = wx.getStorageSync('userInfo');
+        if (userInfo) {
+            this.setData({
+                userInfo
+            });
+        }
     },
-
+    // 格式化日期时间
+    formatDateTime() {
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    },
     loadTodayAppointments() {
-        const appointments = [{
-                id: 1,
-                customerName: '王女士',
-                customerPhone: '138****1234',
-                service: '面部护理 + 深层清洁',
-                time: '10:00-11:30',
-                timeHour: '10:00',
-                timePeriod: '上午',
-                staffName: '李美容师',
-                status: 'pending',
-                statusText: '待服务',
-                last: false
+        const params = {
+            "filter": {
+                "yyrq": this.formatDateTime()
             },
-            {
-                id: 2,
-                customerName: '张小姐',
-                customerPhone: '139****5678',
-                service: '美甲服务',
-                time: '14:00-15:00',
-                timeHour: '14:00',
-                timePeriod: '下午',
-                staffName: '王美甲师',
-                status: 'confirmed',
-                statusText: '已确认',
-                last: false
-            },
-            {
-                id: 3,
-                customerName: '李太太',
-                customerPhone: '136****9012',
-                service: '全身SPA按摩',
-                time: '16:30-18:00',
-                timeHour: '16:30',
-                timePeriod: '下午',
-                staffName: '张按摩师',
-                status: 'completed',
-                statusText: '已完成',
-                last: true
+            "page": {
+                "pageNum": 1,
+                "pageSize": 3
             }
-        ];
+        };
+        api.getReservationList(params).then(responseData => {
 
-        this.setData({
-            todayAppointments: appointments
+            this.setData({
+                todayAppointments: responseData.data.list
+            });
+        }).catch(error => {
+            if (error.type === 'empty') {
+                wx.showToast({
+                    title: '暂无数据',
+                    icon: 'none',
+                    duration: 2000
+                });
+            } else {
+                api.handleApiError(error);
+            }
         });
+
     },
 
     loadNotifications() {
@@ -206,7 +198,7 @@ Page({
 
     viewAllAppointments() {
         wx.navigateTo({
-            url: '/pages/customer/customer'
+            url: '/pages/reservation/reservation'
         });
     },
 

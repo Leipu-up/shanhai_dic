@@ -18,14 +18,11 @@ Page({
         showLoginModal: false,
         showEditModal: false,
         editAvatarUrl: '',
-        personalStats: {
-            monthlyPerformance: '28,500',
-            customerCount: 86,
-            attendanceDays: 22,
-            satisfaction: 98
-        },
-        nextSchedule: '明天 09:00-18:30',
-        unreadMessages: 3,
+        monthlyPerformance: 0,
+        customerCount: 0,
+        attendanceDays: 0,
+        nextSchedule: '',
+        unreadMessages: 0,
         lastLoginTime: ''
 
     },
@@ -33,6 +30,7 @@ Page({
         this.loadUserInfo();
         // 获取最后登录时间
         this.getLastLoginTime();
+        this.getMyData();
     },
     // 获取最后登录时间
     getLastLoginTime() {
@@ -68,7 +66,26 @@ Page({
         // 页面显示时刷新用户信息
         this.loadUserInfo();
     },
-
+    getMyData() {
+        const userInfo = wx.getStorageSync('userInfo');
+        if (userInfo) {
+            const params = {
+                "userId": userInfo.userId
+            };
+            api.getMyData(params).then(responseData => {
+                const mydata = responseData.data;
+                this.setData({
+                    customerCount: responseData.customerCount || 0,
+                    attendanceDays: responseData.attendanceDays || 0,
+                    nextSchedule: responseData.nextSchedule || '',
+                    unreadMessages: responseData.unreadMessages || 0,
+                });
+            }).catch(error => {
+                console.error('加载数据失败:', error);
+                api.handleApiError(error);
+            });
+        }
+    },
     loadUserInfo() {
         // 先从缓存中读取用户信息
         const userInfo = wx.getStorageSync('userInfo');
@@ -324,7 +341,7 @@ Page({
     },
     navigateToMyCustomers() {
         wx.navigateTo({
-            url: '/pages/customer/customer'
+            url: '/pages/reservation/reservation'
         });
     },
     navigateToPerformance() {

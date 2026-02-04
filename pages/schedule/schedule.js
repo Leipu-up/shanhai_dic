@@ -2,6 +2,7 @@
 const {
     api
 } = require('../../utils/app');
+
 Page({
     data: {
         // 筛选条件
@@ -11,10 +12,9 @@ Page({
         selectedStaffName: '',
         selectedStatus: '',
         selectedStatusName: '',
-
+        staffList: [],
         // 员工选项
         staffOptions: [],
-
         // 状态选项
         statusOptions: [{
                 id: '',
@@ -29,58 +29,89 @@ Page({
                 name: '休息'
             }
         ],
-
         // 分页数据
         pageSize: 10,
         currentPage: 1,
-        totalCount: 0,
-        totalPages: 0,
-        isLoading: false,
+        total: 0,
         hasMore: true,
+        loading: false,
+        isRefreshing: false,
+        isFirstLoad: true,
+        isLoadingData: false, // 防止重复请求的标记
 
         // 统计信息
         onDutyCount: 0,
         offDutyCount: 0,
         totalAppointments: 0,
-
         // 排班列表
         scheduleList: [],
-
-        // 员工列表
-        staffList: []
+        // 选择器索引
+        selectedStaffIndex: 0,
+        selectedStatusIndex: 0
     },
 
     onLoad(options) {
+        console.log('页面onLoad开始');
         this.initDefaultDates();
         this.loadStaffList();
-        this.loadScheduleData();
+        // 不在这里直接加载数据
+    },
+
+    onReady() {
+        console.log('页面onReady');
+        // 确保页面准备就绪后再加载数据
+        setTimeout(() => {
+            this.refreshScheduleList();
+        }, 100);
     },
 
     onShow() {
-        this.refreshScheduleList();
+        // 这里保持为空，避免重复请求
     },
 
+    // 下拉刷新
     onPullDownRefresh() {
+        console.log('下拉刷新');
+        // 如果正在加载中，则停止刷新
+        if (this.data.isLoadingData) {
+            wx.stopPullDownRefresh();
+            return;
+        }
         this.refreshScheduleList();
+        // 设置一个超时停止下拉刷新
+        setTimeout(() => {
+            if (this.data.isRefreshing) {
+                wx.stopPullDownRefresh();
+            }
+        }, 2000);
     },
 
+    // 滑动到底部自动加载
     onReachBottom() {
-        this.loadMore();
+        console.log('滑动到底部，触发加载更多');
+        console.log('当前状态 - loading:', this.data.loading, 'hasMore:', this.data.hasMore, 'isLoadingData:', this.data.isLoadingData);
+        if (!this.data.hasMore) {
+            console.log('没有更多数据了，不加载');
+            return;
+        }
+        this.setData({
+            currentPage: this.data.currentPage + 1,
+            loading: true,
+            isLoadingData: true
+        }, () => {
+            console.log('开始加载第', this.data.currentPage, '页');
+            this.loadScheduleList();
+        });
     },
 
     // 初始化默认日期
     initDefaultDates() {
         const today = new Date();
         const formattedDate = this.formatDate(today);
-
-        // 设置默认开始日期为今天，结束日期为明天
-        const tomorrow = new Date(today);
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        const formattedTomorrow = this.formatDate(tomorrow);
-
+        // 设置默认开始日期为今天，结束日期为今天（同一天）
         this.setData({
             startDate: formattedDate,
-            endDate: formattedTomorrow
+            endDate: formattedDate
         });
     },
 
@@ -105,213 +136,221 @@ Page({
                 id: '',
                 name: '全部员工'
             }];
-            if (this.data.userLevel >= 3) {
+            // 获取用户信息
+            const userInfo = wx.getStorageSync('userInfo') || {};
+            const userLevel = userInfo.level || 0;
+            const currentUser = userInfo;
+
+            if (userLevel >= 3) {
                 // 店长以上可以看到所有员工
                 staffOptions = staffOptions.concat(staffList.map(staff => ({
                     id: staff.id,
-                    name: staff.nickname
+                    name: staff.nickname || staff.name,
+                    nickname: staff.nickname
                 })));
             } else {
                 // 普通员工只能看到自己
-                const currentUser = this.data.currentUser;
                 if (currentUser && currentUser.id) {
                     staffOptions.push({
                         id: currentUser.id,
-                        name: currentUser.nickname
+                        name: currentUser.nickname || currentUser.name,
+                        nickname: currentUser.nickname
                     });
                 }
             }
+
+            // 更新索引
+            const selectedStaffIndex = staffOptions.findIndex(item => item.id === this.data.selectedStaffId) || 0;
+
             this.setData({
                 staffList,
-                staffOptions
+                staffOptions,
+                selectedStaffIndex
             });
-            console.log(staffList);
-            console.log(staffOptions);
         }).catch(error => {
             console.error('加载员工列表失败:', error);
             api.handleApiError(error);
         });
     },
 
-    // 加载排班数据
-    loadScheduleData() {
-        // 调取后台api获得数据
-        api.getStaffList(params).then(responseData => {
-            wx.hideLoading();
-            const staffData = responseData.data;
-            const allStaff = [];
-            if (staffData.length > 0) {
-                for (let i = 0; i < staffData.length; i++) {
-                    const id = staffData[i].id;
-                    const employeeId = staffData[i].employeeNo;
-                    const avatar = staffData[i].avatar || '/images/default-avatar.png';
-                    const sfzh = staffData[i].sfzh;
-                    const level = staffData[i].level;
-                    const phone = staffData[i].sjh;
-                    const nickname = staffData[i].nickname;
-                    const name = staffData[i].name;
-                    const nameView = nickname + '(' + name + ')'
-                    const position = staffData[i].rolename;
-                    const storeName = staffData[i].jmsdbName;
-                    const status = staffData[i].status;
-                    const joinDate = staffData[i].joinDate;
-                    const notes = staffData[i].bz || '';
-                    const yuefen = this.calculateWorkDuration(joinDate, status);
-                    const workDuration = status === '在职' ? yuefen : '已离职';
-                    const monthlyPerformance = '--';
-                    allStaff.push({
-                        id: id,
-                        name: name,
-                        nameView: nameView,
-                        sfzh: sfzh,
-                        phone: phone,
-                        employeeId: employeeId,
-                        nickname: nickname,
-                        position: position,
-                        storeName: storeName,
-                        status: status,
-                        workDuration: workDuration,
-                        monthlyPerformance: monthlyPerformance,
-                        avatar: avatar,
-                        notes: notes,
-                        isView: false,
-                        joinDate: joinDate
-                    });
-                }
-            }
+    // 刷新排班列表
+    refreshScheduleList() {
+        // 如果已经在加载中，则跳过
+        if (this.data.isLoadingData) {
+            console.log('数据正在加载中，跳过刷新');
+            return;
+        }
+        if (this.data.isFirstLoad) {
             this.setData({
-                allStaff: allStaff,
-                totalCount: staffData.length
+                isFirstLoad: false
             });
-            this.refreshScheduleList();
+        }
+        console.log('开始刷新排班列表');
+        this.setData({
+            currentPage: 1,
+            hasMore: true,
+            loading: true,
+            isRefreshing: true,
+            isLoadingData: true,
+            scheduleList: [] // 清空列表，重新加载
+        }, () => {
+            this.loadScheduleList();
+        });
+    },
+
+    // 加载排班列表
+    loadScheduleList() {
+        const {
+            startDate,
+            endDate,
+            selectedStaffId,
+            selectedStatus,
+            currentPage,
+            pageSize
+        } = this.data;
+        // 构建筛选参数
+        const params = {
+            "filter": {
+                "pblx": selectedStatus,
+                "jmygb": {
+                    "id": selectedStaffId
+                }
+            },
+            "page": {
+                "pageNum": currentPage,
+                "pageSize": pageSize
+            }
+        };
+
+        console.log('加载排班列表，页码:', currentPage, '参数:', params);
+
+        // 只在第一页加载或下拉刷新时显示loading
+        if ((currentPage === 1 && this.data.isRefreshing) || currentPage === 1) {
+            wx.showLoading({
+                title: '加载中...'
+            });
+        }
+
+        // 假设有一个获取排班列表的API
+        api.getScheduleList(params).then(responseData => {
+            wx.hideLoading();
+
+            const resultData = responseData.data || {};
+            const newList = resultData.list || [];
+            const total = resultData.total || 0;
+            const pageCount = resultData.pageCount || 0;
+
+            console.log('第', currentPage, '页数据加载完成，共', newList.length, '条');
+            console.log('总页数:', pageCount, '当前页:', currentPage);
+
+            // 判断是否还有更多数据 - 修复这里！
+            const hasMore = currentPage < pageCount;
+            console.log('是否有更多数据:', hasMore, '当前页:', currentPage, '总页数:', pageCount);
+
+            // 如果是第一页，替换数据；否则追加数据
+            const scheduleList = (currentPage === 1 || this.data.isRefreshing) ?
+                newList :
+                [...this.data.scheduleList, ...newList];
+
+            // 计算统计信息（注意：这里计算的是当前列表的统计，不是总数据统计）
+            // 如果后端没有返回统计信息，前端可以计算当前列表的统计
+            const stats = this.calculateStats(scheduleList);
+
+            this.setData({
+                scheduleList: scheduleList,
+                hasMore: hasMore,
+                loading: false,
+                isRefreshing: false,
+                total: total,
+                onDutyCount: stats.onDutyCount,
+                offDutyCount: stats.offDutyCount,
+                totalAppointments: stats.totalAppointments,
+                isLoadingData: false
+            }, () => {
+                console.log('数据更新完成，当前总数:', scheduleList.length, '，是否还有更多:', hasMore);
+                console.log('loading:', this.data.loading, 'isLoadingData:', this.data.isLoadingData);
+
+                // 如果当前页是第一页且没有数据，显示空状态
+                if (currentPage === 1 && newList.length === 0) {
+                    console.log('第一页无数据，显示空状态');
+                }
+
+                // 停止下拉刷新
+                if (this.data.isRefreshing) {
+                    wx.stopPullDownRefresh();
+                }
+            });
         }).catch(error => {
             wx.hideLoading();
+            console.error('加载排班列表失败:', error);
+            this.setData({
+                loading: false,
+                isRefreshing: false,
+                isLoadingData: false
+            });
+
+            // 停止下拉刷新
+            if (this.data.isRefreshing) {
+                wx.stopPullDownRefresh();
+            }
+
             if (error.type === 'empty') {
+                // 如果是第一页且无数据，清空列表
+                if (this.data.currentPage === 1) {
+                    this.setData({
+                        scheduleList: [],
+                        hasMore: false,
+                        onDutyCount: 0,
+                        offDutyCount: 0,
+                        totalAppointments: 0
+                    });
+                }
                 wx.showToast({
-                    title: '数据不存在!',
+                    title: '暂无数据',
                     icon: 'none',
-                    duration: 3000
+                    duration: 2000
                 });
             } else {
-                // 根据错误类型显示不同的提示
                 api.handleApiError(error);
             }
         });
-    
     },
 
-    // 刷新排班列表
-    refreshScheduleList() {
-        const allSchedules = this.generateMockSchedules(35);
-        const filteredSchedules = this.filterSchedules(allSchedules);
+    // 计算统计信息
+    calculateStats(scheduleList) {
+        let onDutyCount = 0;
+        let offDutyCount = 0;
+        let totalAppointments = 0;
 
-        // 统计信息
-        const onDutyCount = filteredSchedules.filter(s => s.status === '在岗').length;
-        const offDutyCount = filteredSchedules.filter(s => s.status === '休息').length;
-        const totalAppointments = filteredSchedules.reduce((sum, s) => sum + s.appointmentCount, 0);
+        // 统计去重员工（因为一个员工可能有多个排班）
+        const staffMap = new Map();
 
-        // 分页处理
-        const {
-            pageSize
-        } = this.data;
-        const totalCount = filteredSchedules.length;
-        const totalPages = Math.ceil(totalCount / pageSize);
-        const currentPage = 1;
+        scheduleList.forEach(item => {
+            const staffId = item.jmygb?.id;
+            const status = item.pblx;
+            const appointmentCount = item.appointmentCount || 0;
 
-        // 获取第一页数据
-        const startIndex = (currentPage - 1) * pageSize;
-        const endIndex = Math.min(startIndex + pageSize, totalCount);
-        const pageData = filteredSchedules.slice(startIndex, endIndex);
+            // 统计预约总数
+            totalAppointments += appointmentCount;
 
-        this.setData({
-            scheduleList: pageData,
-            totalCount,
-            totalPages,
-            currentPage,
+            // 统计员工状态（按员工去重）
+            if (staffId) {
+                if (!staffMap.has(staffId)) {
+                    staffMap.set(staffId, status);
+                    if (status === '全天班') {
+                        onDutyCount++;
+                    } else if (status === '休息') {
+                        offDutyCount++;
+                    }
+                }
+            }
+        });
+
+        return {
             onDutyCount,
             offDutyCount,
-            totalAppointments,
-            hasMore: currentPage < totalPages
-        });
-
-        // 停止下拉刷新
-        wx.stopPullDownRefresh();
-    },
-
-    // 筛选排班
-    filterSchedules(schedules) {
-        let filtered = [...schedules];
-
-        // 日期范围筛选
-        const {
-            startDate,
-            endDate
-        } = this.data;
-        if (startDate && endDate) {
-            filtered = filtered.filter(item => {
-                const scheduleDate = item.scheduleDate;
-                return scheduleDate >= startDate && scheduleDate <= endDate;
-            });
-        }
-
-        // 员工筛选
-        const {
-            selectedStaffId
-        } = this.data;
-        if (selectedStaffId) {
-            filtered = filtered.filter(item => item.staffId === selectedStaffId);
-        }
-
-        // 状态筛选
-        const {
-            selectedStatus
-        } = this.data;
-        if (selectedStatus) {
-            filtered = filtered.filter(item => item.status === selectedStatus);
-        }
-
-        // 按日期排序
-        filtered.sort((a, b) => new Date(a.scheduleDate) - new Date(b.scheduleDate));
-
-        return filtered;
-    },
-
-    // 加载更多
-    loadMore() {
-        if (this.data.isLoading || !this.data.hasMore) {
-            return;
-        }
-
-        this.setData({
-            isLoading: true
-        });
-
-        const allSchedules = this.generateMockSchedules(35);
-        const filteredSchedules = this.filterSchedules(allSchedules);
-
-        const {
-            pageSize,
-            currentPage
-        } = this.data;
-        const nextPage = currentPage + 1;
-        const totalCount = filteredSchedules.length;
-        const totalPages = Math.ceil(totalCount / pageSize);
-
-        // 获取下一页数据
-        const startIndex = (nextPage - 1) * pageSize;
-        const endIndex = Math.min(startIndex + pageSize, totalCount);
-        const nextPageData = filteredSchedules.slice(startIndex, endIndex);
-
-        // 合并数据
-        const mergedData = [...this.data.scheduleList, ...nextPageData];
-
-        this.setData({
-            scheduleList: mergedData,
-            currentPage: nextPage,
-            totalPages,
-            isLoading: false,
-            hasMore: nextPage < totalPages
-        });
+            totalAppointments
+        };
     },
 
     // 日期变化事件
@@ -319,6 +358,9 @@ Page({
         const value = e.detail.value;
         this.setData({
             startDate: value
+        }, () => {
+            // 日期变化后自动查询
+            this.refreshScheduleList();
         });
     },
 
@@ -326,6 +368,9 @@ Page({
         const value = e.detail.value;
         this.setData({
             endDate: value
+        }, () => {
+            // 日期变化后自动查询
+            this.refreshScheduleList();
         });
     },
 
@@ -336,7 +381,11 @@ Page({
 
         this.setData({
             selectedStaffId: selectedStaff.id,
-            selectedStaffName: selectedStaff.name
+            selectedStaffName: selectedStaff.name,
+            selectedStaffIndex: index
+        }, () => {
+            // 员工选择后自动查询
+            this.refreshScheduleList();
         });
     },
 
@@ -347,36 +396,28 @@ Page({
 
         this.setData({
             selectedStatus: selectedStatus.id,
-            selectedStatusName: selectedStatus.name
+            selectedStatusName: selectedStatus.name,
+            selectedStatusIndex: index
+        }, () => {
+            // 状态选择后自动查询
+            this.refreshScheduleList();
         });
-    },
-
-    // 查询排班
-    searchSchedules() {
-        this.setData({
-            currentPage: 1,
-            hasMore: true
-        });
-        this.refreshScheduleList();
     },
 
     // 重置筛选条件
     resetFilters() {
         const today = new Date();
         const formattedDate = this.formatDate(today);
-        const tomorrow = new Date(today);
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        const formattedTomorrow = this.formatDate(tomorrow);
 
         this.setData({
             startDate: formattedDate,
-            endDate: formattedTomorrow,
+            endDate: formattedDate,
             selectedStaffId: '',
             selectedStaffName: '',
             selectedStatus: '',
             selectedStatusName: '',
-            currentPage: 1,
-            hasMore: true
+            selectedStaffIndex: 0,
+            selectedStatusIndex: 0
         }, () => {
             this.refreshScheduleList();
         });
@@ -384,6 +425,7 @@ Page({
 
     // 编辑排班
     editSchedule(e) {
+        e.stopPropagation();
         const id = e.currentTarget.dataset.id;
         const modal = this.selectComponent('#scheduleModal');
 
@@ -396,6 +438,7 @@ Page({
 
     // 删除排班
     deleteSchedule(e) {
+        e.stopPropagation();
         const id = e.currentTarget.dataset.id;
         const schedule = this.data.scheduleList.find(item => item.id === parseInt(id));
 
@@ -403,14 +446,19 @@ Page({
 
         wx.showModal({
             title: '确认删除',
-            content: `确定要删除 ${schedule.staffName} 在 ${schedule.scheduleDate} 的排班吗？`,
+            content: `确定要删除 ${schedule.jmygb?.nickname || '未知员工'} 在 ${schedule.pbrq || '未知日期'} 的排班吗？`,
             success: (res) => {
                 if (res.confirm) {
                     wx.showLoading({
                         title: '删除中...'
                     });
 
-                    setTimeout(() => {
+                    // 调用API删除排班
+                    const params = {
+                        id: id
+                    };
+
+                    api.deleteSchedule(params).then(() => {
                         wx.hideLoading();
                         wx.showToast({
                             title: '删除成功',
@@ -419,7 +467,10 @@ Page({
 
                         // 重新加载数据
                         this.refreshScheduleList();
-                    }, 1000);
+                    }).catch(error => {
+                        wx.hideLoading();
+                        api.handleApiError(error);
+                    });
                 }
             }
         });
@@ -431,12 +482,6 @@ Page({
         modal.showModal();
     },
 
-    // 隐藏排班弹窗
-    hideScheduleModal() {
-        const modal = this.selectComponent('#scheduleModal');
-        modal.hideModal();
-    },
-
     // 处理排班确认
     handleScheduleConfirm(e) {
         const scheduleData = e.detail;
@@ -445,13 +490,40 @@ Page({
             title: '保存中...',
         });
 
-        wx.hideLoading();
-        wx.showToast({
-            title: scheduleData.isEdit ? '更新成功' : '新增成功',
-            icon: 'success'
-        });
+        // 调用API保存排班
+        if (scheduleData.id) {
+            // 编辑
+            api.updateSchedule(scheduleData).then(() => {
+                wx.hideLoading();
+                wx.showToast({
+                    title: '更新成功',
+                    icon: 'success'
+                });
+                // 重新加载数据
+                this.refreshScheduleList();
+            }).catch(error => {
+                wx.hideLoading();
+                api.handleApiError(error);
+            });
+        } else {
+            // 新增
+            api.addSchedule(scheduleData).then(() => {
+                wx.hideLoading();
+                wx.showToast({
+                    title: '新增成功',
+                    icon: 'success'
+                });
+                // 重新加载数据
+                this.refreshScheduleList();
+            }).catch(error => {
+                wx.hideLoading();
+                api.handleApiError(error);
+            });
+        }
+    },
 
-        // 重新加载数据
-        this.refreshScheduleList();
+    // 停止事件冒泡
+    stopPropagation(e) {
+
     }
 });
